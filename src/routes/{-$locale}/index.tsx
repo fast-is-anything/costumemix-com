@@ -58,7 +58,7 @@ function Home() {
             </h1>
           </div>
           <div className="mt-4 flex flex-col gap-8 lg:mt-6">
-            <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
+            <div className="mx-auto flex w-full max-w-6xl flex-col gap-3">
               <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium">
                 <LocalLink to={articlePath('trend')} className="inline-flex items-center gap-1.5 hover:text-accent">
                   {c.articles.trend.title} <ArrowRight className="size-4" />
@@ -150,7 +150,7 @@ function Home() {
                 </ul>
               ) : null}
             </div>
-            <div className="mx-auto w-full max-w-4xl space-y-5" id="create">
+            <div className="mx-auto w-full max-w-6xl space-y-5" id="create">
               <Generator styleId={style.id} onStyleChange={setStyleId} initialVariantId={search.variant} />
             </div>
           </div>
@@ -417,6 +417,8 @@ function Home() {
     </>
   )
 }
+
+
 
 
 
