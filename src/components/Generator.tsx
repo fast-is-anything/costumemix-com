@@ -1,5 +1,5 @@
 ﻿import { useNavigate, useRouterState } from '@tanstack/react-router'
-import { CircleAlert, CircleCheck, Download, Smartphone, Upload } from 'lucide-react'
+import { CircleAlert, CircleCheck, Download, Smartphone, Upload, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DISPLAY_STYLES, SCENES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount, styleVariants, type SceneId } from '#/config/site'
 import { api, errorCode, isActiveGeneration, type Generation } from '#/lib/api'
@@ -197,6 +197,14 @@ export function Generator({
     }
   }
 
+  function removePhoto(slot: Slot) {
+    setPhotos((current) => {
+      const removed = current[slot]
+      if (removed) URL.revokeObjectURL(removed.previewUrl)
+      return slot === 0 ? [null, current[1]] : [current[0], null]
+    })
+  }
+
   async function selectFile(file: File | undefined, slot: Slot = 0) {
     if (!file) return
     setError(null)
@@ -317,11 +325,27 @@ export function Generator({
           <StepTitle n={1}>{g.stepPhoto}</StepTitle>
           {need === 2 ? (
             <div className="grid grid-cols-2 gap-3">
-              <PhotoDrop photo={photos[0]} uploading={uploading > 0 && photos[0]?.uploadId === null} busy={busy} testId="photo-input" label={g.photoLeft} onFile={(file) => void selectFile(file, 0)} />
-              <PhotoDrop photo={photos[1]} uploading={uploading > 0 && photos[1]?.uploadId === null} busy={busy} testId="photo-input-2" label={g.photoRight} onFile={(file) => void selectFile(file, 1)} />
+              <PhotoDrop
+                photo={photos[0]}
+                uploading={uploading > 0 && photos[0]?.uploadId === null}
+                busy={busy}
+                testId="photo-input"
+                label={g.photoLeft}
+                onFile={(file) => void selectFile(file, 0)}
+                onRemove={() => removePhoto(0)}
+              />
+              <PhotoDrop
+                photo={photos[1]}
+                uploading={uploading > 0 && photos[1]?.uploadId === null}
+                busy={busy}
+                testId="photo-input-2"
+                label={g.photoRight}
+                onFile={(file) => void selectFile(file, 1)}
+                onRemove={() => removePhoto(1)}
+              />
             </div>
           ) : (
-            <PhotoDrop photo={photo} uploading={uploading > 0} busy={busy} testId="photo-input" onFile={(file) => void selectFile(file, 0)} />
+            <PhotoDrop photo={photo} uploading={uploading > 0} busy={busy} testId="photo-input" onFile={(file) => void selectFile(file, 0)} onRemove={() => removePhoto(0)} />
           )}
           <p className="text-xs leading-5 text-muted">{need === 2 ? g.duoGuidance : g.guidance}</p>
           {/* 桌面访客的照片多半在手机上：扫码传到这里；手机本身不需要 */}
@@ -517,14 +541,12 @@ export function Generator({
             </p>
           ) : null}
           {user ? (
+            // 缺照片/缺授权时把提示和余额合成一行展示
             <p className="text-center text-xs text-muted" data-testid="generator-balance">
+              {!generation && !photosReady ? `${g.needPhoto} - ` : ''}
+              {!generation && photosReady && !consent ? `${g.needConsent} - ` : ''}
               {g.balance(user.credits)}
               {shortfall > 0 ? ` · ${g.needMore(shortfall)}` : ''}
-            </p>
-          ) : null}
-          {user && !generation && (!photosReady || !consent) ? (
-            <p className="text-center text-xs text-muted" data-testid="generator-hint">
-              {!photosReady ? g.needPhoto : g.needConsent}
             </p>
           ) : null}
           <ErrorText code={error} />
@@ -549,6 +571,7 @@ function PhotoDrop({
   testId,
   label,
   onFile,
+  onRemove,
 }: {
   photo: Photo | null
   uploading: boolean
@@ -556,6 +579,7 @@ function PhotoDrop({
   testId: string
   label?: string
   onFile: (file: File | undefined) => void
+  onRemove: () => void
 }) {
   const g = useContent().generator
   const inputRef = useRef<HTMLInputElement>(null)
@@ -578,6 +602,28 @@ function PhotoDrop({
           event.target.value = ''
         }}
       />
+      {photo ? (
+        // 已上传：只展示图片，右上角是移除按钮
+        <div className="relative overflow-hidden rounded-2xl border-2 border-line bg-bg-soft">
+          <img src={photo.previewUrl} alt={label ?? g.dropTitle} className="aspect-[4/3] w-full object-cover sm:aspect-[16/9]" />
+          {uploading ? (
+            <span className="absolute inset-0 grid place-items-center bg-bg/60">
+              <Spinner className="size-6 text-muted" />
+            </span>
+          ) : null}
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onRemove}
+            aria-label="Remove photo"
+            title="Remove photo"
+            data-testid={`${testId}-remove`}
+            className="absolute top-2 right-2 grid size-8 place-items-center rounded-full bg-black/60 text-white backdrop-blur transition hover:bg-black/80 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+      ) : (
       <button
         type="button"
         disabled={busy}
@@ -600,27 +646,15 @@ function PhotoDrop({
             : 'border-fg/35 bg-card hover:border-fg hover:bg-accent/5 dark:border-fg/35 dark:bg-input dark:hover:border-fg'
         }`}
       >
-        {photo ? (
-          <span className={`flex items-center gap-4 text-left ${compact ? 'flex-col gap-2 text-center' : ''}`}>
-            <img src={photo.previewUrl} alt="" className={`rounded-lg object-cover ${compact ? 'size-16' : 'size-20'}`} />
-            <span className="space-y-1">
-              <span className="flex items-center gap-1.5 text-sm font-semibold">
-                {uploading ? <Spinner /> : <CircleCheck className="size-4 text-emerald-600" />}
-                {uploading ? g.uploading : g.uploaded}
-              </span>
-              <span className="block text-xs text-muted underline">{g.change}</span>
-            </span>
+        <span className="flex flex-col items-center">
+          <span className="grid size-12 place-items-center rounded-full bg-ink text-ink-fg shadow-md transition-transform group-hover:scale-110">
+            <Upload className="size-6" />
           </span>
-        ) : (
-          <span className="flex flex-col items-center">
-            <span className="grid size-12 place-items-center rounded-full bg-ink text-ink-fg shadow-md transition-transform group-hover:scale-110">
-              <Upload className="size-6" />
-            </span>
-            <span className="mt-3 text-sm font-semibold">{label ?? g.dropTitle}</span>
-            <span className="mt-1 px-3 text-center text-xs text-muted">{g.dropHint}</span>
-          </span>
-        )}
+          <span className="mt-3 text-sm font-semibold">{label ?? g.dropTitle}</span>
+          <span className="mt-1 px-3 text-center text-xs text-muted">{g.dropHint}</span>
+        </span>
       </button>
+      )}
     </div>
   )
 }
@@ -687,6 +721,7 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
 
 
