@@ -387,7 +387,7 @@ function Home() {
       {/* Final CTA */}
       <section className="pb-24">
         <div className="container-page">
-          <div className="relative overflow-hidden rounded-3xl bg-ink px-6 py-16 text-center text-ink-fg sm:px-12">
+          <div className="sticker relative overflow-hidden rounded-3xl border-2 border-muted bg-ink px-6 py-16 text-center text-ink-fg sm:px-12">
             <div
               className="pointer-events-none absolute inset-0 opacity-40 [background:radial-gradient(50%_60%_at_20%_0%,var(--accent),transparent_70%),radial-gradient(40%_50%_at_90%_100%,var(--accent-2),transparent_70%)]"
               aria-hidden
@@ -417,6 +417,7 @@ function Home() {
     </>
   )
 }
+
 
 
 
