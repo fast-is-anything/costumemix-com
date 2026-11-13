@@ -184,7 +184,7 @@
     border-radius: var(--card-radius);
     box-shadow:
       0.55rem 0.55rem 0 -1px var(--bg-soft),
-      0.55rem 0.55rem 0 0 var(--accent);
+      0.55rem 0.55rem 0 0 color-mix(in oklab, var(--fg) 24%, transparent);
   }
   .input {
     @apply w-full rounded-(--field-radius) border border-line bg-card px-3.5 py-2.5 text-sm text-fg outline-none placeholder:text-muted focus:border-fg;
@@ -265,5 +265,6 @@
     transform: rotate(360deg);
   }
 }
+
 
 
