@@ -130,7 +130,7 @@ function Home() {
                 ))}
               </ul>
             </div>
-            <div className="mx-auto w-full max-w-[460px] space-y-5" id="create">
+            <div className="mx-auto w-full max-w-4xl space-y-5" id="create">
               <Generator styleId={style.id} onStyleChange={setStyleId} />
             </div>
           </div>

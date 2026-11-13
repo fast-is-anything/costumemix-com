@@ -1,4 +1,4 @@
-import { useRouterState } from '@tanstack/react-router'
+﻿import { useRouterState } from '@tanstack/react-router'
 import { CircleAlert, CircleCheck, Download, Smartphone, Upload } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DISPLAY_STYLES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount } from '#/config/site'
@@ -219,7 +219,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
   return (
     <section
       ref={rootRef}
-      className="card space-y-5 p-5 shadow-[0_1px_0_var(--line),0_20px_40px_-24px_rgba(0,0,0,0.25)] sm:p-6"
+      className="card grid gap-5 p-5 shadow-[0_1px_0_var(--line),0_20px_40px_-24px_rgba(0,0,0,0.25)] sm:p-6 lg:grid-cols-2 lg:items-start lg:gap-x-6"
       aria-labelledby="generator-title"
       data-testid="generator"
     >
@@ -227,185 +227,192 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
       <h2 id="generator-title" className="sr-only">
         {g.title}
       </h2>
-      {/* 1. 照片 */}
-      <section className="space-y-3">
-        <StepTitle n={1}>{g.stepPhoto}</StepTitle>
-        {need === 2 ? (
-          <div className="grid grid-cols-2 gap-3">
-            <PhotoDrop photo={photos[0]} uploading={uploading > 0 && photos[0]?.uploadId === null} busy={busy} testId="photo-input" label={g.photoLeft} onFile={(file) => void selectFile(file, 0)} />
-            <PhotoDrop photo={photos[1]} uploading={uploading > 0 && photos[1]?.uploadId === null} busy={busy} testId="photo-input-2" label={g.photoRight} onFile={(file) => void selectFile(file, 1)} />
-          </div>
-        ) : (
-          <PhotoDrop photo={photo} uploading={uploading > 0} busy={busy} testId="photo-input" onFile={(file) => void selectFile(file, 0)} />
-        )}
-        <p className="text-xs leading-5 text-muted">{need === 2 ? g.duoGuidance : g.guidance}</p>
-        {/* 桌面访客的照片多半在手机上：扫码传到这里；手机本身不需要 */}
-        {phoneOpen ? (
-          <PhoneUploadPanel
-            onPhoto={(file) => void selectFile(file, need === 2 && photos[0] && !photos[1] ? 1 : 0)}
-            onClose={() => setPhoneOpen(false)}
-          />
-        ) : (
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() => setPhoneOpen(true)}
-            className="btn-ghost hidden px-3 py-1.5 text-xs md:inline-flex"
-            data-testid="phone-upload-open"
-          >
-            <Smartphone className="size-4" /> {g.phoneOpen}
-          </button>
-        )}
-      </section>
-
-      {/* 2. 风格：只有一种风格时不显示 */}
-      {STYLES.length > 1 ? (
+      <div className="space-y-5">
+        {/* 1. 照片 */}
         <section className="space-y-3">
-          <StepTitle n={2}>{g.stepStyle}</StepTitle>
-          <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={g.stepStyle}>
-            {DISPLAY_STYLES.map((style) => {
-              const active = style.id === styleId
-              const copy = c.styles[style.id as keyof typeof c.styles]
-              const thumb = style.examples.aiVersions[0]
+          <StepTitle n={1}>{g.stepPhoto}</StepTitle>
+          {need === 2 ? (
+            <div className="grid grid-cols-2 gap-3">
+              <PhotoDrop photo={photos[0]} uploading={uploading > 0 && photos[0]?.uploadId === null} busy={busy} testId="photo-input" label={g.photoLeft} onFile={(file) => void selectFile(file, 0)} />
+              <PhotoDrop photo={photos[1]} uploading={uploading > 0 && photos[1]?.uploadId === null} busy={busy} testId="photo-input-2" label={g.photoRight} onFile={(file) => void selectFile(file, 1)} />
+            </div>
+          ) : (
+            <PhotoDrop photo={photo} uploading={uploading > 0} busy={busy} testId="photo-input" onFile={(file) => void selectFile(file, 0)} />
+          )}
+          <p className="text-xs leading-5 text-muted">{need === 2 ? g.duoGuidance : g.guidance}</p>
+          {/* 桌面访客的照片多半在手机上：扫码传到这里；手机本身不需要 */}
+          {phoneOpen ? (
+            <PhoneUploadPanel
+              onPhoto={(file) => void selectFile(file, need === 2 && photos[0] && !photos[1] ? 1 : 0)}
+              onClose={() => setPhoneOpen(false)}
+            />
+          ) : (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => setPhoneOpen(true)}
+              className="btn-ghost hidden px-3 py-1.5 text-xs md:inline-flex"
+              data-testid="phone-upload-open"
+            >
+              <Smartphone className="size-4" /> {g.phoneOpen}
+            </button>
+          )}
+        </section>
+
+        {/* 2. 风格：只有一种风格时不显示 */}
+        {STYLES.length > 1 ? (
+          <section className="space-y-3">
+            <StepTitle n={2}>{g.stepStyle}</StepTitle>
+            <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={g.stepStyle}>
+              {DISPLAY_STYLES.map((style) => {
+                const active = style.id === styleId
+                const copy = c.styles[style.id as keyof typeof c.styles]
+                const thumb = style.examples.aiVersions[0]
+                return (
+                  <button
+                    key={style.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    disabled={busy}
+                    data-testid={`style-${style.id}`}
+                    onClick={() => selectStyle(style.id)}
+                    className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active ? 'bg-card shadow-sm ring-2 ring-ink' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
+                  >
+                    {thumb ? <img src={thumb.poster} alt="" loading="lazy" className="aspect-[3/4] w-10 shrink-0 rounded-md object-cover" /> : null}
+                    <span className="min-w-0">
+                      <span className="block text-sm font-semibold text-fg">{copy.name}</span>
+                      <span className="block text-xs text-muted">{copy.tagline}</span>
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </section>
+        ) : null}
+      </div>
+      <div className="flex flex-col gap-5">
+        {/* 时长 */}
+        <section className="space-y-3">
+          <StepTitle n={STYLES.length > 1 ? 3 : 2}>{g.stepLength}</StepTitle>
+          <div
+            className={`grid gap-1 rounded-xl bg-bg-soft p-1 ${styleDurationList.length === 1 ? 'grid-cols-1' : styleDurationList.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}
+            role="radiogroup"
+            aria-label={g.stepLength}
+          >
+            {styleDurationList.map((d) => {
+              const active = d.id === duration.id
               return (
                 <button
-                  key={style.id}
+                  key={d.id}
                   type="button"
                   role="radio"
                   aria-checked={active}
                   disabled={busy}
-                  data-testid={`style-${style.id}`}
-                  onClick={() => selectStyle(style.id)}
-                  className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active ? 'bg-card shadow-sm ring-2 ring-ink' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
+                  data-testid={`duration-${d.id}`}
+                  onClick={() => setDurationId(d.id)}
+                  className={`rounded-lg px-2 py-2 text-center transition ${active ? 'bg-card shadow-sm ring-1 ring-line' : 'text-muted hover:text-fg'}`}
                 >
-                  {thumb ? <img src={thumb.poster} alt="" loading="lazy" className="aspect-[3/4] w-10 shrink-0 rounded-md object-cover" /> : null}
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold text-fg">{copy.name}</span>
-                    <span className="block text-xs text-muted">{copy.tagline}</span>
+                  <span className="block text-sm font-semibold">
+                    {g.seconds(d.seconds)}
+                    {'isFull' in d && d.isFull ? ` · ${g.full}` : ''}
                   </span>
+                  <span className="block text-xs text-muted">{g.creditsLabel(d.credits)}</span>
                 </button>
               )
             })}
           </div>
         </section>
-      ) : null}
 
-      {/* 时长 */}
-      <section className="space-y-3">
-        <StepTitle n={STYLES.length > 1 ? 3 : 2}>{g.stepLength}</StepTitle>
-        <div
-          className={`grid gap-1 rounded-xl bg-bg-soft p-1 ${styleDurationList.length === 1 ? 'grid-cols-1' : styleDurationList.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}
-          role="radiogroup"
-          aria-label={g.stepLength}
-        >
-          {styleDurationList.map((d) => {
-            const active = d.id === duration.id
-            return (
+        <label className="flex items-start gap-3 text-xs leading-5 text-muted">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(event) => setConsent(event.target.checked)}
+            className="mt-0.5 size-4 shrink-0 accent-[var(--ink)]"
+            data-testid="consent"
+          />
+          <span>{g.consent}</span>
+        </label>
+
+        {/* CTA */}
+        <div className="space-y-2">
+          {loading ? (
+            <div className="btn-primary w-full py-3.5 opacity-60">
+              <Spinner />
+            </div>
+          ) : !user ? (
+            <a href={signInHref(config, pathname, lp('/sign-in'))} className="btn-primary w-full py-3.5" data-testid="generator-sign-up">
+              <GoogleIcon /> {g.ctaSignUp}
+            </a>
+          ) : shortfall > 0 && coverPack ? (
+            <>
               <button
-                key={d.id}
                 type="button"
-                role="radio"
-                aria-checked={active}
-                disabled={busy}
-                data-testid={`duration-${d.id}`}
-                onClick={() => setDurationId(d.id)}
-                className={`rounded-lg px-2 py-2 text-center transition ${active ? 'bg-card shadow-sm ring-1 ring-line' : 'text-muted hover:text-fg'}`}
+                className="btn-primary w-full py-3.5"
+                disabled={checkout.pending !== null || checkout.paused}
+                onClick={() => checkout.buy(coverPack.id)}
+                data-testid="generator-buy"
               >
-                <span className="block text-sm font-semibold">
-                  {g.seconds(d.seconds)}
-                  {'isFull' in d && d.isFull ? ` · ${g.full}` : ''}
-                </span>
-                <span className="block text-xs text-muted">{g.creditsLabel(d.credits)}</span>
+                {checkout.paused ? (
+                  c.pricing.paused
+                ) : checkout.pending === coverPack.id ? (
+                  <>
+                    <Spinner /> {c.pricing.buying}
+                  </>
+                ) : (
+                  g.ctaBuyPack(coverPack.credits, formatPrice(coverPack.priceCents, coverPack.currency))
+                )}
               </button>
-            )
-          })}
-        </div>
-      </section>
-
-      <label className="flex items-start gap-3 text-xs leading-5 text-muted">
-        <input
-          type="checkbox"
-          checked={consent}
-          onChange={(event) => setConsent(event.target.checked)}
-          className="mt-0.5 size-4 shrink-0 accent-[var(--ink)]"
-          data-testid="consent"
-        />
-        <span>{g.consent}</span>
-      </label>
-
-      {/* CTA */}
-      <div className="space-y-2">
-        {loading ? (
-          <div className="btn-primary w-full py-3.5 opacity-60">
-            <Spinner />
-          </div>
-        ) : !user ? (
-          <a href={signInHref(config, pathname, lp('/sign-in'))} className="btn-primary w-full py-3.5" data-testid="generator-sign-up">
-            <GoogleIcon /> {g.ctaSignUp}
-          </a>
-        ) : shortfall > 0 && coverPack ? (
-          <>
+              <p className="text-center text-xs">
+                <LocalLink to="/pricing" className="text-muted underline" data-testid="generator-see-packs">
+                  {g.seePacks}
+                </LocalLink>
+              </p>
+              <ErrorText code={checkout.error} />
+            </>
+          ) : shortfall > 0 ? (
+            <LocalLink to="/pricing" className="btn-primary w-full py-3.5" data-testid="generator-buy">
+              {g.ctaBuy}
+            </LocalLink>
+          ) : (
             <button
               type="button"
               className="btn-primary w-full py-3.5"
-              disabled={checkout.pending !== null || checkout.paused}
-              onClick={() => checkout.buy(coverPack.id)}
-              data-testid="generator-buy"
+              disabled={busy || !photosReady || !consent}
+              onClick={generate}
+              data-testid="generate"
             >
-              {checkout.paused ? (
-                c.pricing.paused
-              ) : checkout.pending === coverPack.id ? (
-                <>
-                  <Spinner /> {c.pricing.buying}
-                </>
-              ) : (
-                g.ctaBuyPack(coverPack.credits, formatPrice(coverPack.priceCents, coverPack.currency))
-              )}
+              {submitting ? <Spinner /> : null}
+              {g.ctaGenerate(duration.credits)}
             </button>
-            <p className="text-center text-xs">
-              <LocalLink to="/pricing" className="text-muted underline" data-testid="generator-see-packs">
-                {g.seePacks}
-              </LocalLink>
+          )}
+          {!loading && !user && photo ? (
+            <p className="text-center text-xs text-muted" data-testid="generator-draft-kept">
+              {g.draftKept}
             </p>
-            <ErrorText code={checkout.error} />
-          </>
-        ) : shortfall > 0 ? (
-          <LocalLink to="/pricing" className="btn-primary w-full py-3.5" data-testid="generator-buy">
-            {g.ctaBuy}
-          </LocalLink>
-        ) : (
-          <button
-            type="button"
-            className="btn-primary w-full py-3.5"
-            disabled={busy || !photosReady || !consent}
-            onClick={generate}
-            data-testid="generate"
-          >
-            {submitting ? <Spinner /> : null}
-            {g.ctaGenerate(duration.credits)}
-          </button>
-        )}
-        {!loading && !user && photo ? (
-          <p className="text-center text-xs text-muted" data-testid="generator-draft-kept">
-            {g.draftKept}
-          </p>
-        ) : null}
-        {guestPack && !loading ? (
-          <p className="text-center text-xs text-muted" data-testid="generator-guest-price">
-            {g.guestPrice(duration.credits, formatPrice(guestPack.priceCents, guestPack.currency))}
-          </p>
-        ) : null}
-        {user ? (
-          <p className="text-center text-xs text-muted" data-testid="generator-balance">
-            {g.balance(user.credits)}
-            {shortfall > 0 ? ` · ${g.needMore(shortfall)}` : ''}
-          </p>
-        ) : null}
-        {user && photosReady && !consent && !generation ? <p className="text-center text-xs text-muted">{g.needConsent}</p> : null}
-        <ErrorText code={error} />
+          ) : null}
+          {guestPack && !loading ? (
+            <p className="text-center text-xs text-muted" data-testid="generator-guest-price">
+              {g.guestPrice(duration.credits, formatPrice(guestPack.priceCents, guestPack.currency))}
+            </p>
+          ) : null}
+          {user ? (
+            <p className="text-center text-xs text-muted" data-testid="generator-balance">
+              {g.balance(user.credits)}
+              {shortfall > 0 ? ` · ${g.needMore(shortfall)}` : ''}
+            </p>
+          ) : null}
+          {user && photosReady && !consent && !generation ? <p className="text-center text-xs text-muted">{g.needConsent}</p> : null}
+          <ErrorText code={error} />
+        </div>
       </div>
 
-      {generation ? <GenerationResult generation={generation} onReset={reset} /> : null}
+      {generation ? (
+        <div className="lg:col-span-2">
+          <GenerationResult generation={generation} onReset={reset} />
+        </div>
+      ) : null}
     </section>
   )
 }
@@ -548,3 +555,4 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
