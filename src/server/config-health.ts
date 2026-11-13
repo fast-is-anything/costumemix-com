@@ -49,6 +49,7 @@ const PAYMENT_SECRETS: Record<string, string[]> = {
   stripe: ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'],
 }
 const VIDEO_SECRETS: Record<string, string[]> = { fal: ['FAL_KEY'], yir: ['YIR_API_KEY'], nanoapi: ['NANOAPI_API_KEY'] }
+const IMAGE_SECRETS: Record<string, string[]> = { fal: ['FAL_KEY'], yir: ['YIR_API_KEY'] }
 const MODERATION_SECRETS: Record<string, string[]> = { openai: ['OPENAI_API_KEY'], none: [] }
 const PLACEHOLDER_HOSTS = /(^|\.)(example\.(com|org|net)|localhost)$|^127\.|SUBDOMAIN/i
 
@@ -156,6 +157,11 @@ export function checkConfig(input: ConfigInput): ConfigIssue[] {
     if (!VIDEO_SECRETS[p]) error('styleProviders', `风格指定了未知的视频服务商 ${p || '(空)'}，可选 fal、yir、nanoapi`)
     else requireSecrets(VIDEO_SECRETS[p], `${p} 视频生成（风格指定）`)
   }
+
+  const image = vars('IMAGE_PROVIDER')
+  if (image === 'mock') error('IMAGE_PROVIDER', 'IMAGE_PROVIDER=mock：生产环境提交图片生成会返回 503')
+  else if (!IMAGE_SECRETS[image]) error('IMAGE_PROVIDER', `未知的 IMAGE_PROVIDER=${image || '(空)'}，可选 fal、yir`)
+  else requireSecrets(IMAGE_SECRETS[image], `${image} 图片生成`)
 
   const moderation = vars('MODERATION_PROVIDER')
   if (moderation === 'mock') error('MODERATION_PROVIDER', 'MODERATION_PROVIDER=mock：生产环境上传图片一律返回 503')

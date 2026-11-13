@@ -27,6 +27,7 @@
 | `STRIPE_ENVIRONMENT` | `test`、`live` | 用 Stripe 时 | webhook 里的 `livemode` 和它不一致时拒收；上线检查核对 `STRIPE_SECRET_KEY` 的前缀（`sk_test_` / `sk_live_`） |
 | `STRIPE_PRODUCTS` | JSON，值是 Price ID，如 `{"starter":"price_xxx"}` | 用 Stripe 时 | 积分包用一次性价格，订阅套餐用 recurring 价格。`scripts/stripe-setup.mjs` 可以生成 |
 | `VIDEO_PROVIDER` | `fal`、`yir`、`nanoapi`、`mock` | 是 | 模型和单价在 `site.video` 里配置，yir 的配置在 `site.video.yir`，NanoAPI 的在 `site.video.nanoapi` |
+| `IMAGE_PROVIDER` | `fal`、`yir`、`mock` | 是 | 图片生成服务商。fal 的模型暂为占位（`fal-ai/flux/dev/image-to-image`），单价和参数待确定；`mock` 只在非 production 可用 |
 | `MODERATION_PROVIDER` | `openai`、`none`、`mock` | 是 | 上传图片的审核方式。`none` 不审核，检查时给出警告 |
 | `OUTPUT_MODERATION` | `frames`、`off`、`mock` | 否（缺省按 `off`） | 成片输出审核：成片存进 R2 后、标记 `succeeded` 前，用 Cloudflare Media Transformations 抽 3 帧（1 秒、中点、80% 处，不足 3 秒只取中点；长边缩到 768）逐帧交给 `MODERATION_PROVIDER`，任一帧不通过就删掉成片、判失败并退积分（`error_code = output_moderation_rejected`）；审核服务不可用时抛错交给队列重试。`off` 不审核，`MODERATION_PROVIDER` 不是 `none` 时检查给出警告；`MODERATION_PROVIDER=none` 时 `frames` 也不审核（日志警告）。`mock` 只在非 production 可用，按生成请求的 `mockOutcome: 'output_reject'` 判拒（本地 dev 和 e2e 用）。**`frames` 需要绑定**：在 `wrangler.jsonc`（预发还有 `wrangler.staging.jsonc`）加 `"media": { "binding": "MEDIA_TRANSFORM" }`（绑定名不能用 `MEDIA`，已被 R2 占用）。模板默认不声明：Media 绑定在本地 dev 只有 remote 模式，每次启动都会连 Cloudflare（要登录、可能计费），没有凭据的 CI 起不来。`frames` 但没绑定时检查报错。输入限制：成片小于 100 MB、不超过 10 分钟，见 [官方文档](https://developers.cloudflare.com/stream/transform-videos/bindings/) |
 | `GOOGLE_CLIENT_ID` | OAuth Client ID | 是 | 站点只有 Google 登录，留空就没人能登录 |

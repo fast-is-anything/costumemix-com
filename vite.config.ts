@@ -15,6 +15,7 @@ const LOCAL_DEV_VARS = {
   SITE_URL: 'http://localhost:3000',
   PAYMENT_PROVIDER: 'mock',
   VIDEO_PROVIDER: 'mock',
+  IMAGE_PROVIDER: 'mock',
   MODERATION_PROVIDER: 'mock',
   // 本地没有 Media 绑定（只有 remote 模式）：成片输出审核走 mock，按生成请求的 mockOutcome 判定
   OUTPUT_MODERATION: 'mock',

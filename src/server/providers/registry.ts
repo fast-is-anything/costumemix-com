@@ -1,5 +1,6 @@
 import type { Style } from '#/config/site'
 import { ApiError, isProduction } from '../util'
+import { createFalImageProvider } from '../image/fal'
 import { createFalProvider } from '../video/fal'
 import { createNanoapiProvider } from '../video/nanoapi'
 import { createYirProvider } from '../video/yir'
@@ -29,7 +30,7 @@ function createMockProvider(): VideoProvider {
 
 // 能力矩阵是唯一事实来源：只列真实可用的能力；不支持的由 unsupportedCapability 兜底
 export const PROVIDER_CAPABILITIES = {
-  fal: ['video'],
+  fal: ['video', 'image'],
   yir: ['video'],
   nanoapi: ['video'],
   mock: ['video', 'image'],
@@ -111,6 +112,6 @@ export function getImageProvider(env: Env, id: ProviderId): ImageProvider {
     return createMockImageProvider()
   }
   if (!supports(id, 'image')) return unsupportedImageCapability(id)
-  // 真实图片 adapter（fal）在 P4c 接
+  if (id === 'fal') return createFalImageProvider(env)
   throw new ApiError(503, 'image_not_configured', `No image adapter for ${id}`)
 }
