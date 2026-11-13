@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { VolumeX } from 'lucide-react'
 
 // 竖屏示例视频：进入视口自动静音播放，离开暂停；尊重“减少动态效果”设置
 export function VideoCard({
@@ -7,12 +8,14 @@ export function VideoCard({
   label,
   credit,
   className = '',
+  variant = 'default',
 }: {
   video: string
   poster: string
   label?: ReactNode
   credit?: string
   className?: string
+  variant?: 'default' | 'sticker'
 }) {
   const ref = useRef<HTMLVideoElement>(null)
 
@@ -29,6 +32,34 @@ export function VideoCard({
     observer.observe(element)
     return () => observer.disconnect()
   }, [])
+
+  if (variant === 'sticker') {
+    return (
+      <figure className={className}>
+        <div className="relative aspect-[9/16] w-full overflow-hidden rounded-xl bg-black shadow-sm">
+          <video
+            ref={ref}
+            src={video}
+            poster={poster}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="size-full object-cover"
+          />
+          <span className="absolute top-2 right-2 flex size-7 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur" aria-hidden>
+            <VolumeX className="size-3.5" />
+          </span>
+          {label ? (
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-2 pt-6 pb-2 text-left text-xs font-semibold leading-tight text-white">
+              {label}
+            </figcaption>
+          ) : null}
+        </div>
+        {credit ? <figcaption className="mt-1 truncate text-center text-[10px] text-muted">{credit}</figcaption> : null}
+      </figure>
+    )
+  }
 
   return (
     <figure className={className}>

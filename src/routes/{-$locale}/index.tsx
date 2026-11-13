@@ -45,15 +45,15 @@ function Home() {
       {/* Hero：标题与描述居中，下面是热门服装片段和生成器（上下布局） */}
       <section className="relative overflow-hidden">
         <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
-        <div className="container-page relative py-10 lg:py-14">
+        <div className="container-page relative py-6 lg:py-8">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mt-5 font-display text-5xl leading-[1.04] tracking-tight sm:text-6xl">
+            <h1 className="mt-2 font-display text-5xl leading-[1.04] tracking-tight sm:text-6xl">
               {c.hero.title}
               <span className="mx-auto mt-2 block max-w-2xl font-sans text-lg font-normal leading-8 text-muted">{c.hero.subtitle}</span>
             </h1>
           </div>
-          <div className="mt-8 flex flex-col gap-12 lg:mt-12">
-            <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
+          <div className="mt-4 flex flex-col gap-8 lg:mt-6">
+            <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
               <span className="chip mx-auto w-fit">
                 <Flame className="size-4 text-accent" /> {c.hero.badge}
               </span>
@@ -89,26 +89,41 @@ function Home() {
                   })}
                 </div>
               ) : null}
-              <div
-                // 原片 + 样片一共 2 段时（例如双人风格只有一段样片）收窄成两列，卡片和三列时一样大
-                className={`grid gap-3 sm:gap-4 ${style.examples.aiVersions.length === 1 ? 'mx-auto w-2/3 grid-cols-2' : 'grid-cols-3'}`}
+              <ul
+                // 热门服装片段：手机上横向滑动、卡片轻微旋转的贴纸样式，桌面居中排开
+                className="-mx-5 flex snap-x snap-mandatory scroll-px-5 justify-start gap-3 overflow-x-auto px-5 pt-2 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:max-w-3xl sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0"
                 {...(STYLES.length > 1 ? { id: 'hero-panel', role: 'tabpanel', 'aria-labelledby': `hero-tab-${style.id}` } : {})}
               >
-                <VideoCard key={`${style.id}-original`} video={style.examples.original.video} poster={style.examples.original.poster} label={c.hero.original} credit={style.examples.original.credit} />
-                {style.examples.aiVersions.map((v) => (
+                <li className="w-[30%] max-w-[168px] min-w-[104px] shrink-0 snap-start motion-safe:transition-transform motion-safe:hover:rotate-0 sm:w-[168px] -rotate-2">
                   <VideoCard
-                    key={v.video}
-                    video={v.video}
-                    poster={v.poster}
-                    credit={v.credit}
-                    label={
-                      <>
-                        <Sparkles className="size-3" /> {c.hero.aiVersion}
-                      </>
-                    }
+                    variant="sticker"
+                    video={style.examples.original.video}
+                    poster={style.examples.original.poster}
+                    label={c.hero.original}
+                    credit={style.examples.original.credit}
                   />
+                </li>
+                {style.examples.aiVersions.map((v, index) => (
+                  <li
+                    key={v.video}
+                    className={`w-[30%] max-w-[168px] min-w-[104px] shrink-0 snap-start motion-safe:transition-transform motion-safe:hover:rotate-0 sm:w-[168px] ${
+                      index === 0 ? 'rotate-[1.5deg]' : index === 1 ? '-rotate-1' : 'rotate-2'
+                    }`}
+                  >
+                    <VideoCard
+                      variant="sticker"
+                      video={v.video}
+                      poster={v.poster}
+                      credit={v.credit}
+                      label={
+                        <>
+                          <Sparkles className="size-3" /> {c.hero.aiVersion}
+                        </>
+                      }
+                    />
+                  </li>
                 ))}
-              </div>
+              </ul>
               <div className="flex flex-wrap justify-center gap-2">
                 {c.hero.chips.map((chip) => (
                   <span key={chip} className="chip">
