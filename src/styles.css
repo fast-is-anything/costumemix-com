@@ -183,13 +183,13 @@
     @apply relative;
     border-radius: var(--card-radius);
     box-shadow:
-      0.55rem 0.55rem 0 -2px var(--bg-soft),
+      0.55rem 0.55rem 0 -3px var(--bg-soft),
       0.55rem 0.55rem 0 0 var(--muted);
   }
   /* 暗色下参考橙色贴纸样式：橙色描边 + 橙色底 */
   [data-theme='dark'] .sticker {
     box-shadow:
-      0.55rem 0.55rem 0 -2px var(--bg-soft),
+      0.55rem 0.55rem 0 -3px var(--bg-soft),
       0.55rem 0.55rem 0 0 var(--accent);
   }
   .input {
@@ -271,6 +271,7 @@
     transform: rotate(360deg);
   }
 }
+
 
 
 
