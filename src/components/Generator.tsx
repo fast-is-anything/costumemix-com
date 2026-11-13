@@ -271,7 +271,7 @@ export function Generator({
     <div className="sticker mb-2">
     <section
       ref={rootRef}
-      className="card grid gap-5 border-ink p-5 shadow-[0_1px_0_var(--line),0_20px_40px_-24px_rgba(0,0,0,0.25)] sm:p-6 lg:grid-cols-2 lg:items-start lg:gap-x-6"
+      className="card grid gap-5 border-2 border-muted p-5 shadow-[0_1px_0_var(--line),0_20px_40px_-24px_rgba(0,0,0,0.25)] sm:p-6 lg:grid-cols-2 lg:items-start lg:gap-x-6"
       aria-labelledby="generator-title"
       data-testid="generator"
     >
