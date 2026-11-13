@@ -284,7 +284,7 @@ export function Generator({
         <div
           role="tablist"
           aria-label={g.stepStyle}
-          className="relative flex rounded-xl bg-bg-soft p-1 lg:col-span-2"
+          className="relative flex rounded-xl bg-bg-soft p-1 lg:col-span-2 dark:bg-surface-inset"
           style={{ width: `${SCENES.length * 7.5}rem` }}
           data-testid="scene-tabs"
         >
@@ -380,7 +380,7 @@ export function Generator({
         <section className="space-y-3">
           <StepTitle n={STYLES.length > 1 ? 3 : 2}>{isImage ? g.stepVariant : g.stepLength}</StepTitle>
           {isImage ? (
-            <div className="grid gap-1 rounded-xl bg-bg-soft p-1" role="radiogroup" aria-label={g.stepVariant}>
+            <div className="grid gap-1 rounded-xl bg-bg-soft p-1 dark:bg-surface-inset" role="radiogroup" aria-label={g.stepVariant}>
               {variantList.map((v) => {
                 const active = v.id === selectedVariant?.id
                 const label = c.styles[currentStyle.id as keyof typeof c.styles].variants?.[v.id] ?? v.id
@@ -412,7 +412,7 @@ export function Generator({
             </div>
           ) : (
           <div
-            className={`grid gap-1 rounded-xl bg-bg-soft p-1 ${styleDurationList.length === 1 ? 'grid-cols-1' : styleDurationList.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}
+            className={`grid gap-1 rounded-xl bg-bg-soft p-1 dark:bg-surface-inset ${styleDurationList.length === 1 ? 'grid-cols-1' : styleDurationList.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}
             role="radiogroup"
             aria-label={g.stepLength}
           >
@@ -589,7 +589,7 @@ function PhotoDrop({
         className={`flex w-full items-center justify-center rounded-xl border-2 border-dashed text-center transition ${compact ? 'px-2 py-4' : 'px-4 py-6'} ${
           dragging
             ? 'border-accent bg-accent/10 ring-4 ring-accent/15'
-            : 'border-line bg-bg-soft shadow-[inset_0_2px_8px_rgba(0,0,0,0.07)] hover:border-fg/50'
+            : 'border-line bg-bg-soft shadow-[inset_0_2px_8px_rgba(0,0,0,0.07)] hover:border-fg/50 dark:border-fg/25 dark:bg-surface-inset'
         }`}
       >
         {photo ? (
@@ -630,7 +630,7 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
   const g = useContent().generator
   const locale = useLocale()
   return (
-    <div className="space-y-3 rounded-xl border border-line bg-bg-soft p-4" data-testid="generation-status" data-status={generation.status}>
+    <div className="space-y-3 rounded-xl border border-line bg-bg-soft p-4 dark:bg-surface-inset" data-testid="generation-status" data-status={generation.status}>
       {isActiveGeneration(generation) ? (
         <p className="flex items-start gap-2 text-sm">
           <Spinner className="mt-0.5 size-4 shrink-0" />
@@ -679,6 +679,7 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
 
 

@@ -48,6 +48,8 @@
   --accent-text: #ffb067;
   --accent-2: #2fd6f5;
   --glow: rgba(255, 122, 24, 0.18);
+  /* 暗色下凹槽类控件（上传区、时长/变体/场景切换、结果区）用这个更深的一档，和卡片区分开 */
+  --surface-inset: #0d0c0b;
   color-scheme: dark;
 }
 
@@ -101,6 +103,7 @@
 @theme inline {
   --color-bg: var(--bg);
   --color-bg-soft: var(--bg-soft);
+  --color-surface-inset: var(--surface-inset, var(--bg-soft));
   --color-card: var(--card);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
