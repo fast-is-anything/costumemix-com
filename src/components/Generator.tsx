@@ -1,4 +1,4 @@
-import { useRouterState } from '@tanstack/react-router'
+﻿import { useRouterState } from '@tanstack/react-router'
 import { CircleAlert, CircleCheck, Download, Smartphone, Upload } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DISPLAY_STYLES, SCENES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount, styleVariants, type SceneId } from '#/config/site'
@@ -79,7 +79,8 @@ export function Generator({
 
   // 切换风格后，当前时长不在新风格的档位里就选它最长的档位
   useEffect(() => {
-    if (!styleDurationList.some((d) => d.id === durationId)) setDurationId(styleDurationList[styleDurationList.length - 1]!.id)
+    const lastDuration = styleDurationList[styleDurationList.length - 1]
+    if (lastDuration && !styleDurationList.some((d) => d.id === durationId)) setDurationId(lastDuration.id)
   }, [styleId])
 
   // 挂载时（只在客户端）恢复登录或付款跳转前保存的草稿：照片、风格、时长、授权勾选
@@ -96,7 +97,7 @@ export function Generator({
         ? draft.durationId
         : nextStyleDurations.some((d) => d.id === durationId)
           ? durationId
-          : nextStyleDurations[nextStyleDurations.length - 1]!.id
+          : (nextStyleDurations[nextStyleDurations.length - 1]?.id ?? '')
       draftRef.current = { file, file2, styleId: nextStyle, durationId: nextDuration, consent: draft.consent === true }
       setPhotos([
         { file, previewUrl: URL.createObjectURL(file), uploadId: null },
@@ -621,5 +622,6 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
 
