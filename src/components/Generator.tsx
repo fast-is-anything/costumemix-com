@@ -19,6 +19,9 @@ type Photos = [Photo | null, Photo | null]
 const POLL_MS = 3000
 
 // styleId / onStyleChange：首页把风格状态提到外面，让 hero 标签和生成器同步；不传时生成器自己管
+// 每个场景上次的选择：只存在浏览器内存里，刷新即忘（不写草稿、不进 localStorage）
+const sceneSelections = new Map<SceneId, { styleId: string; durationId: string; variantId: string }>()
+
 export function Generator({
   styleId: controlledStyleId,
   onStyleChange,
@@ -63,15 +66,22 @@ export function Generator({
   const checkout = useCheckout()
   const duration = styleDurationList.find((d) => d.id === durationId) ?? styleDurationList[styleDurationList.length - 1]
   const selectedVariant = variantList.find((v) => v.id === variantId) ?? variantList[0]
-  // 切场景 = 换一类结果：选中该场景第一套服装，参数回到该服装的默认项（时长取最后一档、变体取第一个）
+  // 切场景时恢复该场景上次的选择；没有记录（或配置已变）才回到第一套服装 + 默认参数
   function selectCategory(next: SceneId) {
-    setCategory(next)
-    const first = DISPLAY_STYLES.find((s) => s.category === next)
+    sceneSelections.set(category, { styleId, durationId, variantId })
+    const remembered = sceneSelections.get(next)
+    const rememberedStyle = remembered ? findStyle(remembered.styleId) : undefined
+    const first =
+      rememberedStyle && rememberedStyle.category === next
+        ? rememberedStyle
+        : DISPLAY_STYLES.find((s) => s.category === next)
     if (!first) return
+    setCategory(next)
     selectStyle(first.id)
     const durations = styleDurations(first)
-    setDurationId(durations[durations.length - 1]?.id ?? '')
-    setVariantId(styleVariants(first)[0]?.id ?? '')
+    setDurationId(durations.find((d) => d.id === remembered?.durationId)?.id ?? durations[durations.length - 1]?.id ?? '')
+    const variants = styleVariants(first)
+    setVariantId(variants.find((v) => v.id === remembered?.variantId)?.id ?? variants[0]?.id ?? '')
   }
   const credits = isImage ? (selectedVariant?.credits ?? 0) : (duration?.credits ?? 0)
   const shortfall = user ? Math.max(0, credits - user.credits) : 0
@@ -131,6 +141,11 @@ export function Generator({
     }
     // 只在挂载时恢复一次
   }, [])
+
+  // 场景内改服装/时长/变体也记到内存，切走再切回来能恢复
+  useEffect(() => {
+    sceneSelections.set(category, { styleId, durationId, variantId })
+  }, [category, styleId, durationId, variantId])
 
   // 有照片时，照片、风格、时长、授权勾选的变化都写进草稿
   const photoFile = photos[0]?.file
