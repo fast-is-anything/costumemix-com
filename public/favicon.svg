@@ -1,11 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0b3d2e"/>
-      <stop offset="1" stop-color="#071f19"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="16" fill="url(#g)"/>
-  <path d="M32 10l2.6 6.2 6.7.5-5.1 4.4 1.6 6.5L32 24.2l-5.8 3.4 1.6-6.5-5.1-4.4 6.7-.5z" fill="#d9b260"/>
-  <text x="32" y="48" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" font-weight="700" fill="#f7f4ee">CM</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="CostumeMix">
+  <circle cx="346.112" cy="589.312" r="284.444444" fill="#5563DC"/>
+  <path d="M458.296889 125.952m54.950447 14.723928l384.653129 103.067495q54.950447 14.723928 40.226519 69.674375l-103.067495 384.653129q-14.723928 54.950447-69.674375 40.226519l-384.653129-103.067495q-54.950447-14.723928-40.226519-69.674375l103.067495-384.653129q14.723928-54.950447 69.674375-40.226519Z" fill="#FFB444"/>
+  <path d="M654.506667 455.281778a28.444444 28.444444 0 0 1 46.819555 0l257.365334 405.902222c10.410667 16.384-2.616889 36.864-23.381334 36.864H420.522667c-20.764444 0-33.792-20.48-23.381334-36.864l257.365334-405.902222z" fill="#FF643D"/>
 </svg>

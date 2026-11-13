@@ -6,6 +6,11 @@
   "compatibility_date": "2026-06-19",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
+  // 正式域名：自定义域名由 Cloudflare 自动创建 DNS 记录和证书；先跑 staging 预览，切生产时只改 vars
+  "routes": [
+    { "pattern": "costumemix.com", "custom_domain": true },
+    { "pattern": "www.costumemix.com", "custom_domain": true }
+  ],
   "observability": { "enabled": true },
   "assets": {
     "directory": "./dist/client",
@@ -15,7 +20,7 @@
   "vars": {
     // 预览阶段：staging 禁止搜索引擎抓取、禁用 dev 登录，等支付/视频/登录密钥就绪后改 production
     "APP_ENV": "staging",
-    "SITE_URL": "https://costumemix.eastlion123456.workers.dev",
+    "SITE_URL": "https://costumemix.com",
     // waffo | dodo | stripe | mock（mock 只允许非 production）
     "PAYMENT_PROVIDER": "mock",
     // fal | yir | nanoapi | mock（mock 只允许非 production）

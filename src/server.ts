@@ -1,4 +1,5 @@
 import handler from '@tanstack/react-start/server-entry'
+import { site } from './config/site'
 import { regionalConsentDefault } from './lib/consent'
 import { runHealthCheck } from './server/alerts'
 import { app } from './server/app'
@@ -28,6 +29,11 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url)
     const { pathname } = url
+    // www 统一 301 到裸域，避免两个主机名各收录一份；canonical 只指向裸域
+    if (url.hostname === `www.${site.domain}`) {
+      url.hostname = site.domain
+      return withSecurityHeaders(Response.redirect(url.toString(), 301), env, url)
+    }
     // Umami 同域代理（/s/script.js、/s/api/send）：不走页面和 API 逻辑
     const umami = handleUmamiProxy(request, env)
     if (umami) return withSecurityHeaders(await umami, env, url)

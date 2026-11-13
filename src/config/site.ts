@@ -102,7 +102,7 @@ export const site = {
       },
     },
     // TODO(site): 换成真实的圣诞服装趋势源视频（seed/templates/）
-    // TODO(site): 换成授权的展示素材并写 credit（public/demo/、public/og.png、public/favicon.svg）
+    // TODO(site): 换成授权的展示素材并写 credit（public/demo/、public/og.png）
   ],
   // 主推风格：首页 hero 标签和生成器默认选中它、排在最前面（例如新出的趋势风格）。
   // null = 默认风格（styles[0]）。只影响界面，请求不带 styleId 时仍用默认风格。
