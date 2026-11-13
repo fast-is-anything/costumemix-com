@@ -262,7 +262,7 @@ function Home() {
                     <p className="mt-2 text-xs font-medium uppercase tracking-[0.12em] text-muted">{styleCopy(s.id).tagline}</p>
                     <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-4">
                       <figure className="min-w-0">
-                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
+                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
                         <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
                       </figure>
                       <ArrowRight className="size-5 text-muted" aria-hidden />
@@ -347,7 +347,7 @@ function Home() {
               return (
                 <div key={idea.title} className="grid items-center gap-10 md:grid-cols-2">
                   <div className={`grid grid-cols-[0.8fr_1fr] items-end gap-4 ${flip ? 'md:order-2' : ''}`}>
-                    <img src={media.photo} alt={c.alt.inputPhoto} loading="lazy" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
+                    <img src={media.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
                     <VideoCard video={media.video} poster={media.poster} />
                   </div>
                   <div className="space-y-4">
@@ -417,6 +417,7 @@ function Home() {
     </>
   )
 }
+
 
 
 
