@@ -4,7 +4,7 @@ import type { Content } from './en'
 
 type S = typeof Site
 type StyleId = S['styles'][number]['id']
-type StyleCopy = { name: string; tagline: string }
+type StyleCopy = { name: string; tagline: string; variants?: Record<string, string> }
 
 export function zh(s: S): Content {
   const k = s.keyword
@@ -15,6 +15,11 @@ export function zh(s: S): Content {
     'santa-suit-v1': { name: '圣诞老人装', tagline: '经典红袍，连白胡子一起还原。' },
     'elf-costume-v1': { name: '精灵装', tagline: '绿衣尖帽，一身工坊的忙年气息。' },
     'ugly-sweater-v1': { name: '丑毛衣', tagline: '针织、花哨，派对感拉满。' },
+    'id-photo-white-v1': {
+      name: '证件照',
+      tagline: '纯色背景，头肩构图。',
+      variants: { 'white-1in': '白底', 'blue-1in': '蓝底' },
+    },
   }
   const { uploadDays, outputDays } = s.retention
   const photoRetention = uploadDays > 0 ? `在上传 ${uploadDays} 天后自动删除` : '保留到你主动删除为止'
@@ -29,6 +34,7 @@ export function zh(s: S): Content {
     styles,
     scenes: {
       christmas: { name: '圣诞节', tagline: '圣诞老人装、精灵装和丑毛衣。' },
+      'id-photo': { name: '证件照', tagline: '纯色影棚背景，干净的头肩照。' },
     },
     meta: {
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
@@ -92,6 +98,7 @@ export function zh(s: S): Content {
       uploaded: '照片已就绪',
       stepStyle: '服装',
       stepLength: '时长',
+      stepVariant: '背景',
       seconds: (n: number) => `${n} 秒`,
       full: '完整版',
       creditsLabel: (n: number) => `${n} 积分`,

@@ -4,7 +4,7 @@ import type { ArticleKey, site as Site } from '#/config/site'
 
 type S = typeof Site
 type StyleId = S['styles'][number]['id']
-type StyleCopy = { name: string; tagline: string }
+type StyleCopy = { name: string; tagline: string; variants?: Record<string, string> }
 // faq 可选：有就在正文后渲染折叠问答，并输出 FAQPage 结构化数据
 // 文章段落可选的表格（对比、规格），渲染在该段落的文字之后；第一列作为行标题
 export type ArticleTable = { head: string[]; rows: string[][] }
@@ -36,12 +36,18 @@ export function en(s: S) {
     'santa-suit-v1': { name: 'Santa Suit', tagline: 'The classic red suit, beard included.' },
     'elf-costume-v1': { name: 'Elf Costume', tagline: 'Green tunic, pointy hat, workshop energy.' },
     'ugly-sweater-v1': { name: 'Ugly Christmas Sweater', tagline: 'Knitted, loud and party-ready.' },
+    'id-photo-white-v1': {
+      name: 'ID photo',
+      tagline: 'Plain backdrop, head and shoulders.',
+      variants: { 'white-1in': 'White background', 'blue-1in': 'Blue background' },
+    },
   }
   return {
     styles,
     // 生成器顶部 tab 的展示名；键必须覆盖 site.ts 的 SCENES
     scenes: {
       christmas: { name: 'Christmas', tagline: 'Santa suits, elf costumes and ugly sweaters.' },
+      'id-photo': { name: 'ID photos', tagline: 'Studio backgrounds for a clean head shot.' },
     },
     meta: {
       // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
@@ -107,6 +113,7 @@ export function en(s: S) {
       uploaded: 'Photo ready',
       stepStyle: 'Costume',
       stepLength: 'Length',
+      stepVariant: 'Background',
       seconds: (n: number) => `${n} s`,
       full: 'full',
       creditsLabel: (n: number) => `${n} credits`,

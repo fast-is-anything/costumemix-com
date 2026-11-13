@@ -1,7 +1,7 @@
 ﻿import { Hono } from 'hono'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
-import { defaultStyle, findPackage, findPlan, findStyle, findStyleDuration, isLocale, localePath, sellingPlans, site, stylePhotoCount } from '#/config/site'
+import { defaultStyle, findPackage, findPlan, findStyle, findStyleDuration, findStyleVariant, isLocale, localePath, sellingPlans, site, stylePhotoCount } from '#/config/site'
 import { safeRedirectPath } from '#/lib/redirect'
 import { GENERATION_ID_PATTERN } from '#/lib/xmp'
 import { exportFileName, exportUserData } from './account-export'
@@ -48,7 +48,7 @@ import { createTakedown, isBlockedMedia, parseTakedown, type TakedownInput } fro
 import { turnstileSiteKey, verifyTurnstile } from './turnstile'
 import type { AppContext, GenerationRow, OrderRow, UploadRow, UserRow } from './types'
 import { ApiError, constantTimeEqual, createId, isCheckConstraintError, isProduction, nowIso, randomToken, sha256Hex } from './util'
-import { videoProviderIdForStyle } from './providers/registry'
+import { providerIdForStyle, supports } from './providers/registry'
 import { videoModelName } from './video/model-name'
 
 const MAX_ACTIVE_JOBS_PER_USER = 3
@@ -279,15 +279,20 @@ app.post('/api/generations', async (c) => {
   const settings = await getSettings(c.env)
   assertOpen(settings, user)
   await rateLimit(c.env.GENERATE_LIMITER, user.id)
-  const body = await readJson<{ uploadId: string; uploadIds: unknown; durationId: string; styleId?: string; mockOutcome: string; locale: string; consent: unknown }>(c)
+  const body = await readJson<{ uploadId: string; uploadIds: unknown; durationId: string; variantId: string; styleId?: string; mockOutcome: string; locale: string; consent: unknown }>(c)
   // 生成前必须同意（照片是本人或已获许可、对方成年）：服务端留存同意时间和当时的文案原文
   if (body.consent !== true) throw new ApiError(400, 'consent_required')
   // 不带 styleId 用默认风格；带了但不存在报错，不悄悄换风格
   const style = body.styleId === undefined || body.styleId === null ? defaultStyle : findStyle(String(body.styleId))
   if (!style) throw new ApiError(400, 'invalid_style')
-  // 时长档位跟着风格走（风格没配自己的就是全站的）
-  const duration = findStyleDuration(style, body.durationId ?? '')
-  if (!duration) throw new ApiError(400, 'invalid_duration')
+  // 视频按 durationId，图片按 variantId；两者都由风格决定
+  const isImage = style.kind === 'image'
+  const duration = isImage ? undefined : findStyleDuration(style, body.durationId ?? '')
+  const variant = isImage ? findStyleVariant(style, body.variantId ?? '') : undefined
+  if (!isImage && !duration) throw new ApiError(400, 'invalid_duration')
+  if (isImage && !variant) throw new ApiError(400, 'invalid_variant')
+  const outputType = isImage ? 'image' : 'video'
+  const credits = isImage ? variant!.credits : duration!.credits
   const db = c.env.DB
   // uploadIds 优先，兼容旧的单张 uploadId；张数必须等于风格要求（第 1 张 = 左边的人，第 2 张 = 右边的人）
   const uploadIds: unknown = body.uploadIds ?? (body.uploadId === undefined ? [] : [body.uploadId])
@@ -314,7 +319,8 @@ app.post('/api/generations', async (c) => {
   if (cap > 0 && (await generationsToday(db, nowIso())) >= cap) throw new ApiError(429, 'daily_limit')
   await rememberLocale(c.env, user, body.locale)
 
-  const providerId = videoProviderIdForStyle(c.env, style)
+  const providerId = providerIdForStyle(c.env, style)
+  if (!supports(providerId, outputType)) throw new ApiError(503, 'capability_unsupported')
   const mockOutcome = providerId === 'mock' && (body.mockOutcome === 'fail' || body.mockOutcome === 'hang' || body.mockOutcome === 'output_reject') ? body.mockOutcome : null
   const meta = mockOutcome ? JSON.stringify({ mockOutcome }) : null
   const id = createId('gen')
@@ -326,12 +332,29 @@ app.post('/api/generations', async (c) => {
         .prepare(
           `INSERT INTO generations (id, user_id, template_id, output_type, duration_id, duration_seconds, variant_id, credits_cost, upload_id,
            second_upload_id, status, provider, provider_meta, created_at, updated_at, consent_at, consent_text)
-           VALUES (?, ?, ?, 'video', ?, ?, NULL, ?, ?, ?, 'queued', ?, ?, ?, ?, ?, ?)`,
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'queued', ?, ?, ?, ?, ?, ?)`,
         )
-        .bind(id, user.id, style.id, duration.id, duration.seconds, duration.credits, upload.id, secondUpload?.id ?? null, providerId, meta, now, now, now, consent),
+        .bind(
+          id,
+          user.id,
+          style.id,
+          outputType,
+          duration?.id ?? null,
+          duration?.seconds ?? null,
+          variant?.id ?? null,
+          credits,
+          upload.id,
+          secondUpload?.id ?? null,
+          providerId,
+          meta,
+          now,
+          now,
+          now,
+          consent,
+        ),
       ...ledgerStatements(db, {
         userId: user.id,
-        delta: -duration.credits,
+        delta: -credits,
         reason: 'generation',
         refId: id,
         idempotencyKey: `generation:${id}`,

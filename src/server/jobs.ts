@@ -1,4 +1,4 @@
-﻿import { findStyle, findStyleDuration, site } from '#/config/site'
+﻿import { findStyle, findStyleDuration, findStyleVariant, site, stylePhotoCount } from '#/config/site'
 import { jobToken, signedUploadUrl, templateSourceUrl } from './media'
 import { expireStatements, generationRefundStatements } from './credits'
 import { notifyGenerationFinished } from './notifications'
@@ -8,9 +8,10 @@ import type { GenerationRow, UploadRow, VideoJobMessage } from './types'
 import { sweepExpiredMedia, sweepHandoff } from './retention'
 import { grantDueSubscriptions } from './subscriptions'
 import { nowIso } from './util'
-import { getVideoProvider } from './providers/registry'
+import { getImageProvider, getVideoProvider } from './providers/registry'
 import type { ProviderId } from './providers/types'
 import { videoModelName } from './video/model-name'
+import { ImageProviderError } from './image/types'
 import { VideoProviderError } from './video/types'
 import { addStyleMusic } from './music'
 import { tagOutputWithXmp } from './xmp'
@@ -26,10 +27,11 @@ export async function storeOutputFromUrl(
   url: string,
   key: string,
   limits = { streamed: MAX_OUTPUT_BYTES, buffered: MAX_BUFFERED_OUTPUT_BYTES },
+  contentType = 'video/mp4',
 ) {
   const response = await fetch(url)
   if (!response.ok) throw new Error(`download output failed: HTTP ${response.status}`)
-  const httpMetadata = { contentType: 'video/mp4' }
+  const httpMetadata = { contentType }
   const header = response.headers.get('content-length')
   const declared = header === null ? NaN : Number(header)
   if (Number.isSafeInteger(declared) && declared > 0) {
@@ -68,6 +70,10 @@ const POLL_DELAY_SECONDS: Record<string, number> = { mock: 2, fal: 20, yir: 20, 
 
 export async function enqueueJob(env: Env, message: VideoJobMessage, delaySeconds = 0) {
   await env.VIDEO_QUEUE.send(message, delaySeconds > 0 ? { delaySeconds } : undefined)
+}
+
+export function isProviderError(error: unknown): error is VideoProviderError | ImageProviderError {
+  return error instanceof VideoProviderError || error instanceof ImageProviderError
 }
 
 export async function handleQueueBatch(batch: MessageBatch<VideoJobMessage>, env: Env) {
@@ -119,6 +125,11 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
     .bind(nowIso(), generation.id)
     .run()
   if (!claimed.meta.changes) return
+
+  if (generation.output_type === 'image') {
+    await submitImageGeneration(env, generation)
+    return
+  }
 
   // P3 只有视频产物；图片在 P4 接。缺字段直接判失败，避免拿 null 去请求服务商
   if (generation.output_type !== 'video' || generation.duration_id === null || generation.duration_seconds === null) {
@@ -176,7 +187,7 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
       .run()
     await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[providerId])
   } catch (error) {
-    if (error instanceof VideoProviderError && !error.retryable) {
+    if (isProviderError(error) && !error.retryable) {
       await failGeneration(env, generation.id, error.code, error.message)
       return
     }
@@ -191,6 +202,11 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
 async function pollGeneration(env: Env, generation: GenerationRow) {
   if (generation.status !== 'processing' || !generation.provider_request_id) return
 
+  if (generation.output_type === 'image') {
+    await pollImageGeneration(env, generation)
+    return
+  }
+
   if (generation.output_type !== 'video' || generation.duration_id === null || generation.duration_seconds === null) {
     await failGeneration(env, generation.id, 'invalid_input', 'Generation is missing video options')
     return
@@ -202,7 +218,7 @@ async function pollGeneration(env: Env, generation: GenerationRow) {
   try {
     status = await provider.status(generation.provider_request_id, parseMeta(generation.provider_meta))
   } catch (error) {
-    if (error instanceof VideoProviderError && !error.retryable) {
+    if (isProviderError(error) && !error.retryable) {
       await failGeneration(env, generation.id, error.code, error.message)
       return
     }
@@ -287,6 +303,126 @@ async function pollGeneration(env: Env, generation: GenerationRow) {
   const current = await env.DB.prepare('SELECT status FROM generations WHERE id = ?').bind(generation.id).first<{ status: string }>()
   if (current?.status === 'succeeded') return
   // 期间已被判失败（超时、管理员失败或下架）：不留下无主的成片，但服务商已经出片计费，成本照记
+  await env.MEDIA.delete(outputKey)
+  await env.DB.prepare('UPDATE generations SET provider_cost_cents = ? WHERE id = ? AND provider_cost_cents IS NULL')
+    .bind(costCents, generation.id)
+    .run()
+}
+
+
+// 图片任务：提交到图片服务商，产物是 outputs/<user>/<id>.jpg；不混音乐、不抽帧审核
+async function submitImageGeneration(env: Env, generation: GenerationRow) {
+  const style = findStyle(generation.template_id)
+  if (!style || style.kind !== 'image' || !generation.variant_id) {
+    await failGeneration(env, generation.id, 'invalid_input', 'Image style or variant missing')
+    return
+  }
+  const variant = findStyleVariant(style, generation.variant_id)
+  const upload = await env.DB.prepare('SELECT * FROM uploads WHERE id = ?').bind(generation.upload_id).first<UploadRow>()
+  const secondUpload = generation.second_upload_id
+    ? await env.DB.prepare('SELECT * FROM uploads WHERE id = ?').bind(generation.second_upload_id).first<UploadRow>()
+    : null
+  const need = stylePhotoCount(style)
+  const secondMissing = need === 2 && (!secondUpload || Boolean(secondUpload.expired_at))
+  if (!variant || !upload || upload.expired_at || secondMissing) {
+    await failGeneration(env, generation.id, 'invalid_input', 'Upload or variant no longer exists')
+    return
+  }
+
+  const provider = getImageProvider(env, generation.provider as ProviderId)
+  const baseMeta = { ...parseMeta(generation.provider_meta), variantId: variant.id }
+  try {
+    const webhookUrl = new URL(`/api/webhooks/${generation.provider}`, env.SITE_URL)
+    webhookUrl.searchParams.set('gen', generation.id)
+    webhookUrl.searchParams.set('token', await jobToken(env, generation.id))
+    const result = await provider.submit({
+      generationId: generation.id,
+      style,
+      imageUrls: await Promise.all(
+        [upload, ...(secondUpload ? [secondUpload] : [])].map((u) => signedUploadUrl(env, u.id, Date.parse(generation.created_at))),
+      ),
+      variantId: variant.id,
+      templateUrl: new URL(variant.template, env.SITE_URL).toString(),
+      webhookUrl: webhookUrl.toString(),
+      meta: baseMeta,
+    })
+    const now = nowIso()
+    await env.DB.prepare(
+      'UPDATE generations SET provider_request_id = ?, provider_meta = ?, started_at = ?, updated_at = ? WHERE id = ?',
+    )
+      .bind(result.requestId, JSON.stringify(result.meta), now, now, generation.id)
+      .run()
+    await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[generation.provider] ?? 5)
+  } catch (error) {
+    if (isProviderError(error) && !error.retryable) {
+      await failGeneration(env, generation.id, error.code, error.message)
+      return
+    }
+    await env.DB.prepare("UPDATE generations SET status = 'queued', updated_at = ? WHERE id = ? AND status = 'processing'")
+      .bind(nowIso(), generation.id)
+      .run()
+    throw error
+  }
+}
+
+async function pollImageGeneration(env: Env, generation: GenerationRow) {
+  if (!generation.provider_request_id || !generation.variant_id) return
+  const provider = getImageProvider(env, generation.provider as ProviderId)
+  let status
+  try {
+    status = await provider.status(generation.provider_request_id, parseMeta(generation.provider_meta))
+  } catch (error) {
+    if (isProviderError(error) && !error.retryable) {
+      await failGeneration(env, generation.id, error.code, error.message)
+      return
+    }
+    throw error
+  }
+
+  if (status.state === 'pending') {
+    if (minutesSince(generation.created_at) > JOB_TIMEOUT_MINUTES) {
+      await failGeneration(env, generation.id, 'timeout', 'Image generation timed out')
+      return
+    }
+    await env.DB.prepare('UPDATE generations SET updated_at = ? WHERE id = ?').bind(nowIso(), generation.id).run()
+    await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[generation.provider] ?? 5)
+    return
+  }
+
+  if (status.state === 'failed') {
+    await failGeneration(env, generation.id, status.code, status.message)
+    return
+  }
+
+  const outputKey = `outputs/${generation.user_id}/${generation.id}.jpg`
+  if ('url' in status.output) {
+    if (!(await storeOutputFromUrl(env, status.output.url, outputKey, undefined, 'image/jpeg'))) {
+      await failGeneration(env, generation.id, 'output_too_large', 'Provider output exceeds the size limit')
+      return
+    }
+  } else {
+    const source = await env.MEDIA.get(status.output.r2Key)
+    if (!source) {
+      await failGeneration(env, generation.id, 'output_missing', `R2 object ${status.output.r2Key} not found`)
+      return
+    }
+    await env.MEDIA.put(outputKey, await source.arrayBuffer(), { httpMetadata: { contentType: 'image/jpeg' } })
+  }
+
+  const now = nowIso()
+  const costCents = status.costCents ?? provider.costCents(generation.variant_id)
+  const saved = await env.DB.prepare(
+    `UPDATE generations SET status = 'succeeded', output_r2_key = ?, provider_cost_cents = ?, completed_at = ?, updated_at = ?
+     WHERE id = ? AND status = 'processing'`,
+  )
+    .bind(outputKey, costCents, now, now, generation.id)
+    .run()
+  if (saved.meta.changes) {
+    await notifyGenerationFinished(env, generation.id)
+    return
+  }
+  const current = await env.DB.prepare('SELECT status FROM generations WHERE id = ?').bind(generation.id).first<{ status: string }>()
+  if (current?.status === 'succeeded') return
   await env.MEDIA.delete(outputKey)
   await env.DB.prepare('UPDATE generations SET provider_cost_cents = ? WHERE id = ? AND provider_cost_cents IS NULL')
     .bind(costCents, generation.id)
@@ -391,6 +527,7 @@ function parseMeta(value: string | null): Record<string, unknown> {
 function minutesSince(iso: string) {
   return (Date.now() - Date.parse(iso)) / 60_000
 }
+
 
 
 

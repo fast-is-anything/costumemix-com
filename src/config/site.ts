@@ -8,7 +8,7 @@ export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = 'en'
 
 // 场景分类：生成器顶部的 tab 按这里的顺序渲染。加场景时在这里补一项，并补齐 content 里的 scenes 文案。
-export const SCENES = ['christmas'] as const
+export const SCENES = ['christmas', 'id-photo'] as const
 export type SceneId = (typeof SCENES)[number]
 
 // 每种语言的 BCP 47 标签（<html lang>、日期格式、Turnstile）、og:locale 和切换器里显示的自称。
@@ -110,6 +110,18 @@ export const site = {
         ],
         madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
       },
+    },
+    {
+      id: 'id-photo-white-v1',
+      category: 'id-photo',
+      kind: 'image',
+      prompt:
+        'Keep the face, hair and skin tone from the reference photo. Replace the background with a plain studio backdrop and crop to a head-and-shoulders ID photo.',
+      variants: [
+        { id: 'white-1in', template: '/demo/sample-photo.jpg', credits: 4 },
+        { id: 'blue-1in', template: '/demo/sample-photo.jpg', credits: 4 },
+      ],
+      examples: { photo: '/demo/sample-photo.jpg', result: '/demo/sample-photo.jpg', credit: 'Demo · placeholder' },
     },
     // TODO(site): 换成真实的圣诞服装趋势源视频（seed/templates/）
     // TODO(site): 换成授权的展示素材并写 credit（public/demo/、public/og.png）

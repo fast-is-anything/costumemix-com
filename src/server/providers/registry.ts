@@ -32,8 +32,26 @@ export const PROVIDER_CAPABILITIES = {
   fal: ['video'],
   yir: ['video'],
   nanoapi: ['video'],
-  mock: ['video'],
+  mock: ['video', 'image'],
 } as const satisfies Record<ProviderId, readonly Capability[]>
+
+// 图片 mock：几秒后“完成”，产物直接复制 seed 上传的占位图（templates/sample-photo.jpg）
+function createMockImageProvider(): ImageProvider {
+  return {
+    async submit(input) {
+      return {
+        requestId: `mock_image_${input.generationId}`,
+        meta: { ...input.meta, readyAt: Date.now() + 2000, resultKey: 'templates/sample-photo.jpg' },
+      }
+    },
+    async status(_requestId, meta) {
+      if (meta.mockOutcome === 'hang' || Date.now() < Number(meta.readyAt ?? 0)) return { state: 'pending' }
+      if (meta.mockOutcome === 'fail') return { state: 'failed', code: 'mock_failure', message: 'Simulated image failure' }
+      return { state: 'completed', output: { r2Key: String(meta.resultKey) } }
+    },
+    costCents: () => 0,
+  }
+}
 
 export function supports(providerId: ProviderId, capability: Capability): boolean {
   return (PROVIDER_CAPABILITIES[providerId] as readonly Capability[]).includes(capability)
@@ -48,7 +66,26 @@ export function activeVideoProviderId(env: Env): ProviderId {
 }
 
 // 生成任务用哪个服务商：风格固定了就用风格的；mock（本地与 e2e）压过一切
+function configuredImageProvider(env: Env): string {
+  const configured = (env as Env & { IMAGE_PROVIDER?: string }).IMAGE_PROVIDER
+  // 生产环境默认 fal；本地/测试默认 mock
+  return configured ?? (isProduction(env) ? 'fal' : 'mock')
+}
+
+export function activeImageProviderId(env: Env): ProviderId {
+  const configured = configuredImageProvider(env)
+  if (configured === 'mock' && !isProduction(env)) return 'mock'
+  if (configured === 'fal' || configured === 'yir') return configured
+  throw new ApiError(503, 'image_not_configured', `Unsupported IMAGE_PROVIDER: ${configured}`)
+}
+
+// 生成任务用哪个服务商：按产物类型选默认服务商，style.provider 可覆盖；mock 在非生产压过一切
 export function providerIdForStyle(env: Env, style: Style): ProviderId {
+  if (style.kind === 'image') {
+    const active = activeImageProviderId(env)
+    if (active === 'mock') return 'mock'
+    return style.provider ?? active
+  }
   const active = activeVideoProviderId(env)
   if (active === 'mock') return 'mock'
   return style.provider ?? active
@@ -69,10 +106,11 @@ export function getVideoProvider(env: Env, id: ProviderId = activeVideoProviderI
 }
 
 export function getImageProvider(env: Env, id: ProviderId): ImageProvider {
-  if (id === 'mock' && isProduction(env)) {
-    throw new ApiError(503, 'provider_not_configured', 'mock provider is not available in production')
+  if (id === 'mock') {
+    if (isProduction(env)) throw new ApiError(503, 'provider_not_configured', 'mock provider is not available in production')
+    return createMockImageProvider()
   }
   if (!supports(id, 'image')) return unsupportedImageCapability(id)
-  // 图片实现要到 P4 才接；矩阵里没有 'image'，这里理论上不可达
+  // 真实图片 adapter（fal）在 P4c 接
   throw new ApiError(503, 'image_not_configured', `No image adapter for ${id}`)
 }

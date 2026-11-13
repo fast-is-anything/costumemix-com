@@ -5,8 +5,8 @@ import type { AlertKind } from './alerts'
 // 用户输入（姓名、留言内容等）只出现在正文并全部转义，不进 Subject。
 
 export interface TemplateParams {
-  generation_succeeded: { generationId: string; expiresAt: string | null }
-  generation_failed: { generationId: string; credits: number }
+  generation_succeeded: { generationId: string; expiresAt: string | null; media: 'video' | 'image' }
+  generation_failed: { generationId: string; credits: number; media: 'video' | 'image' }
   order_paid: { orderId: string; credits: number; amount: string }
   takedown_received: { reportId: string; dueAt: string }
   takedown_resolved: { reportId: string; outcome: 'removed' | 'rejected' }
@@ -148,19 +148,19 @@ export function alertChatText(p: AlertParams) {
 const USER_TEMPLATES: { [K in UserTemplate]: Record<Locale, Render<K>> } = {
   generation_succeeded: {
     en: (p, ctx) => ({
-      subject: `Your ${brand} video is ready`,
-      heading: 'Your video is ready',
+      subject: `Your ${brand} ${p.media} is ready`,
+      heading: `Your ${p.media} is ready`,
       paragraphs: [
-        'Your AI video is ready to watch and download.',
+        `Your AI ${p.media} is ready to watch and download.`,
         p.expiresAt ? `We keep it until ${date(ctx, p.expiresAt)}, then delete it automatically. Download a copy if you want to keep it.` : '',
       ],
       cta: { label: 'Open my videos', url: link(ctx, '/dashboard') },
       footer: AI_FOOTER.en,
     }),
     zh: (p, ctx) => ({
-      subject: `你的 ${brand} 视频已生成`,
-      heading: '视频已生成',
-      paragraphs: ['你的 AI 视频已经可以观看和下载了。', p.expiresAt ? `成片保存到 ${date(ctx, p.expiresAt)}，之后会自动删除；需要长期保留请及时下载。` : ''],
+      subject: `你的 ${brand} ${p.media === 'image' ? '图片' : '视频'}已生成`,
+      heading: `${p.media === 'image' ? '图片' : '视频'}已生成`,
+      paragraphs: [`你的 AI ${p.media === 'image' ? '图片' : '视频'}已经可以查看和下载了。`, p.expiresAt ? `成片保存到 ${date(ctx, p.expiresAt)}，之后会自动删除；需要长期保留请及时下载。` : ''],
       cta: { label: '查看我的视频', url: link(ctx, '/dashboard') },
       footer: AI_FOOTER.zh,
     }),
@@ -168,17 +168,17 @@ const USER_TEMPLATES: { [K in UserTemplate]: Record<Locale, Render<K>> } = {
 
   generation_failed: {
     en: (p, ctx) => ({
-      subject: `Your ${brand} video failed — credits refunded`,
-      heading: "We couldn't make your video",
+      subject: `Your ${brand} ${p.media} failed — credits refunded`,
+      heading: `We couldn't make your ${p.media}`,
       paragraphs: [
-        `Something went wrong while generating your video. We've returned ${p.credits} credits to your balance.`,
+        `Something went wrong while generating your ${p.media}. We've returned ${p.credits} credits to your balance.`,
         'You can try again with the same photo, or use a clear, front-facing one.',
       ],
       cta: { label: 'Try again', url: link(ctx, '/') },
     }),
     zh: (p, ctx) => ({
-      subject: `你的 ${brand} 视频生成失败，积分已退回`,
-      heading: '视频生成失败',
+      subject: `你的 ${brand} ${p.media === 'image' ? '图片' : '视频'}生成失败，积分已退回`,
+      heading: `${p.media === 'image' ? '图片' : '视频'}生成失败`,
       paragraphs: [`这次生成没有成功，${p.credits} 个积分已退回你的账户。`, '可以用同一张照片再试一次，或者换一张正脸清晰的照片。'],
       cta: { label: '重新生成', url: link(ctx, '/') },
     }),

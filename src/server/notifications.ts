@@ -1,4 +1,4 @@
-import { formatPrice, site } from '#/config/site'
+﻿import { formatPrice, site } from '#/config/site'
 import { adminEmails } from './auth'
 import { postChatMessage } from './chat-notify'
 import { runEmailMaintenance, sendEmails, type OutgoingEmail } from './email'
@@ -47,7 +47,7 @@ export function notifyGenerationFinished(env: Env, generationId: string) {
           to: user.email,
           userId: user.id,
           locale: user.locale,
-          params: { generationId: generation.id, expiresAt: outputExpiresAt(generation.completed_at) },
+          params: { generationId: generation.id, expiresAt: outputExpiresAt(generation.completed_at), media: generation.output_type },
         },
       ])
     } else if (generation.status === 'failed' && generation.refunded && !SILENT_FAILURES.has(generation.error_code ?? '')) {
@@ -58,7 +58,7 @@ export function notifyGenerationFinished(env: Env, generationId: string) {
           to: user.email,
           userId: user.id,
           locale: user.locale,
-          params: { generationId: generation.id, credits: generation.credits_cost },
+          params: { generationId: generation.id, credits: generation.credits_cost, media: generation.output_type },
         },
       ])
     }
@@ -251,3 +251,4 @@ export async function runNotificationCron(env: Env) {
   const result = await runEmailMaintenance(env)
   if (result.retried) console.log('email retry', result)
 }
+

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+﻿import { afterEach, describe, expect, it, vi } from 'vitest'
 import { site } from '#/config/site'
 import { EMAIL_MAX_ATTEMPTS, attemptDelivery, emailConfig, type EmailConfig, type Mailer } from '#/server/email'
 import { renderEmail } from '#/server/email-templates'
@@ -27,12 +27,12 @@ function sendError(code: string | null, message = 'boom') {
 
 describe('renderEmail', () => {
   it('按 locale 选择语言和带前缀的链接，未知语言回退英文', () => {
-    const zh = renderEmail('generation_failed', { generationId: 'gen_1', credits: 6 }, { siteUrl: SITE_URL, locale: 'zh' })
+    const zh = renderEmail('generation_failed', { generationId: 'gen_1', credits: 6, media: 'video' }, { siteUrl: SITE_URL, locale: 'zh' })
     expect(zh.subject).toContain('积分已退回')
     expect(zh.text).toContain('6 个积分已退回')
     expect(zh.text).toContain('重新生成: https://example.test/zh\n')
 
-    const fallback = renderEmail('generation_failed', { generationId: 'gen_1', credits: 6 }, { siteUrl: SITE_URL, locale: 'fr' })
+    const fallback = renderEmail('generation_failed', { generationId: 'gen_1', credits: 6, media: 'video' }, { siteUrl: SITE_URL, locale: 'fr' })
     expect(fallback.subject).toContain('credits refunded')
     expect(fallback.text).toContain('Try again: https://example.test/')
     expect(fallback.text).not.toContain('/zh/')
@@ -215,3 +215,4 @@ describe('attemptDelivery', () => {
     expect(cfg.mailer.send).not.toHaveBeenCalled()
   })
 })
+

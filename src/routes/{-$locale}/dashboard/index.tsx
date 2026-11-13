@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+﻿import { createFileRoute } from '@tanstack/react-router'
 import { Download, Share2, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { AiBadge, ErrorText, Spinner, StatusPill, formatDate } from '#/components/ui'
@@ -68,7 +68,7 @@ function VideosPage() {
 
   // 分享：先在浏览器里截一帧做链接预览图（失败就不带，分享页用站点默认图），再生成公开链接
   async function share(g: Generation) {
-    if (!g.mediaUrl || !confirm(d.confirmShare)) return
+    if (!g.mediaUrl || g.mediaType !== 'video' || !confirm(d.confirmShare)) return
     setSharing(g.id)
     try {
       const poster = await captureSharePoster(g.mediaUrl, c.common.aiGenerated)
@@ -123,7 +123,11 @@ function VideosPage() {
               {g.status === 'succeeded' && g.mediaUrl ? (
                 <>
                   <AiBadge />
-                  <video src={g.mediaUrl} controls playsInline preload="metadata" className="size-full bg-black object-contain" />
+                  {g.mediaType === 'image' ? (
+                    <img src={g.mediaUrl} alt="" className="size-full bg-bg-soft object-contain" />
+                  ) : (
+                    <video src={g.mediaUrl} controls playsInline preload="metadata" className="size-full bg-black object-contain" />
+                  )}
                 </>
               ) : isActiveGeneration(g) ? (
                 <Spinner className="size-6 text-muted" />
@@ -154,7 +158,7 @@ function VideosPage() {
                       <Download className="size-3.5" /> {d.download}
                     </a>
                   ) : null}
-                  {g.mediaUrl && site.share.enabled && !g.shareId ? (
+                  {g.mediaUrl && g.mediaType === 'video' && site.share.enabled && !g.shareId ? (
                     <button
                       type="button"
                       className="btn-ghost px-3 py-1.5 text-xs"
@@ -193,3 +197,6 @@ function VideosPage() {
     </div>
   )
 }
+
+
+

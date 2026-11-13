@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+﻿import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { ArrowRight, Camera, Check, Clock, Coins, Film, ShieldCheck, Smartphone, Sparkles, X } from 'lucide-react'
 import { Faq, faqJsonLd } from '#/components/Faq'
@@ -6,7 +6,7 @@ import { Generator } from '#/components/Generator'
 import { Pricing } from '#/components/Pricing'
 import { VideoCard } from '#/components/VideoCard'
 import { LocalLink } from '#/components/ui'
-import { DISPLAY_STYLES, STYLES, VIDEO_STYLES, articlePath, featuredStyle, findStyle, site } from '#/config/site'
+import { VIDEO_STYLES, STYLES, articlePath, featuredStyle, findStyle, site } from '#/config/site'
 import { getContent, localeFromParam, pageHead, useContent } from '#/lib/i18n'
 import { homeJsonLd, jsonLdScript } from '#/lib/seo'
 
@@ -66,7 +66,7 @@ function Home() {
               </div>
               {STYLES.length > 1 ? (
                 <div role="tablist" aria-label={c.generator.stepStyle} className="flex flex-wrap justify-center gap-2">
-                  {DISPLAY_STYLES.map((s) => {
+                  {VIDEO_STYLES.map((s) => {
                     const active = s.id === style.id
                     return (
                       <button
@@ -84,7 +84,7 @@ function Home() {
                           const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
                           if (!step) return
                           event.preventDefault()
-                          const next = DISPLAY_STYLES[(DISPLAY_STYLES.indexOf(s) + step + DISPLAY_STYLES.length) % DISPLAY_STYLES.length]!
+                          const next = VIDEO_STYLES[(VIDEO_STYLES.indexOf(s) + step + VIDEO_STYLES.length) % VIDEO_STYLES.length]!
                           setStyleId(next.id)
                           document.getElementById(`hero-tab-${next.id}`)?.focus()
                         }}
@@ -394,5 +394,6 @@ function Home() {
     </>
   )
 }
+
 
 

@@ -1,7 +1,7 @@
 import { useRouterState } from '@tanstack/react-router'
 import { CircleAlert, CircleCheck, Download, Smartphone, Upload } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { DISPLAY_STYLES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount } from '#/config/site'
+import { DISPLAY_STYLES, SCENES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount, styleVariants, type SceneId } from '#/config/site'
 import { api, errorCode, isActiveGeneration, type Generation } from '#/lib/api'
 import { track } from '#/lib/attribution'
 import { useCheckout } from '#/lib/checkout'
@@ -32,10 +32,15 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
   const [ownStyleId, setOwnStyleId] = useState<string>(featuredStyle.id)
   const styleId = controlledStyleId ?? ownStyleId
   const selectStyle = onStyleChange ?? setOwnStyleId
+  const [category, setCategory] = useState<SceneId>(SCENES[0]!)
+  const visibleStyles = DISPLAY_STYLES.filter((s) => s.category === category)
   const currentStyle = findStyle(styleId) ?? featuredStyle
   const need = stylePhotoCount(currentStyle)
+  const isImage = currentStyle.kind === 'image'
   const styleDurationList = styleDurations(currentStyle)
-  const [durationId, setDurationId] = useState<string>(styleDurationList[styleDurationList.length - 1]!.id)
+  const variantList = styleVariants(currentStyle)
+  const [durationId, setDurationId] = useState<string>(styleDurationList[styleDurationList.length - 1]?.id ?? '')
+  const [variantId, setVariantId] = useState<string>(variantList[0]?.id ?? '')
   const [consent, setConsent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -52,12 +57,14 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
   const draftClearedRef = useRef<File | null>(null)
 
   const checkout = useCheckout()
-  const duration = styleDurationList.find((d) => d.id === durationId) ?? styleDurationList[styleDurationList.length - 1]!
-  const shortfall = user ? Math.max(0, duration.credits - user.credits) : 0
+  const duration = styleDurationList.find((d) => d.id === durationId) ?? styleDurationList[styleDurationList.length - 1]
+  const selectedVariant = variantList.find((v) => v.id === variantId) ?? variantList[0]
+  const credits = isImage ? (selectedVariant?.credits ?? 0) : (duration?.credits ?? 0)
+  const shortfall = user ? Math.max(0, credits - user.credits) : 0
   // 余额不足时直接在这里下单够用的最便宜积分包；没有够用的包就退回去价格页
   const coverPack = shortfall > 0 ? cheapestPackageCovering(shortfall) : undefined
   // 访客也先看到这个视频要多少积分、最便宜的够用的包多少钱
-  const guestPack = !user ? cheapestPackageCovering(duration.credits) : undefined
+  const guestPack = !user ? cheapestPackageCovering(credits) : undefined
 
   useEffect(() => () => {
     if (photos[0]) URL.revokeObjectURL(photos[0].previewUrl)
@@ -195,8 +202,11 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
         }
         uploadIds.push(uploadId)
       }
-      const data = await api<{ generation: Generation }>('/api/generations', { json: { uploadIds, durationId: duration.id, styleId, locale, consent } })
-      track('generate_video', { style_id: styleId, duration_id: duration.id, credits: data.generation.creditsCost })
+      const optionId = isImage ? selectedVariant?.id : duration?.id
+      const data = await api<{ generation: Generation }>('/api/generations', {
+        json: { uploadIds, ...(isImage ? { variantId: optionId } : { durationId: optionId }), styleId, locale, consent },
+      })
+      track('generate_video', { style_id: styleId, duration_id: optionId, credits: data.generation.creditsCost })
       draftClearedRef.current = photo.file
       await clearDraft()
       setGeneration(data.generation)
@@ -227,6 +237,23 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
       <h2 id="generator-title" className="sr-only">
         {g.title}
       </h2>
+      {SCENES.length > 1 ? (
+        <div role="tablist" aria-label={g.stepStyle} className="flex flex-wrap gap-2 lg:col-span-2" data-testid="scene-tabs">
+          {SCENES.map((id) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={id === category}
+              data-testid={`scene-tab-${id}`}
+              onClick={() => setCategory(id)}
+              className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${id === category ? 'bg-ink text-bg' : 'bg-bg-soft text-muted hover:text-fg'}`}
+            >
+              {c.scenes[id].name}
+            </button>
+          ))}
+        </div>
+      ) : null}
       <div className="space-y-5">
         {/* 1. 照片 */}
         <section className="space-y-3">
@@ -264,7 +291,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
           <section className="space-y-3">
             <StepTitle n={2}>{g.stepStyle}</StepTitle>
             <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={g.stepStyle}>
-              {DISPLAY_STYLES.map((style) => {
+              {visibleStyles.map((style) => {
                 const active = style.id === styleId
                 const copy = c.styles[style.id as keyof typeof c.styles]
                 const thumb = style.kind === 'image' ? style.examples.result : style.examples.aiVersions[0]?.poster
@@ -292,16 +319,39 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
         ) : null}
       </div>
       <div className="flex flex-col gap-5">
-        {/* 时长 */}
+        {/* 时长 / 背景 */}
         <section className="space-y-3">
-          <StepTitle n={STYLES.length > 1 ? 3 : 2}>{g.stepLength}</StepTitle>
+          <StepTitle n={STYLES.length > 1 ? 3 : 2}>{isImage ? g.stepVariant : g.stepLength}</StepTitle>
+          {isImage ? (
+            <div className="grid gap-1 rounded-xl bg-bg-soft p-1" role="radiogroup" aria-label={g.stepVariant}>
+              {variantList.map((v) => {
+                const active = v.id === selectedVariant?.id
+                const label = c.styles[currentStyle.id as keyof typeof c.styles].variants?.[v.id] ?? v.id
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    disabled={busy}
+                    data-testid={`variant-${v.id}`}
+                    onClick={() => setVariantId(v.id)}
+                    className={`rounded-lg px-2 py-2 text-center transition ${active ? 'bg-card shadow-sm ring-1 ring-line' : 'text-muted hover:text-fg'}`}
+                  >
+                    <span className="block text-sm font-semibold">{label}</span>
+                    <span className="block text-xs text-muted">{g.creditsLabel(v.credits)}</span>
+                  </button>
+                )
+              })}
+            </div>
+          ) : (
           <div
             className={`grid gap-1 rounded-xl bg-bg-soft p-1 ${styleDurationList.length === 1 ? 'grid-cols-1' : styleDurationList.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}
             role="radiogroup"
             aria-label={g.stepLength}
           >
             {styleDurationList.map((d) => {
-              const active = d.id === duration.id
+              const active = d.id === duration?.id
               return (
                 <button
                   key={d.id}
@@ -322,6 +372,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
               )
             })}
           </div>
+          )}
         </section>
 
         <label className="flex items-start gap-3 text-xs leading-5 text-muted">
@@ -384,7 +435,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
               data-testid="generate"
             >
               {submitting ? <Spinner /> : null}
-              {g.ctaGenerate(duration.credits)}
+              {g.ctaGenerate(credits)}
             </button>
           )}
           {!loading && !user && photo ? (
@@ -394,7 +445,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
           ) : null}
           {guestPack && !loading ? (
             <p className="text-center text-xs text-muted" data-testid="generator-guest-price">
-              {g.guestPrice(duration.credits, formatPrice(guestPack.priceCents, guestPack.currency))}
+              {g.guestPrice(credits, formatPrice(guestPack.priceCents, guestPack.currency))}
             </p>
           ) : null}
           {user ? (
@@ -523,7 +574,11 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
           </p>
           <div className="relative mx-auto w-fit">
             <AiBadge />
-            <video src={generation.mediaUrl} controls playsInline className="max-h-[420px] rounded-lg bg-black" data-testid="generation-video" />
+            {generation.mediaType === 'image' ? (
+              <img src={generation.mediaUrl} alt="" className="max-h-[420px] rounded-lg bg-black object-contain" data-testid="generation-image" />
+            ) : (
+              <video src={generation.mediaUrl} controls playsInline className="max-h-[420px] rounded-lg bg-black" data-testid="generation-video" />
+            )}
           </div>
           <p className="text-xs text-muted" data-testid="ai-notice">
             {g.aiNotice}
