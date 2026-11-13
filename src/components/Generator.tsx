@@ -592,10 +592,12 @@ function PhotoDrop({
           setDragging(false)
           onFile(event.dataTransfer.files?.[0])
         }}
-        className={`flex w-full items-center justify-center rounded-xl border-2 border-dashed text-center transition ${compact ? 'px-2 py-4' : 'px-4 py-6'} ${
+        className={`group relative flex w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed text-center transition-all ${
+          compact ? 'aspect-[4/3] px-2 py-4' : 'aspect-[16/10] px-4 py-6 sm:aspect-[16/9]'
+        } ${
           dragging
             ? 'border-accent bg-accent/10 ring-4 ring-accent/15'
-            : 'border-line bg-bg-soft shadow-[inset_0_2px_8px_rgba(0,0,0,0.07)] hover:border-fg/50 dark:border-fg/25 dark:bg-surface-inset'
+            : 'border-fg/35 bg-card hover:border-fg hover:bg-accent/5 dark:border-fg/35 dark:bg-input dark:hover:border-fg'
         }`}
       >
         {photo ? (
@@ -610,12 +612,12 @@ function PhotoDrop({
             </span>
           </span>
         ) : (
-          <span className="flex flex-col items-center gap-2.5">
-            <span className="grid size-11 place-items-center rounded-full bg-ink text-ink-fg">
-              <Upload className="size-5" />
+          <span className="flex flex-col items-center">
+            <span className="grid size-12 place-items-center rounded-full bg-ink text-ink-fg shadow-md transition-transform group-hover:scale-110">
+              <Upload className="size-6" />
             </span>
-            <span className="text-sm font-semibold">{g.dropTitle}</span>
-            {compact ? null : <span className="text-xs text-muted">{g.dropHint}</span>}
+            <span className="mt-3 text-sm font-semibold">{label ?? g.dropTitle}</span>
+            <span className="mt-1 px-3 text-center text-xs text-muted">{g.dropHint}</span>
           </span>
         )}
       </button>
