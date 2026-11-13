@@ -21,8 +21,8 @@ beforeEach(() => {
   }
   sqlite
     .prepare(
-      `INSERT INTO generations (id, user_id, template_id, duration_id, duration_seconds, credits_cost, upload_id, second_upload_id, status, provider, created_at, updated_at)
-       VALUES ('gen_1', 'usr_1', 't', 'short', 6, 6, 'upl_1', 'upl_2', ?, 'mock', ?, ?)`,
+      `INSERT INTO generations (id, user_id, template_id, output_type, duration_id, duration_seconds, credits_cost, upload_id, second_upload_id, status, provider, created_at, updated_at)
+       VALUES ('gen_1', 'usr_1', 't', 'video', 'short', 6, 6, 'upl_1', 'upl_2', ?, 'mock', ?, ?)`,
     )
     .run('queued', old, old)
 })

@@ -68,8 +68,8 @@ function expectConsistent(userId: string) {
 function addFailedGeneration(userId: string, id: string, cost: number) {
   sqlite
     .prepare(
-      `INSERT INTO generations (id, user_id, template_id, duration_id, duration_seconds, credits_cost, upload_id, status, provider, refunded, created_at, updated_at)
-       VALUES (?, ?, 't', 'short', 6, ?, 'upl', 'failed', 'mock', 1, ?, ?)`,
+      `INSERT INTO generations (id, user_id, template_id, output_type, duration_id, duration_seconds, credits_cost, upload_id, status, provider, refunded, created_at, updated_at)
+       VALUES (?, ?, 't', 'video', 'short', 6, ?, 'upl', 'failed', 'mock', 1, ?, ?)`,
     )
     .run(id, userId, cost, iso(0), iso(0))
 }

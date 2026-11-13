@@ -77,8 +77,8 @@ describe('读取与每日上限（SQLite）', () => {
     const id = `gen_${++seq}`
     return db
       .prepare(
-        `INSERT INTO generations (id, user_id, template_id, duration_id, duration_seconds, credits_cost, upload_id, provider, created_at, updated_at)
-         VALUES (?, 'u', 't', 'd', 5, 1, 'up', 'mock', ?, ?)`,
+        `INSERT INTO generations (id, user_id, template_id, output_type, duration_id, duration_seconds, credits_cost, upload_id, provider, created_at, updated_at)
+         VALUES (?, 'u', 't', 'video', 'd', 5, 1, 'up', 'mock', ?, ?)`,
       )
       .bind(id, createdAt, createdAt)
   }

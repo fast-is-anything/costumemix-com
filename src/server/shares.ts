@@ -68,6 +68,8 @@ export function assertShareable(row: GenerationRow) {
   if (row.removed_at) throw new ApiError(410, 'media_removed')
   if (row.expired_at) throw new ApiError(410, 'media_expired')
   if (row.status !== 'succeeded' || !row.output_r2_key) throw new ApiError(409, 'not_ready')
+  // 图片暂不支持公开分享（分享页按视频渲染）
+  if (row.output_type !== 'video') throw new ApiError(409, 'not_shareable')
 }
 
 // 读取并检查封面：没有请求体时返回 null（不带封面，分享页用站点默认 OG 图）。

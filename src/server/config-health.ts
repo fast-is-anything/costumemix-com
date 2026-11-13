@@ -165,8 +165,8 @@ export function checkConfig(input: ConfigInput): ConfigIssue[] {
 
   const image = vars('IMAGE_PROVIDER')
   if (image === 'mock') error('IMAGE_PROVIDER', 'IMAGE_PROVIDER=mock：生产环境提交图片生成会返回 503')
-  else if (!IMAGE_SECRETS[image]) error('IMAGE_PROVIDER', `未知的 IMAGE_PROVIDER=${image || '(空)'}，可选 fal、yir`)
-  else requireSecrets(IMAGE_SECRETS[image], `${image} 图片生成`)
+  else if (image && !IMAGE_SECRETS[image]) error('IMAGE_PROVIDER', `未知的 IMAGE_PROVIDER=${image}，可选 fal、yir`)
+  else if (image) requireSecrets(IMAGE_SECRETS[image], `${image} 图片生成`)
 
   const moderation = vars('MODERATION_PROVIDER')
   if (moderation === 'mock') error('MODERATION_PROVIDER', 'MODERATION_PROVIDER=mock：生产环境上传图片一律返回 503')

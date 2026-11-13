@@ -24,8 +24,8 @@ beforeEach(() => {
   sqlite.prepare('INSERT INTO users (id, email, credits, created_at) VALUES (?, ?, 0, ?)').run('usr_1', 'u@example.com', now)
   sqlite
     .prepare(
-      `INSERT INTO generations (id, user_id, template_id, duration_id, duration_seconds, credits_cost, upload_id, status, provider,
-       provider_request_id, provider_meta, created_at, updated_at) VALUES ('gen_1', 'usr_1', 't', 'short', 6, 6, 'upl_1', 'processing', 'yir', 'job_s', ?, ?, ?)`,
+      `INSERT INTO generations (id, user_id, template_id, output_type, duration_id, duration_seconds, credits_cost, upload_id, status, provider,
+       provider_request_id, provider_meta, created_at, updated_at) VALUES ('gen_1', 'usr_1', 't', 'video', 'short', 6, 6, 'upl_1', 'processing', 'yir', 'job_s', ?, ?, ?)`,
     )
     .run(JSON.stringify({ stage: 'scene' }), now, now)
   status.mockReset()
