@@ -44,10 +44,10 @@
   --line: #2f2b26;
   --ink: #f2ede4;
   --ink-fg: #12110f;
-  --accent: #ff4f8b;
-  --accent-text: #ff4f8b;
+  --accent: #ff7a18;
+  --accent-text: #ffb067;
   --accent-2: #2fd6f5;
-  --glow: rgba(255, 79, 139, 0.14);
+  --glow: rgba(255, 122, 24, 0.18);
   color-scheme: dark;
 }
 
@@ -189,8 +189,8 @@
   /* 暗色下参考橙色贴纸样式：橙色描边 + 橙色底 */
   [data-theme='dark'] .sticker {
     box-shadow:
-      0.55rem 0.55rem 0 -1px color-mix(in oklab, #f97316 55%, var(--card)),
-      0.55rem 0.55rem 0 0 #f97316;
+      0.55rem 0.55rem 0 -1px color-mix(in oklab, var(--accent) 55%, var(--card)),
+      0.55rem 0.55rem 0 0 var(--accent);
   }
   .input {
     @apply w-full rounded-(--field-radius) border border-line bg-card px-3.5 py-2.5 text-sm text-fg outline-none placeholder:text-muted focus:border-fg;
@@ -271,6 +271,7 @@
     transform: rotate(360deg);
   }
 }
+
 
 
 
