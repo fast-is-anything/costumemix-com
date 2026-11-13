@@ -1,32 +1,32 @@
----
+﻿---
 name: sync-upstream
-description: 在 ShrimpReel 派生出的站点仓库里合并模板（upstream）的更新：先出同步计划，再 git merge，按“共用代码取模板、站点层保留站点的值”的分层策略解决冲突，列出新增的 vars、密钥和迁移，最后验证。用户说“同步模板”“合并 upstream”“更新模板”“sync upstream”时使用。
+description: 在站点分支上合并本仓库 main 分支（模板）的更新：先出同步计划，再 git merge，按“共用代码取模板、站点层保留站点的值”的分层策略解决冲突，列出新增的 vars、密钥和迁移，最后验证。用户说“同步模板”“合并 main”“更新模板”“sync upstream”时使用。
 ---
 
 # 合并模板更新
 
-目标：把 `upstream/main` 合进站点仓库（模板 `qianshuixia/shrimpreel` 的默认分支是 `main`，模板的修复只在 `main` 上）。模板的修复全部进来，站点自己的配置和文案不丢，最后列出部署前必须做的事。不提交、不推送、不部署，除非用户明确要求。
+目标：把本仓库 `main` 分支（`origin/main`，即模板）合进站点分支。模板的修复只提交在 `main` 上。模板的修复全部进来，站点自己的配置和文案不丢，最后列出部署前必须做的事。不提交、不推送、不部署，除非用户明确要求。
 
 ## 前提（不满足就停下说明）
 
-1. 当前目录是站点仓库：`git remote -v` 里有 `upstream` 指向模板（`qianshuixia/shrimpreel`）。当前仓库就是模板时不适用。站点自己的开发分支可能不叫 `main`（例如 `costumemix-com`），同步一律以 `upstream/main` 为准，合并到当前分支即可，不要把站点分支改成 `main`。
+1. 模板就是本仓库的 `main` 分支：`git remote -v` 里 `origin` 指向本仓库，`main` 由 `origin/main` 跟踪。站点开发分支不是 `main`（例如 `costumemix-com`），合并时以 `origin/main` 为模板源合进当前分支，不要把站点分支改成 `main`。
 2. 工作区干净（`git status --short` 为空），也没有进行中的合并（`.git/MERGE_HEAD` 不存在）。
 3. 已 `npm install`。
 
-站点里可能还没有这个 skill（第一次同步）。这时用 `git show upstream/main:.claude/skills/sync-upstream/SKILL.md` 读模板里的版本照做。Windows 的 Git Bash 会把 `<ref>:<路径>` 当成路径列表改写，`git show` 报 `ambiguous argument`，前面加 `MSYS_NO_PATHCONV=1`。
+站点里可能还没有这个 skill（第一次同步）。这时用 `git show origin/main:.claude/skills/sync-upstream/SKILL.md` 读模板里的版本照做。Windows 的 Git Bash 会把 `<ref>:<路径>` 当成路径列表改写，`git show` 报 `ambiguous argument`，前面加 `MSYS_NO_PATHCONV=1`。
 
 ## 1. 出同步计划
 
 ```bash
 mkdir -p .tmp/sync-upstream
-git fetch upstream
-git show upstream/main:scripts/sync-plan.mjs > .tmp/sync-upstream/sync-plan.mjs
+git fetch origin
+git show origin/main:scripts/sync-plan.mjs > .tmp/sync-upstream/sync-plan.mjs
 node .tmp/sync-upstream/sync-plan.mjs | tee .tmp/sync-upstream/plan.log
 ```
 
 用模板最新版的脚本，分层规则以模板为准，站点里有没有这个脚本都能跑。输出“已经是最新”就结束。
 
-- 基线是 `git merge-base HEAD upstream/main`，所以只能用 `git merge`。squash、rebase 或 cherry-pick 模板提交都会让基线停在原地，下次计划会重复列出已合过的提交。
+- 基线是 `git merge-base HEAD origin/main`，所以只能用 `git merge`。squash、rebase 或 cherry-pick 模板提交都会让基线停在原地，下次计划会重复列出已合过的提交。
 - “站点改过的共用文件”不为空时，逐个看 `git diff <基线> HEAD -- <文件>`，归成三类告诉用户：
   1. 模板已经有同样或更好的修复：合并时取模板版本。
   2. 站点特有的需求（比如改了 `src/styles.css` 的主色）：保留站点改动，写进最终汇报，建议以后在模板里做成站点层配置。
@@ -37,7 +37,7 @@ node .tmp/sync-upstream/sync-plan.mjs | tee .tmp/sync-upstream/plan.log
 ## 2. 合并
 
 ```bash
-git merge --no-ff --no-commit upstream/main
+git merge --no-ff --no-commit origin/main
 git status --short
 ```
 
@@ -94,3 +94,4 @@ Template-sync: <完整 sha>
 ```
 
 `git log --grep "Template-sync:"` 可以查历次同步。用户要放弃这次合并时用 `git merge --abort`，它会丢掉所有冲突处理结果，执行前先确认。
+

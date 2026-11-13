@@ -1,4 +1,4 @@
----
+﻿---
 name: new-hot-site
 description: 在 ShrimpReel 派生出的站点仓库里，把一句话热词需求变成可以本地跑通的新站：整理站点简介、跑 new-site 脚手架、改定价和生成参数、重写中英文案、换素材，最后跑 typecheck、test、seo:check 和 build。用户说“上新词”“建新站”“new hot site”“用模板做一个 XX 站”时使用。
 ---
@@ -9,7 +9,7 @@ description: 在 ShrimpReel 派生出的站点仓库里，把一句话热词需�
 
 ## 前提（不满足就停下说明）
 
-1. 当前目录是站点仓库，不是模板本身：`git remote -v` 里有 `upstream` 指向模板 `qianshuixia/shrimpreel`（默认分支 `main`）。只有 `origin` 指向 `qianshuixia/shrimpreel` 时，先让用户按 README“上新词流程”第 1 步建站点仓库；站点仓库的默认分支可以不是 `main`（例如 `costumemix-com`），照常使用当前分支，不需要改名。
+1. 当前目录是站点仓库，不是模板本身：模板就是本仓库的 `main` 分支（`origin/main`），站点在别的分支上（例如 `costumemix-com`）。只有当前分支就是 `main` 时，先让用户按 README“上新词流程”第 1 步建站点分支。
 2. 工作区干净（`git status --short` 为空），这样最后能用 `git diff --stat` 给出完整改动。
 3. 已 `npm install`。
 
@@ -22,7 +22,7 @@ description: 在 ShrimpReel 派生出的站点仓库里，把一句话热词需�
 - `wrangler.jsonc`、`package.json` 的 `name`、`wrangler.staging.jsonc`（都由脚手架改或删）
 - `.tmp/new-site/`（站点简介和日志，不入库）
 
-白名单外的文件（组件、路由、`src/server`、`src/styles.css`、迁移、测试）是各站共用的代码，改了会让以后 `git merge upstream/main` 冲突。确实需要改时先停下，说明原因并等用户确认；共用代码的 bug 应该回到模板里修。
+白名单外的文件（组件、路由、`src/server`、`src/styles.css`、迁移、测试）是各站共用的代码，改了会让以后 `git merge origin/main` 冲突。确实需要改时先停下，说明原因并等用户确认；共用代码的 bug 应该回到模板里修。
 
 ## 缺信息时写 TODO(site)，不阻塞
 
@@ -115,3 +115,4 @@ git grep -n "TODO(site)" -- src wrangler.jsonc
 5. 上线前必须用户自己做的事（README“上新词流程”第 5–8 步）：创建 Cloudflare 资源并写回 id；把 vars 改成生产值（`APP_ENV=production`、`SITE_URL`、真实服务商、`ADMIN_EMAILS` 等，简介里记下的值一并列出）；`wrangler secret put` 各密钥；在支付商后台建商品；`npm run deploy`；上线后的 seo:check 和站长平台提交。
 
 不提交、不推送、不部署，除非用户明确要求。
+
