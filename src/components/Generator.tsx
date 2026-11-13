@@ -480,7 +480,7 @@ export function Generator({
           ) : (
             <button
               type="button"
-              className="btn-primary w-full py-3.5"
+              className="btn-primary sticker-sm w-full rounded-xl border-2 border-muted py-3.5"
               disabled={busy || !photosReady || !consent}
               onClick={generate}
               data-testid="generate"
