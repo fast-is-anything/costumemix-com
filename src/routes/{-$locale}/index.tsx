@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { ArrowRight, Camera, Check, Clock, Coins, Film, ShieldCheck, Smartphone, Sparkles, X } from 'lucide-react'
 import { Faq, faqJsonLd } from '#/components/Faq'
@@ -47,9 +47,9 @@ function Home() {
         <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
         <div className="container-page relative py-6 lg:py-8">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mt-2 font-display text-5xl leading-[1.04] tracking-tight sm:text-6xl">
+            <h1 className="mt-2 font-display text-5xl font-black uppercase leading-[1.04] tracking-tight sm:text-7xl">
               {c.hero.title}
-              <span className="mx-auto mt-2 block max-w-2xl font-sans text-lg font-normal leading-8 text-muted">{c.hero.subtitle}</span>
+              <span className="mx-auto mt-2 block max-w-2xl font-sans text-lg font-normal leading-8 text-muted normal-case">{c.hero.subtitle}</span>
             </h1>
           </div>
           <div className="mt-4 flex flex-col gap-8 lg:mt-6">
@@ -211,37 +211,43 @@ function Home() {
         </div>
       </section>
 
-      {/* Made with：照片 → 成片 */}
+      {/* Made with：照片 → 成片。桌面左列吸顶不动，右列按服装排成时间轴随页滚动 */}
       <section id="examples" className="scroll-mt-20 border-t border-line bg-bg-soft/60 py-20">
-        <div className="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.1fr]">
-          <div className="space-y-4">
+        <div className="container-page grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-x-20">
+          <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
             <p className="eyebrow text-accent-text">{c.madeWith.eyebrow}</p>
             <h2 className="font-display text-4xl leading-tight sm:text-5xl">{c.madeWith.title}</h2>
+            <div aria-hidden className="h-px w-14 bg-gradient-to-r from-accent to-accent-2" />
             <p className="max-w-md text-lg leading-8 text-muted">{c.madeWith.body}</p>
           </div>
-          {/* 每种风格各一行（服务端渲染，不依赖 JS）；单风格时不显示风格名 */}
-          <div className="space-y-10">
-            {DISPLAY_STYLES.map((s) => (
-              <div key={s.id} className="space-y-3" data-testid={`made-with-${s.id}`}>
-                {STYLES.length > 1 ? (
-                  <p className="text-sm">
-                    <span className="font-semibold">{styleCopy(s.id).name}</span>
-                    <span className="text-muted"> · {styleCopy(s.id).tagline}</span>
-                  </p>
-                ) : null}
-                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-                  <figure>
-                    <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
-                    <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
-                  </figure>
-                  <ArrowRight className="size-6 text-muted" aria-hidden />
-                  <div>
-                    <VideoCard video={s.examples.madeWith.video} poster={s.examples.madeWith.poster} />
-                    <p className="mt-2 text-center text-xs text-muted">{c.madeWith.resultLabel}</p>
+          {/* 每种风格是一个时间轴节点（服务端渲染，不依赖 JS）；单风格时不显示风格名 */}
+          <div className="relative min-w-0">
+            <div aria-hidden className="pointer-events-none absolute inset-y-0 left-[0.4375rem] w-px bg-line" />
+            <ol className="flex flex-col gap-12 lg:gap-16">
+              {DISPLAY_STYLES.map((s, index) => (
+                <li key={s.id} className="relative grid grid-cols-[max-content_minmax(0,1fr)] items-start gap-x-4 lg:gap-x-6" data-testid={`made-with-${s.id}`}>
+                  <div className="relative z-[1] flex h-full justify-center">
+                    <span aria-hidden className="mt-3 block size-3.5 rounded-full bg-gradient-to-br from-accent to-accent-2 ring-4 ring-bg-soft" />
                   </div>
-                </div>
-              </div>
-            ))}
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold uppercase leading-none tracking-[0.15em] text-accent-text">{String(index + 1).padStart(2, '0')}</div>
+                    <h3 className="mt-3 font-display text-2xl leading-tight">{styleCopy(s.id).name}</h3>
+                    <p className="mt-2 text-xs font-medium uppercase tracking-[0.12em] text-muted">{styleCopy(s.id).tagline}</p>
+                    <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-4">
+                      <figure className="min-w-0">
+                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
+                        <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
+                      </figure>
+                      <ArrowRight className="size-5 text-muted" aria-hidden />
+                      <div className="min-w-0">
+                        <VideoCard video={s.examples.madeWith.video} poster={s.examples.madeWith.poster} />
+                        <p className="mt-2 text-center text-xs text-muted">{c.madeWith.resultLabel}</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
@@ -362,9 +368,21 @@ function Home() {
             <div className="relative space-y-5">
               <h2 className="font-display text-4xl leading-tight sm:text-5xl">{c.finalCta.title}</h2>
               <p className="mx-auto max-w-xl opacity-80">{c.finalCta.body}</p>
-              <a href="#create" className="btn mt-2 bg-ink-fg text-ink hover:opacity-90">
-                {c.finalCta.cta} · {formatPrice(site.packages[0]!.priceCents, site.packages[0]!.currency)}+
-              </a>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href="#create"
+                  className="group inline-flex h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-ink-fg px-7 text-base font-bold text-ink transition-all hover:opacity-90 active:translate-y-px"
+                >
+                  {c.finalCta.makeVideo}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </a>
+                <LocalLink
+                  to="/pricing"
+                  className="inline-flex h-12 shrink-0 items-center justify-center whitespace-nowrap rounded-xl border-2 border-ink-fg px-7 text-base font-bold text-ink-fg transition-colors hover:bg-ink-fg/10 active:translate-y-px"
+                >
+                  {c.finalCta.seePricing}
+                </LocalLink>
+              </div>
             </div>
           </div>
         </div>
@@ -372,4 +390,5 @@ function Home() {
     </>
   )
 }
+
 

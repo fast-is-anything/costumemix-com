@@ -68,7 +68,7 @@ export function zh(s: S): Content {
     },
     hero: {
       title: `${k}`,
-      subtitle: `上传一张照片，就能看到自己穿上圣诞老人装、精灵装或丑毛衣的样子。${b} 保留你的脸，把你放进一段竖屏换装视频——不用试衣间、不用摄影棚、不用缝衣服。`,
+      subtitle: '一张照片就能换装。选圣诞老人、精灵或丑毛衣，几分钟生成可直接分享的竖屏短片，不用试衣间、不用买衣服。',
       badge: '圣诞换装玩法',
       original: '原版服装片段',
       aiVersion: '你的 AI 版本',
@@ -294,9 +294,11 @@ export function zh(s: S): Content {
       ],
     },
     finalCta: {
-      title: '你的圣诞造型，只差一张照片',
-      body: '上传自拍、选一套服装，看自己出现在一段节日短片里。',
+      title: '华丽换装，现在开始',
+      body: '一张照片，几秒换装。挑一套圣诞造型，生成可直接发布的竖屏短片。',
       cta: '制作我的换装视频',
+      makeVideo: '制作换装视频',
+      seePricing: '查看价格',
     },
     footer: {
       statement: `${b} 是独立项目，与 ${s.trendPlatform}、Elf Yourself 及示例片段中的服装品牌均无关联。`,

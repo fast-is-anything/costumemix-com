@@ -81,7 +81,7 @@ export function en(s: S) {
     },
     hero: {
       title: `${k}`,
-      subtitle: `Upload one photo and see yourself in a Santa suit, an elf costume or an ugly Christmas sweater. ${b} keeps your face and renders you into a short vertical costume video — no fitting room, no studio, no sewing.`,
+      subtitle: 'One photo is all it takes. Pick a Santa suit, elf costume or ugly sweater and get a share-ready vertical clip in minutes, no fitting room needed.',
       badge: 'Christmas costume trend',
       original: 'Original costume clip',
       aiVersion: 'Your AI version',
@@ -321,9 +321,11 @@ export function en(s: S) {
       ] as FaqItem[],
     },
     finalCta: {
-      title: 'Your Christmas costume is one photo away',
-      body: 'Upload a selfie, pick a costume and watch yourself take the lead in a holiday clip.',
+      title: 'YOUR GLAM OUTFIT STARTS HERE',
+      body: 'One photo, a few minutes, a whole new look. Pick a costume and get a vertical clip ready to post.',
       cta: 'Create my costume video',
+      makeVideo: 'Make my outfit video',
+      seePricing: 'See pricing',
     },
     footer: {
       statement: `${b} is an independent project and is not affiliated with ${s.trendPlatform}, Elf Yourself or the costume brands shown in the sample clips.`,
