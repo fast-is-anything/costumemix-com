@@ -68,7 +68,7 @@ export function Pricing() {
           return (
             <div
               key={pack.id}
-              className={`card relative flex flex-col p-6 ${highlight ? 'ring-2 ring-ink md:-translate-y-2' : ''}`}
+              className={`card relative flex flex-col p-6 ${highlight ? 'sticker border-2 border-muted md:-translate-y-2' : ''}`}
               data-testid={`package-${pack.id}`}
             >
               {highlight ? (
@@ -122,7 +122,7 @@ function PlanCard({ plan, button }: { plan: SubscriptionPlan; button: ReactNode 
   const info = p.plans[plan.id] ?? { name: plan.id, tagline: '' }
   const saving = yearlySaving(plan)
   return (
-    <div className={`card relative flex flex-col p-6 ${plan.highlight ? 'ring-2 ring-ink' : ''}`} data-testid={`plan-${plan.id}`}>
+    <div className={`card relative flex flex-col p-6 ${plan.highlight ? 'sticker border-2 border-muted' : ''}`} data-testid={`plan-${plan.id}`}>
       {plan.highlight ? (
         <span className="absolute -top-3 left-6 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-ink-fg">{p.popular}</span>
       ) : null}
