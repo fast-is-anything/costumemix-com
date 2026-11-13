@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { ArrowRight, Camera, Check, Clock, Coins, Film, Flame, ShieldCheck, Smartphone, Sparkles, X } from 'lucide-react'
+import { ArrowRight, Camera, Check, Clock, Coins, Film, ShieldCheck, Smartphone, Sparkles, X } from 'lucide-react'
 import { Faq, faqJsonLd } from '#/components/Faq'
 import { Generator } from '#/components/Generator'
 import { Pricing } from '#/components/Pricing'
@@ -54,9 +54,14 @@ function Home() {
           </div>
           <div className="mt-4 flex flex-col gap-8 lg:mt-6">
             <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
-              <span className="chip mx-auto w-fit">
-                <Flame className="size-4 text-accent" /> {c.hero.badge}
-              </span>
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium">
+                <LocalLink to={articlePath('trend')} className="inline-flex items-center gap-1.5 hover:text-accent">
+                  {c.articles.trend.title} <ArrowRight className="size-4" />
+                </LocalLink>
+                <LocalLink to={articlePath('howTo')} className="inline-flex items-center gap-1.5 hover:text-accent">
+                  {c.articles.howTo.title} <ArrowRight className="size-4" />
+                </LocalLink>
+              </div>
               {STYLES.length > 1 ? (
                 <div role="tablist" aria-label={c.generator.stepStyle} className="flex flex-wrap justify-center gap-2">
                   {DISPLAY_STYLES.map((s) => {
@@ -124,22 +129,6 @@ function Home() {
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-wrap justify-center gap-2">
-                {c.hero.chips.map((chip) => (
-                  <span key={chip} className="chip">
-                    {chip}
-                  </span>
-                ))}
-              </div>
-              <p className="text-center text-xs text-muted">{c.hero.creditNote}</p>
-              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium">
-                <LocalLink to={articlePath('trend')} className="inline-flex items-center gap-1.5 hover:text-accent">
-                  {c.articles.trend.title} <ArrowRight className="size-4" />
-                </LocalLink>
-                <LocalLink to={articlePath('howTo')} className="inline-flex items-center gap-1.5 hover:text-accent">
-                  {c.articles.howTo.title} <ArrowRight className="size-4" />
-                </LocalLink>
-              </div>
             </div>
             <div className="mx-auto w-full max-w-[460px] space-y-5" id="create">
               <Generator styleId={style.id} onStyleChange={setStyleId} />
