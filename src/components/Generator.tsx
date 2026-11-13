@@ -1,4 +1,4 @@
-﻿import { useRouterState } from '@tanstack/react-router'
+﻿import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { CircleAlert, CircleCheck, Download, Smartphone, Upload } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DISPLAY_STYLES, SCENES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount, styleVariants, type SceneId } from '#/config/site'
@@ -32,6 +32,8 @@ export function Generator({
   const lp = useLocalePath()
   const locale = useLocale()
   const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const search = useRouterState({ select: (s) => s.location.search })
+  const navigate = useNavigate()
   const { user, config, loading, refresh } = useSession()
   // 两个照片槽：第 1 槽 = 源视频左边的人（单人风格只用它），第 2 槽 = 右边的人；切回单人风格时第 2 槽保留在状态里但被忽略
   const [photos, setPhotos] = useState<Photos>([null, null])
@@ -376,11 +378,13 @@ export function Generator({
                     data-testid={`variant-${v.id}`}
                     onClick={() => {
                       setVariantId(v.id)
-                      // 背景选择写进 URL：复制地址即可分享同一个背景
-                      const url = new URL(window.location.href)
-                      url.searchParams.set('style', currentStyle.id)
-                      url.searchParams.set('variant', v.id)
-                      window.history.replaceState(null, '', url)
+                      // 背景写进 URL；resetScroll 防止路由的滚动恢复把页面拉回顶部
+                      void navigate({
+                        to: pathname,
+                        search: { ...search, style: currentStyle.id, variant: v.id },
+                        replace: true,
+                        resetScroll: false,
+                      })
                     }}
                     className={`rounded-lg px-2 py-2 text-center transition ${active ? 'bg-card shadow-sm ring-1 ring-line' : 'text-muted hover:text-fg'}`}
                   >
@@ -656,6 +660,8 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
+
 
 
 
