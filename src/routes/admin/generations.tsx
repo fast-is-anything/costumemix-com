@@ -133,7 +133,7 @@ function AdminGenerations() {
                   <td className="text-xs">
                     {g.template_id}
                     <span className="block text-muted">
-                      {g.duration_seconds ?? '—'}s · {g.credits_cost} 积分
+                      {g.output_type === 'image' ? `图片 · ${g.variant_id ?? '—'}` : `${g.duration_seconds ?? '—'}s`} · {g.credits_cost} 积分
                     </span>
                   </td>
                   <td>

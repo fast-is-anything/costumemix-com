@@ -12,8 +12,9 @@ import { homeJsonLd, jsonLdScript } from '#/lib/seo'
 
 // ?style=<id> 预选风格（不存在的 id 忽略）
 export const Route = createFileRoute('/{-$locale}/')({
-  validateSearch: (search: Record<string, unknown>): { style?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { style?: string; variant?: string } => ({
     style: typeof search.style === 'string' && findStyle(search.style) ? search.style : undefined,
+    variant: typeof search.variant === 'string' ? search.variant : undefined,
   }),
   head: ({ params }) => {
     const locale = localeFromParam(params.locale)
@@ -125,10 +126,21 @@ function Home() {
                   </li>
                 ))}
               </ul>
+              ) : style.kind === 'image' ? (
+                <div className="mx-auto grid max-w-md grid-cols-2 gap-3 sm:gap-4" data-testid="hero-image-demo">
+                  <figure>
+                    <img src={style.examples.photo} alt="" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
+                    <figcaption className="mt-2 text-center text-xs text-muted">{c.hero.original}</figcaption>
+                  </figure>
+                  <figure>
+                    <img src={style.examples.result} alt="" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
+                    <figcaption className="mt-2 text-center text-xs text-muted">{c.hero.aiVersion}</figcaption>
+                  </figure>
+                </div>
               ) : null}
             </div>
             <div className="mx-auto w-full max-w-4xl space-y-5" id="create">
-              <Generator styleId={style.id} onStyleChange={setStyleId} />
+              <Generator styleId={style.id} onStyleChange={setStyleId} initialVariantId={search.variant} />
             </div>
           </div>
         </div>

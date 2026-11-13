@@ -19,7 +19,11 @@ type Photos = [Photo | null, Photo | null]
 const POLL_MS = 3000
 
 // styleId / onStyleChange：首页把风格状态提到外面，让 hero 标签和生成器同步；不传时生成器自己管
-export function Generator({ styleId: controlledStyleId, onStyleChange }: { styleId?: string; onStyleChange?: (id: string) => void } = {}) {
+export function Generator({
+  styleId: controlledStyleId,
+  onStyleChange,
+  initialVariantId,
+}: { styleId?: string; onStyleChange?: (id: string) => void; initialVariantId?: string } = {}) {
   const c = useContent()
   const g = c.generator
   const lp = useLocalePath()
@@ -40,7 +44,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
   const styleDurationList = styleDurations(currentStyle)
   const variantList = styleVariants(currentStyle)
   const [durationId, setDurationId] = useState<string>(styleDurationList[styleDurationList.length - 1]?.id ?? '')
-  const [variantId, setVariantId] = useState<string>(variantList[0]?.id ?? '')
+  const [variantId, setVariantId] = useState<string>(initialVariantId ?? variantList[0]?.id ?? '')
   const [consent, setConsent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -335,7 +339,14 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
                     aria-checked={active}
                     disabled={busy}
                     data-testid={`variant-${v.id}`}
-                    onClick={() => setVariantId(v.id)}
+                    onClick={() => {
+                      setVariantId(v.id)
+                      // 背景选择写进 URL：复制地址即可分享同一个背景
+                      const url = new URL(window.location.href)
+                      url.searchParams.set('style', currentStyle.id)
+                      url.searchParams.set('variant', v.id)
+                      window.history.replaceState(null, '', url)
+                    }}
                     className={`rounded-lg px-2 py-2 text-center transition ${active ? 'bg-card shadow-sm ring-1 ring-line' : 'text-muted hover:text-fg'}`}
                   >
                     <span className="block text-sm font-semibold">{label}</span>
