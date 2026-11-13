@@ -187,9 +187,10 @@
       var(--sticker-offset) var(--sticker-offset) 0 calc(-1 * var(--sticker-line)) var(--bg-soft),
       var(--sticker-offset) var(--sticker-offset) 0 0 var(--muted);
   }
+  /* 暗色下偏移背景卡整体是亮橙色：内层用页面背景色留出缝隙，把主卡和橙色背景卡分开 */
   [data-theme='dark'] :is(.sticker, .sticker-md, .sticker-sm) {
     box-shadow:
-      var(--sticker-offset) var(--sticker-offset) 0 calc(-1 * var(--sticker-line)) var(--bg-soft),
+      var(--sticker-offset) var(--sticker-offset) 0 calc(-1 * var(--sticker-line)) var(--bg),
       var(--sticker-offset) var(--sticker-offset) 0 0 var(--accent);
   }
   /* 大卡片（生成器、Final CTA、价格卡） */
@@ -287,6 +288,7 @@
     transform: rotate(360deg);
   }
 }
+
 
 
 
