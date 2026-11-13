@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { X } from 'lucide-react'
 import { api, errorCode } from '#/lib/api'
 import { useContent, useLocalePath } from '#/lib/i18n'
 import { QrCode } from './QrCode'
@@ -12,8 +13,8 @@ function clock(ms: number) {
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
 }
 
-// 桌面端的“扫码用手机上传”面板：取一个中转 token，二维码指向手机上传页（token 放 URL fragment，不进服务器日志和 Referer），
-// 面板打开期间每 2 秒问一次服务器照片到了没；收到后交给 onPhoto（等同于在桌面选了这个文件）并关闭
+// 桌面端的“扫码用手机上传”弹窗：取一个中转 token，二维码指向手机上传页（token 放 URL fragment，不进服务器日志和 Referer），
+// 弹窗打开期间每 2 秒问一次服务器照片到了没；收到后交给 onPhoto（等同于在桌面选了这个文件）并关闭
 export function PhoneUploadPanel({ onPhoto, onClose }: { onPhoto: (file: File) => void; onClose: () => void }) {
   const g = useContent().generator
   const lp = useLocalePath()
@@ -25,6 +26,22 @@ export function PhoneUploadPanel({ onPhoto, onClose }: { onPhoto: (file: File) =
   // 轮询只在 token 变化时重启，回调始终取最新的
   const callbacks = useRef({ onPhoto, onClose })
   callbacks.current = { onPhoto, onClose }
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  // 弹窗交互：Esc 关闭、打开时锁定页面滚动、初始焦点放在关闭按钮
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') callbacks.current.onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeRef.current?.focus()
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = previous
+    }
+  }, [])
 
   // 取 token：打开面板和“换一个二维码”时各一次
   useEffect(() => {
@@ -78,12 +95,17 @@ export function PhoneUploadPanel({ onPhoto, onClose }: { onPhoto: (file: File) =
     }
   }, [session, expired])
 
+  // 倒计时；到点后弹窗自动关闭（中转 token 已失效，留着只会误导）
   useEffect(() => {
     if (!session || expired) return
     const timer = setInterval(() => {
       const t = Date.now()
+      if (t >= session.expiresAt) {
+        setExpired(true)
+        callbacks.current.onClose()
+        return
+      }
       setNow(t)
-      if (t >= session.expiresAt) setExpired(true)
     }, 1000)
     return () => clearInterval(timer)
   }, [session, expired])
@@ -91,42 +113,67 @@ export function PhoneUploadPanel({ onPhoto, onClose }: { onPhoto: (file: File) =
   const url = session ? `${location.origin}${lp('/phone-upload')}#${session.token}` : null
 
   return (
-    <div className="space-y-3 rounded-xl border border-line bg-bg-soft p-4" data-testid="phone-upload-panel">
-      <p className="text-sm font-semibold">{g.phoneTitle}</p>
-      {url && !expired ? (
-        <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-start">
-          <QrCode text={url} label={g.phoneTitle} className="size-40 shrink-0 rounded-lg" />
-          <div className="min-w-0 space-y-2 text-xs leading-5 text-muted">
-            <p>{g.phoneHelp}</p>
-            <p className="flex items-center gap-1.5">
-              <Spinner className="size-3.5" /> {g.phoneWaiting}
-            </p>
-            <p data-testid="phone-upload-countdown">{g.phoneExpiresIn(clock(session!.expiresAt - now))}</p>
-            <p>
-              <span className="block">{g.phoneLinkLabel}</span>
-              <a href={url} target="_blank" rel="noreferrer" className="break-all underline" data-testid="phone-upload-link">
-                {url}
-              </a>
-            </p>
-          </div>
-        </div>
-      ) : expired ? (
-        <p className="text-sm" data-testid="phone-upload-expired">
-          {g.phoneExpired}
-        </p>
-      ) : error ? null : (
-        <Spinner />
-      )}
-      <ErrorText code={error} />
-      <div className="flex gap-2">
-        {expired || error ? (
-          <button type="button" className="btn-primary px-4 py-2" onClick={() => setRound((n) => n + 1)} data-testid="phone-upload-renew">
-            {g.phoneRenew}
+    <div className="fixed inset-0 z-[60] flex items-end justify-center p-4 sm:items-center" data-testid="phone-upload-panel">
+      {/* 点击遮罩关闭；遮罩本身不进 Tab 序列 */}
+      <div aria-hidden className="absolute inset-0 bg-ink/50 backdrop-blur-sm" onClick={onClose} />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="phone-upload-title"
+        className="card relative w-full max-w-md space-y-4 p-5 shadow-2xl sm:p-6"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <h2 id="phone-upload-title" className="font-display text-xl leading-tight">
+            {g.phoneTitle}
+          </h2>
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={onClose}
+            aria-label={g.phoneCancel}
+            className="grid size-8 shrink-0 place-items-center rounded-full text-muted transition hover:bg-bg-soft hover:text-fg"
+            data-testid="phone-upload-close"
+          >
+            <X className="size-4" />
           </button>
-        ) : null}
-        <button type="button" className="btn-ghost px-4 py-2" onClick={onClose} data-testid="phone-upload-cancel">
-          {g.phoneCancel}
-        </button>
+        </div>
+        {url && !expired ? (
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+            <QrCode text={url} label={g.phoneTitle} className="size-40 shrink-0 rounded-xl" />
+            <div className="min-w-0 space-y-2 text-xs leading-5 text-muted">
+              <p>{g.phoneHelp}</p>
+              <p className="flex items-center gap-1.5 text-fg">
+                <Spinner className="size-3.5" /> {g.phoneWaiting}
+              </p>
+              <p data-testid="phone-upload-countdown">{g.phoneExpiresIn(clock(session!.expiresAt - now))}</p>
+              <p>
+                <span className="block">{g.phoneLinkLabel}</span>
+                <a href={url} target="_blank" rel="noreferrer" className="break-all underline" data-testid="phone-upload-link">
+                  {url}
+                </a>
+              </p>
+            </div>
+          </div>
+        ) : expired ? (
+          <p className="rounded-xl bg-bg-soft p-4 text-sm" data-testid="phone-upload-expired">
+            {g.phoneExpired}
+          </p>
+        ) : error ? null : (
+          <div className="grid place-items-center py-8">
+            <Spinner />
+          </div>
+        )}
+        <ErrorText code={error} />
+        <div className="flex justify-end gap-2">
+          {expired || error ? (
+            <button type="button" className="btn-primary px-4 py-2" onClick={() => setRound((n) => n + 1)} data-testid="phone-upload-renew">
+              {g.phoneRenew}
+            </button>
+          ) : null}
+          <button type="button" className="btn-ghost px-4 py-2" onClick={onClose} data-testid="phone-upload-cancel">
+            {g.phoneCancel}
+          </button>
+        </div>
       </div>
     </div>
   )

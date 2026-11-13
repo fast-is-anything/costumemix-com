@@ -1,4 +1,4 @@
-﻿import { useRouterState } from '@tanstack/react-router'
+import { useRouterState } from '@tanstack/react-router'
 import { CircleAlert, CircleCheck, Download, Smartphone, Upload } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DISPLAY_STYLES, STYLES, cheapestPackageCovering, featuredStyle, findStyle, formatPrice, site, styleDurations, stylePhotoCount } from '#/config/site'
@@ -251,7 +251,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
               type="button"
               disabled={busy}
               onClick={() => setPhoneOpen(true)}
-              className="btn-ghost hidden px-3 py-1.5 text-xs md:inline-flex"
+              className="mt-2 inline-flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-accent-text underline-offset-4 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
               data-testid="phone-upload-open"
             >
               <Smartphone className="size-4" /> {g.phoneOpen}
@@ -555,4 +555,5 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
