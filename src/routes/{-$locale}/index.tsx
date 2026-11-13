@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ArrowRight, Camera, Check, Clock, Coins, Film, ShieldCheck, Smartphone, Sparkles, X } from 'lucide-react'
 import { Faq, faqJsonLd } from '#/components/Faq'
 import { Generator } from '#/components/Generator'
+import { ImageCard } from '#/components/ImageCard'
 import { Pricing } from '#/components/Pricing'
 import { VideoCard } from '#/components/VideoCard'
 import { LocalLink } from '#/components/ui'
@@ -40,6 +41,7 @@ function Home() {
   // hero 标签和生成器共用同一个风格；SSR 默认显示主推风格（或 URL 指定的）
   const [styleId, setStyleId] = useState<string>(search.style ?? featuredStyle.id)
   const style = findStyle(styleId) ?? featuredStyle
+  const demoCardClass = 'w-[32%] max-w-[200px] min-w-[116px] shrink-0 snap-start sm:w-[200px]'
   // hero 演示区目前按视频准备；图片风格在 P4b 接
   const videoStyle = style.kind === 'image' ? null : style
   const styleCopy = (id: string) => c.styles[id as keyof typeof c.styles]
@@ -103,7 +105,7 @@ function Home() {
                 className="-mx-5 flex snap-x snap-mandatory scroll-px-5 justify-start gap-3 overflow-x-auto px-5 pt-2 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:max-w-4xl sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0"
                 {...(STYLES.length > 1 ? { id: 'hero-panel', role: 'tabpanel', 'aria-labelledby': `hero-tab-${style.id}` } : {})}
               >
-                <li className="w-[32%] max-w-[200px] min-w-[116px] shrink-0 snap-start sm:w-[200px]">
+                <li className={demoCardClass}>
                   <VideoCard
                     video={videoStyle.examples.original.video}
                     poster={videoStyle.examples.original.poster}
@@ -127,16 +129,25 @@ function Home() {
                 ))}
               </ul>
               ) : style.kind === 'image' ? (
-                <div className="mx-auto grid max-w-md grid-cols-2 gap-3 sm:gap-4" data-testid="hero-image-demo">
-                  <figure>
-                    <img src={style.examples.photo} alt="" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
-                    <figcaption className="mt-2 text-center text-xs text-muted">{c.hero.original}</figcaption>
-                  </figure>
-                  <figure>
-                    <img src={style.examples.result} alt="" className="aspect-[3/4] w-full rounded-2xl object-cover ring-1 ring-line" />
-                    <figcaption className="mt-2 text-center text-xs text-muted">{c.hero.aiVersion}</figcaption>
-                  </figure>
-                </div>
+                <ul
+                  className="-mx-5 flex snap-x snap-mandatory scroll-px-5 justify-start gap-3 overflow-x-auto px-5 pt-2 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:max-w-4xl sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0"
+                  data-testid="hero-image-demo"
+                >
+                  <li className={demoCardClass}>
+                    <ImageCard src={style.examples.photo} label={c.hero.original} credit={style.examples.credit} />
+                  </li>
+                  <li className={demoCardClass}>
+                    <ImageCard
+                      src={style.examples.result}
+                      credit={style.examples.credit}
+                      label={
+                        <>
+                          <Sparkles className="size-3" /> {c.hero.aiVersion}
+                        </>
+                      }
+                    />
+                  </li>
+                </ul>
               ) : null}
             </div>
             <div className="mx-auto w-full max-w-4xl space-y-5" id="create">
