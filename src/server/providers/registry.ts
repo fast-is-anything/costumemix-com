@@ -68,7 +68,7 @@ export function activeVideoProviderId(env: Env): ProviderId {
 
 // 生成任务用哪个服务商：风格固定了就用风格的；mock（本地与 e2e）压过一切
 function configuredImageProvider(env: Env): string {
-  const configured = (env as Env & { IMAGE_PROVIDER?: string }).IMAGE_PROVIDER
+  const configured = env.IMAGE_PROVIDER
   // 生产环境默认 fal；本地/测试默认 mock
   return configured ?? (isProduction(env) ? 'fal' : 'mock')
 }

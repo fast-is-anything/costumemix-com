@@ -12,7 +12,8 @@ export function configIssues(env: Env, paymentProvider?: string) {
     bindings: [...REQUIRED_BINDINGS, ...OPTIONAL_BINDINGS].filter((name) => record[name] != null),
     packageIds: site.packages.map((p) => p.id),
     planIds: sellingPlans.map((p) => p.id),
-    styleProviders: STYLES.flatMap((s) => (s.provider ? [s.provider] : [])),
+    styleProviders: STYLES.flatMap((s) => (s.kind !== 'image' && s.provider ? [s.provider] : [])),
+    imageStyleProviders: STYLES.flatMap((s) => (s.kind === 'image' && s.provider ? [s.provider] : [])),
     siteDomain: site.domain,
   })
 }

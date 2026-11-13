@@ -1,4 +1,5 @@
-// 简体中文文案，结构必须与 en.ts 一致（由 Content 类型约束）
+﻿// 简体中文文案，结构必须与 en.ts 一致（由 Content 类型约束）
+import { VIDEO_STYLES } from '#/config/site'
 import type { site as Site } from '#/config/site'
 import type { Content } from './en'
 
@@ -38,7 +39,7 @@ export function zh(s: S): Content {
     },
     meta: {
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
-      homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
+      homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频，或一张干净的证件照。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
       pricingTitle: `价格 — ${b}`,
       pricingDescription: subs
         ? `${k} 视频的积分包与月付、年付订阅：按秒计费，积分包永不过期，订阅随时可取消；生成失败自动退还积分。`
@@ -77,7 +78,7 @@ export function zh(s: S): Content {
     },
     hero: {
       title: `${k}`,
-      subtitle: '一张照片就能换装。选圣诞老人、精灵或丑毛衣，几分钟生成可直接分享的竖屏短片，不用试衣间、不用买衣服。',
+      subtitle: '一张照片就能换装。选圣诞老人、精灵或丑毛衣，几分钟生成可直接分享的竖屏短片；也可以换成纯色背景，做一张干净的证件照。',
       badge: '圣诞换装玩法',
       original: '原版服装片段',
       aiVersion: '你的 AI 版本',
@@ -194,7 +195,7 @@ export function zh(s: S): Content {
       title: `${b} 规格`,
       rows: [
         { label: '上传', value: `一张清晰的单人照片，${uploadTypes}，不超过 ${uploadMb} MB` },
-        { label: '服装', value: s.styles.map((style) => styles[style.id].name).join('、') },
+        { label: '服装', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join('、') },
         { label: '视频时长', value: `${s.durations.map((d) => d.seconds).join('、')} 秒` },
         { label: '成片', value: `竖屏 ${s.template.aspectRatio} MP4，无水印` },
         { label: '价格', value: `1 积分 = 1 秒视频；积分包 ${usd(cheapest.priceCents)} 起（${cheapest.credits} 积分）` },
@@ -278,7 +279,7 @@ export function zh(s: S): Content {
         },
         {
           q: '可以选哪些服装？',
-          a: `目前有：${s.styles.map((style) => styles[style.id].name).join('、')}。每一套都是已授权的片段，之后每个季节还会加新服装。`,
+          a: `目前有：${VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join('、')}。每一套都是已授权的片段，之后每个季节还会加新服装。`,
           guide: { article: 'outfits', label: '看看圣诞装扮灵感' },
         },
         {
@@ -859,3 +860,5 @@ export function zh(s: S): Content {
     },
   }
 }
+
+

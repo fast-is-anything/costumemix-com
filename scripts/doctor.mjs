@@ -72,7 +72,7 @@ export function findSiteTodos(root = fileURLToPath(new URL('..', import.meta.url
 // secretNames / pendingMigrations：undefined = 没有核对（--offline），null = 查询失败
 export function runDoctor(
   config,
-  { secretNames, pendingMigrations, siteDomain = site.domain, packageIds = site.packages.map((p) => p.id), planIds = sellingPlans.map((p) => p.id), styleProviders = STYLES.flatMap((s) => (s.provider ? [s.provider] : [])), siteTodos = [] } = {},
+  { secretNames, pendingMigrations, siteDomain = site.domain, packageIds = site.packages.map((p) => p.id), planIds = sellingPlans.map((p) => p.id), styleProviders = STYLES.flatMap((s) => (s.kind !== 'image' && s.provider ? [s.provider] : [])), imageStyleProviders = STYLES.flatMap((s) => (s.kind === 'image' && s.provider ? [s.provider] : [])), siteTodos = [] } = {},
 ) {
   const vars = config.vars ?? {}
   const issues = checkConfig({
@@ -83,6 +83,7 @@ export function runDoctor(
     packageIds,
     planIds,
     styleProviders,
+    imageStyleProviders,
     siteDomain,
   })
   const error = (key, message) => issues.push({ level: 'error', key, message })

@@ -32,7 +32,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
   const [ownStyleId, setOwnStyleId] = useState<string>(featuredStyle.id)
   const styleId = controlledStyleId ?? ownStyleId
   const selectStyle = onStyleChange ?? setOwnStyleId
-  const [category, setCategory] = useState<SceneId>(SCENES[0]!)
+  const [category, setCategory] = useState<SceneId>((findStyle(styleId) ?? featuredStyle).category)
   const visibleStyles = DISPLAY_STYLES.filter((s) => s.category === category)
   const currentStyle = findStyle(styleId) ?? featuredStyle
   const need = stylePhotoCount(currentStyle)

@@ -19,6 +19,7 @@ export interface ConfigInput {
   planIds?: readonly string[]
   // 风格固定的视频服务商（STYLES 里写了 provider 的）：和 VIDEO_PROVIDER 不同的也要有各自的密钥
   styleProviders?: readonly string[]
+  imageStyleProviders?: readonly string[]
   siteDomain: string
 }
 
@@ -156,6 +157,10 @@ export function checkConfig(input: ConfigInput): ConfigIssue[] {
     if (p === video) continue
     if (!VIDEO_SECRETS[p]) error('styleProviders', `风格指定了未知的视频服务商 ${p || '(空)'}，可选 fal、yir、nanoapi`)
     else requireSecrets(VIDEO_SECRETS[p], `${p} 视频生成（风格指定）`)
+  }
+  for (const p of new Set(input.imageStyleProviders ?? [])) {
+    if (!IMAGE_SECRETS[p]) error('imageStyleProviders', `图片风格指定了未知的图片服务商 ${p || '(空)'}，可选 fal、yir`)
+    else requireSecrets(IMAGE_SECRETS[p], `${p} 图片生成（风格指定）`)
   }
 
   const image = vars('IMAGE_PROVIDER')

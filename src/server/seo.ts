@@ -80,6 +80,7 @@ seoRoutes.get('/llms.txt', async (c) => {
 
   const styleName = (style: Style) => en.styles[style.id as keyof typeof en.styles].name
   const styleNames = STYLES.map(styleName)
+  const imageStyles = STYLES.filter((style) => style.kind === 'image')
   const durationText = (list: readonly StyleDuration[]) => list.map((d) => `${d.seconds}-second clip: ${plural(d.credits, 'credit')}`).join('; ')
   // 风格自己配了 durations 的单独列价格，其余风格共用 site.durations；都没配时和以前一样只写一句
   const ownDurationStyles = VIDEO_STYLES.filter((style) => style.durations)
@@ -91,7 +92,7 @@ seoRoutes.get('/llms.txt', async (c) => {
           ...(sharedDurationStyles.length > 0 ? [`${sharedDurationStyles.map(styleName).join(', ')}: ${durationText(site.durations)}`] : []),
           ...ownDurationStyles.map((style) => `${styleName(style)}: ${durationText(style.durations!)}`),
         ].join('. ')}`
-  const duoNames = STYLES.filter((style) => stylePhotoCount(style) === 2).map(styleName)
+  const duoNames = VIDEO_STYLES.filter((style) => stylePhotoCount(style) === 2).map(styleName)
   const packs = site.packages.map((p) => `${plural(p.credits, 'credit')} for ${formatPrice(p.priceCents, p.currency)}`)
   const formats = upload.contentTypes.map((type) => type.replace('image/', '').toUpperCase())
   const musicStyles = VIDEO_STYLES.filter((style) => style.music).map((style) => en.styles[style.id as keyof typeof en.styles].name)
@@ -100,13 +101,26 @@ seoRoutes.get('/llms.txt', async (c) => {
       duoNames.length > 0 ? `; the ${duoNames.join(', ')} style${duoNames.length === 1 ? ' takes' : 's take'} two photos, one per person (the first is the dancer on the left)` : ''
     }.`,
     `Style${styleNames.length === 1 ? '' : 's'}: ${styleNames.join(', ')}.`,
-    `Output: a vertical ${site.template.aspectRatio} video; ${lengths}.`,
+    `Output: ${[
+      VIDEO_STYLES.length > 0 ? `a vertical ${site.template.aspectRatio} video` : '',
+      imageStyles.length > 0 ? 'a still image' : '',
+    ]
+      .filter(Boolean)
+      .join(' or ')}${VIDEO_STYLES.length > 0 ? `; ${lengths}` : ''}.`,
+    ...(imageStyles.length > 0
+      ? [`Image styles: ${imageStyles.map(styleName).join(', ')}; each returns a still image with a plain backdrop.`]
+      : []),
     ...(musicStyles.length === 0
       ? []
-      : musicStyles.length === STYLES.length
+      : musicStyles.length === VIDEO_STYLES.length
         ? [STYLES.length === 1 ? 'Videos come with a background music track.' : 'Each style comes with its own background music track.']
         : [`Videos in the ${musicStyles.join(', ')} style${musicStyles.length === 1 ? '' : 's'} come with a background music track.`]),
-    `Downloads are MP4 files without a visible watermark${site.aiMetadata.enabled ? '; each video carries a machine-readable AI label (XMP metadata)' : ''}.`,
+    `Downloads: ${[
+      VIDEO_STYLES.length > 0 ? 'MP4 (video)' : '',
+      imageStyles.length > 0 ? 'JPEG (image)' : '',
+    ]
+      .filter(Boolean)
+      .join(' and ')} without a visible watermark${site.aiMetadata.enabled ? '; each video carries a machine-readable AI label (XMP metadata)' : ''}.`,
     `Credit packs (one-time purchase, credits from packs never expire): ${packs.join('; ')}.`,
     ...(sellingPlans.length > 0
       ? [`Subscriptions: ${sellingPlans.map((p) => `${formatPrice(p.priceCents, p.currency)} per ${p.interval} for ${plural(p.credits, 'credit')} each month`).join('; ')}.`]

@@ -60,6 +60,14 @@ describe('checkConfig', () => {
     expect(keys(withStyles(['bogus']))).toEqual(['error:styleProviders'])
   })
 
+  it('图片风格指定的图片服务商单独校验：只接受 fal、yir，并检查各自密钥', () => {
+    const withImageStyles = (imageStyleProviders: string[], secrets: ConfigInput['secrets'] = {}) => ({ ...ready({ secrets }), imageStyleProviders })
+    expect(keys(withImageStyles(['fal']))).toEqual([])
+    expect(keys(withImageStyles(['nanoapi']))).toEqual(['error:imageStyleProviders'])
+    expect(keys(withImageStyles(['yir'], { YIR_API_KEY: 'y' }))).toEqual([])
+    expect(keys(withImageStyles(['yir']))).toEqual(['error:YIR_API_KEY'])
+  })
+
   it('只要求所选服务商的密钥；运行时能看到值时拦截弱 SESSION_SECRET，doctor 只核对名字', () => {
     const dodo = ready({
       vars: { PAYMENT_PROVIDER: 'dodo', DODO_ENVIRONMENT: 'live', DODO_PRODUCTS: '{"starter":"p1","party":"p2"}' },

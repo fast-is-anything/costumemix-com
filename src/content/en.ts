@@ -1,5 +1,6 @@
-// 英文文案。所有关键词/品牌通过 site 配置插值，上新词时通常只需改 site.ts；
+﻿// 英文文案。所有关键词/品牌通过 site 配置插值，上新词时通常只需改 site.ts；
 // 文章与 FAQ 建议按新趋势重写，保证内容原创、贴合关键词。
+import { VIDEO_STYLES } from '#/config/site'
 import type { ArticleKey, site as Site } from '#/config/site'
 
 type S = typeof Site
@@ -52,7 +53,7 @@ export function en(s: S) {
     meta: {
       // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
-      homeDescription: 'CostumeMix is the AI outfit changer that turns one photo into a short Christmas costume video: Santa suit, elf costume or ugly sweater, in minutes.',
+      homeDescription: 'CostumeMix is the AI outfit changer that turns one photo into a short Christmas costume video or a clean ID photo: Santa suit, elf costume or ugly sweater, in minutes.',
       pricingTitle: `Pricing — ${b}`,
       pricingDescription: subs
         ? `Credit packs and monthly or yearly plans for AI outfit videos. Pack credits never expire, cancel anytime, failed renders are refunded.`
@@ -91,7 +92,7 @@ export function en(s: S) {
     },
     hero: {
       title: `${k}`,
-      subtitle: 'One photo is all it takes. Pick a Santa suit, elf costume or ugly sweater and get a share-ready vertical clip in minutes, no fitting room needed.',
+      subtitle: 'One photo is all it takes. Pick a Santa suit, elf costume or ugly sweater for a share-ready vertical clip, or a plain backdrop for an ID photo, in minutes.',
       badge: 'Christmas costume trend',
       original: 'Original costume clip',
       aiVersion: 'Your AI version',
@@ -210,7 +211,7 @@ export function en(s: S) {
       title: `${b} specs`,
       rows: [
         { label: 'Input', value: `One clear photo of one person, ${uploadTypes} up to ${uploadMb} MB` },
-        { label: 'Costumes', value: s.styles.map((style) => styles[style.id].name).join(', ') },
+        { label: 'Costumes', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join(', ') },
         { label: 'Video length', value: `${s.durations.map((d) => d.seconds).join(', ')} seconds` },
         { label: 'Output', value: `Vertical ${s.template.aspectRatio} MP4, no watermark` },
         { label: 'Price', value: `1 credit = 1 second of video; packs from ${usd(cheapest.priceCents)} for ${cheapest.credits} credits` },
@@ -306,7 +307,7 @@ export function en(s: S) {
         },
         {
           q: 'Which costumes can I choose?',
-          a: `Today: ${s.styles.map((style) => styles[style.id].name).join(', ')}. Each one is a licensed clip, and new outfits are added for each season.`,
+          a: `Today: ${VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join(', ')}. Each one is a licensed clip, and new outfits are added for each season.`,
           guide: { article: 'outfits', label: 'See the Christmas outfit ideas' },
         },
         {
@@ -912,3 +913,4 @@ export function en(s: S) {
 }
 
 export type Content = ReturnType<typeof en>
+

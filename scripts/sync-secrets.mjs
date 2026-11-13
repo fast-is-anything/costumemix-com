@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 // 把本地密钥文件同步到 Worker 的 secrets。默认只出计划：列名字和差异，不打印任何值；加 --apply 才写入，
 // 值经 stdin 交给 `wrangler secret bulk`，不落临时文件。
 // 已存在的 secret 默认不覆盖（换 SESSION_SECRET 会让所有登录和已签名的图片地址失效），要覆盖加 --overwrite。
@@ -42,7 +42,7 @@ export function exampleSecrets(text) {
 }
 
 // remoteNames：远端已有的 secret 名字，null = 读不到
-export function planSecrets({ entries, example, remoteNames, config, overwrite = false, siteDomain = site.domain, packageIds = site.packages.map((p) => p.id), planIds = sellingPlans.map((p) => p.id), styleProviders = STYLES.flatMap((s) => (s.provider ? [s.provider] : [])) }) {
+export function planSecrets({ entries, example, remoteNames, config, overwrite = false, siteDomain = site.domain, packageIds = site.packages.map((p) => p.id), planIds = sellingPlans.map((p) => p.id), styleProviders = STYLES.flatMap((s) => (s.kind !== 'image' && s.provider ? [s.provider] : [])), imageStyleProviders = STYLES.flatMap((s) => (s.kind === 'image' && s.provider ? [s.provider] : [])) }) {
   const known = exampleSecrets(example)
   const vars = config.vars ?? {}
   const errors = []
@@ -76,6 +76,7 @@ export function planSecrets({ entries, example, remoteNames, config, overwrite =
     packageIds,
     planIds,
     styleProviders,
+    imageStyleProviders,
     siteDomain,
   })
     .filter((issue) => issue.level === 'error' && known.has(issue.key))
@@ -146,3 +147,4 @@ export function main(args, { wrangler = runWrangler, gitIgnored = isGitIgnored, 
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) process.exitCode = main(process.argv.slice(2))
+

@@ -24,6 +24,7 @@ export function planSecrets(input: {
   packageIds?: string[]
   planIds?: string[]
   styleProviders?: string[]
+  imageStyleProviders?: string[]
 }): SecretPlan
 export function redact(output: string, values: string[]): string
 export function main(
