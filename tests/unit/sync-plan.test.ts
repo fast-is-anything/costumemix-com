@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+﻿import { describe, expect, it } from 'vitest'
 import { buildPlan, layerOf } from '../../scripts/sync-plan.mjs'
 
 describe('sync-plan', () => {
@@ -48,6 +48,7 @@ describe('sync-plan', () => {
     expect(plan.newSecrets).toEqual(['NEW_KEY', 'OPTIONAL_KEY'])
 
     expect(() => buildPlan((args) => (args[0] === 'merge-base' ? null : git(args)))).toThrow('没有共同历史')
-    expect(() => buildPlan(() => null)).toThrow('git fetch upstream')
+    expect(() => buildPlan(() => null)).toThrow('git fetch origin')
   })
 })
+
