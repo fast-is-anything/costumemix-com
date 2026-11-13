@@ -1,4 +1,4 @@
-import { useNavigate, useRouterState } from '@tanstack/react-router'
+﻿import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { ChevronDown, Languages, LogOut, Menu, Moon, Sun, X } from 'lucide-react'
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
 import { LOCALE_META, LOCALES } from '#/config/site'
@@ -22,9 +22,10 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg/85 backdrop-blur">
-      <nav className="container-page flex h-16 items-center justify-between gap-4">
+      <nav className="container-page flex h-16 items-center gap-4">
         <Logo />
-        <div className="hidden items-center gap-10 md:flex">
+        {/* 导航项紧跟 logo 排布，右侧留给语言、主题和账户 */}
+        <div className="ml-10 hidden flex-1 items-center gap-10 md:flex">
           {links.map((link) => (
             <a key={link.href} href={link.href} className="eyebrow text-fg/80 hover:text-fg">
               {link.label}
@@ -261,3 +262,4 @@ export function LanguageLinks() {
     </nav>
   )
 }
+
