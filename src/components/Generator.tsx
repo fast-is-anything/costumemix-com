@@ -587,7 +587,9 @@ function PhotoDrop({
           onFile(event.dataTransfer.files?.[0])
         }}
         className={`flex w-full items-center justify-center rounded-xl border-2 border-dashed text-center transition ${compact ? 'px-2 py-4' : 'px-4 py-6'} ${
-          dragging ? 'border-accent bg-accent/5' : 'border-line bg-card hover:border-fg/40'
+          dragging
+            ? 'border-accent bg-accent/10 ring-4 ring-accent/15'
+            : 'border-line bg-bg-soft shadow-[inset_0_2px_8px_rgba(0,0,0,0.07)] hover:border-fg/50'
         }`}
       >
         {photo ? (
