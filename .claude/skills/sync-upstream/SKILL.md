@@ -5,11 +5,11 @@ description: 在 ShrimpReel 派生出的站点仓库里合并模板（upstream�
 
 # 合并模板更新
 
-目标：把 `upstream/main` 合进站点仓库。模板的修复全部进来，站点自己的配置和文案不丢，最后列出部署前必须做的事。不提交、不推送、不部署，除非用户明确要求。
+目标：把 `upstream/main` 合进站点仓库（模板 `qianshuixia/shrimpreel` 的默认分支是 `main`，模板的修复只在 `main` 上）。模板的修复全部进来，站点自己的配置和文案不丢，最后列出部署前必须做的事。不提交、不推送、不部署，除非用户明确要求。
 
 ## 前提（不满足就停下说明）
 
-1. 当前目录是站点仓库：`git remote -v` 里有 `upstream` 指向模板。当前仓库就是模板时不适用。
+1. 当前目录是站点仓库：`git remote -v` 里有 `upstream` 指向模板（`qianshuixia/shrimpreel`）。当前仓库就是模板时不适用。站点自己的开发分支可能不叫 `main`（例如 `costumemix-com`），同步一律以 `upstream/main` 为准，合并到当前分支即可，不要把站点分支改成 `main`。
 2. 工作区干净（`git status --short` 为空），也没有进行中的合并（`.git/MERGE_HEAD` 不存在）。
 3. 已 `npm install`。
 

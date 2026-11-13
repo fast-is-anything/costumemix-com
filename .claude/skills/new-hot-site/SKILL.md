@@ -9,7 +9,7 @@ description: 在 ShrimpReel 派生出的站点仓库里，把一句话热词需�
 
 ## 前提（不满足就停下说明）
 
-1. 当前目录是站点仓库，不是模板本身：`git remote -v` 里有 `upstream` 指向模板。只有 `origin` 指向 `qianshuixia/shrimpreel` 时，先让用户按 README“上新词流程”第 1 步建站点仓库。
+1. 当前目录是站点仓库，不是模板本身：`git remote -v` 里有 `upstream` 指向模板 `qianshuixia/shrimpreel`（默认分支 `main`）。只有 `origin` 指向 `qianshuixia/shrimpreel` 时，先让用户按 README“上新词流程”第 1 步建站点仓库；站点仓库的默认分支可以不是 `main`（例如 `costumemix-com`），照常使用当前分支，不需要改名。
 2. 工作区干净（`git status --short` 为空），这样最后能用 `git diff --stat` 给出完整改动。
 3. 已 `npm install`。
 
