@@ -186,6 +186,12 @@
       0.55rem 0.55rem 0 -1px var(--bg-soft),
       0.55rem 0.55rem 0 0 color-mix(in oklab, var(--fg) 24%, transparent);
   }
+  /* 暗色下参考橙色贴纸样式：橙色描边 + 橙色底 */
+  [data-theme='dark'] .sticker {
+    box-shadow:
+      0.55rem 0.55rem 0 -1px color-mix(in oklab, #f97316 55%, var(--card)),
+      0.55rem 0.55rem 0 0 #f97316;
+  }
   .input {
     @apply w-full rounded-(--field-radius) border border-line bg-card px-3.5 py-2.5 text-sm text-fg outline-none placeholder:text-muted focus:border-fg;
   }
@@ -265,6 +271,8 @@
     transform: rotate(360deg);
   }
 }
+
+
 
 
 
