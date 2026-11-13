@@ -47,9 +47,9 @@ function Home() {
         <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
         <div className="container-page relative py-10 lg:py-14">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mt-5 text-6xl font-semibold leading-[1.02] tracking-tight sm:text-8xl">
+            <h1 className="mt-5 font-display text-5xl leading-[1.04] tracking-tight sm:text-6xl">
               {c.hero.title}
-              <span className="mt-2 block text-xl font-normal leading-snug text-muted sm:text-3xl">{c.hero.subtitle}</span>
+              <span className="mx-auto mt-2 block max-w-2xl font-sans text-lg font-normal leading-8 text-muted">{c.hero.subtitle}</span>
             </h1>
           </div>
           <div className="mt-8 flex flex-col gap-12 lg:mt-12">
