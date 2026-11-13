@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, costumemix-com]
   pull_request:
 
 permissions:
