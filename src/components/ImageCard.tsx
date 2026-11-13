@@ -16,7 +16,7 @@ export function ImageCard({
 }) {
   return (
     <figure className={className}>
-      <div className="sticker relative aspect-[9/16] overflow-hidden rounded-2xl border-2 border-muted bg-bg-soft">
+      <div className="sticker-md relative aspect-[9/16] overflow-hidden rounded-2xl border-2 border-muted bg-bg-soft">
         <img src={src} alt={alt} loading="lazy" className="size-full object-cover" />
         {label ? (
           <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">

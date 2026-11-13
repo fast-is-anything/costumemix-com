@@ -32,7 +32,7 @@ export function VideoCard({
 
   return (
     <figure className={className}>
-      <div className="sticker relative aspect-[9/16] overflow-hidden rounded-2xl border-2 border-muted bg-bg-soft">
+      <div className="sticker-md relative aspect-[9/16] overflow-hidden rounded-2xl border-2 border-muted bg-bg-soft">
         <video
           ref={ref}
           src={video}

@@ -91,7 +91,7 @@ function Home() {
                           setStyleId(next.id)
                           document.getElementById(`hero-tab-${next.id}`)?.focus()
                         }}
-                        className={`sticker rounded-full border-2 border-muted px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-ink text-ink-fg' : 'bg-bg-soft text-muted hover:text-fg'}`}
+                        className={`sticker-sm rounded-full border-2 border-muted px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-ink text-ink-fg' : 'bg-bg-soft text-muted hover:text-fg'}`}
                       >
                         {styleCopy(s.id).name}
                       </button>
@@ -262,7 +262,7 @@ function Home() {
                     <p className="mt-2 text-xs font-medium uppercase tracking-[0.12em] text-muted">{styleCopy(s.id).tagline}</p>
                     <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-4">
                       <figure className="min-w-0">
-                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
+                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
                         <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
                       </figure>
                       <ArrowRight className="size-5 text-muted" aria-hidden />
@@ -347,7 +347,7 @@ function Home() {
               return (
                 <div key={idea.title} className="grid items-center gap-10 md:grid-cols-2">
                   <div className={`grid grid-cols-[0.8fr_1fr] items-end gap-4 ${flip ? 'md:order-2' : ''}`}>
-                    <img src={media.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
+                    <img src={media.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
                     <VideoCard video={media.video} poster={media.poster} />
                   </div>
                   <div className="space-y-4">
@@ -417,6 +417,7 @@ function Home() {
     </>
   )
 }
+
 
 
 

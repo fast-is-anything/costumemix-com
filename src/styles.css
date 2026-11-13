@@ -178,19 +178,35 @@
   .card {
     @apply rounded-(--card-radius) border border-line bg-card;
   }
-  /* 错位贴纸卡片：主卡片后面露出一张带边框、偏移的背景卡 */
-  .sticker {
+  /* 错位贴纸卡片：组件越小，错位和框线越细 */
+  .sticker,
+  .sticker-md,
+  .sticker-sm {
     @apply relative;
-    border-radius: var(--card-radius);
     box-shadow:
-      0.35rem 0.35rem 0 -3px var(--bg-soft),
-      0.35rem 0.35rem 0 0 var(--muted);
+      var(--sticker-offset) var(--sticker-offset) 0 calc(-1 * var(--sticker-line)) var(--bg-soft),
+      var(--sticker-offset) var(--sticker-offset) 0 0 var(--muted);
   }
-  /* 暗色下参考橙色贴纸样式：橙色描边 + 橙色底 */
-  [data-theme='dark'] .sticker {
+  [data-theme='dark'] :is(.sticker, .sticker-md, .sticker-sm) {
     box-shadow:
-      0.35rem 0.35rem 0 -3px var(--bg-soft),
-      0.35rem 0.35rem 0 0 var(--accent);
+      var(--sticker-offset) var(--sticker-offset) 0 calc(-1 * var(--sticker-line)) var(--bg-soft),
+      var(--sticker-offset) var(--sticker-offset) 0 0 var(--accent);
+  }
+  /* 大卡片（生成器、Final CTA、价格卡） */
+  .sticker {
+    --sticker-offset: 0.35rem;
+    --sticker-line: 3px;
+    border-radius: var(--card-radius);
+  }
+  /* 中等卡片（示例视频/图片、时间轴照片） */
+  .sticker-md {
+    --sticker-offset: 0.25rem;
+    --sticker-line: 2px;
+  }
+  /* 小控件（风格 tab 等） */
+  .sticker-sm {
+    --sticker-offset: 0.2rem;
+    --sticker-line: 2px;
   }
   .input {
     @apply w-full rounded-(--field-radius) border border-line bg-card px-3.5 py-2.5 text-sm text-fg outline-none placeholder:text-muted focus:border-fg;
@@ -271,6 +287,7 @@
     transform: rotate(360deg);
   }
 }
+
 
 
 
