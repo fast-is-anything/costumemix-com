@@ -42,86 +42,92 @@ function Home() {
   const styleCopy = (id: string) => c.styles[id as keyof typeof c.styles]
   return (
     <>
-      {/* Hero：左侧生成器，右侧原版 vs AI 版对比 */}
+      {/* Hero：标题与描述居中，下面是热门服装片段和生成器（上下布局） */}
       <section className="relative overflow-hidden">
         <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
-        <div className="container-page relative grid gap-10 py-10 lg:grid-cols-[minmax(0,430px)_1fr] lg:gap-16 lg:py-14">
-          <div className="space-y-5" id="create">
-            <h1 className="font-display text-5xl leading-[1.04] tracking-tight sm:text-6xl">{c.hero.title}</h1>
-            <p className="text-lg leading-8 text-muted">{c.hero.subtitle}</p>
-            <Generator styleId={style.id} onStyleChange={setStyleId} />
+        <div className="container-page relative py-10 lg:py-14">
+          <div className="mx-auto max-w-4xl text-center">
+            <h1 className="mt-5 text-6xl font-semibold leading-[1.02] tracking-tight sm:text-8xl">
+              {c.hero.title}
+              <span className="mt-2 block text-xl font-normal leading-snug text-muted sm:text-3xl">{c.hero.subtitle}</span>
+            </h1>
           </div>
-          <div className="flex flex-col justify-center gap-5">
-            <span className="chip w-fit">
-              <Flame className="size-4 text-accent" /> {c.hero.badge}
-            </span>
-            {STYLES.length > 1 ? (
-              <div role="tablist" aria-label={c.generator.stepStyle} className="flex flex-wrap gap-2">
-                {DISPLAY_STYLES.map((s) => {
-                  const active = s.id === style.id
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      role="tab"
-                      id={`hero-tab-${s.id}`}
-                      aria-selected={active}
-                      aria-controls="hero-panel"
-                      tabIndex={active ? 0 : -1}
-                      data-testid={`hero-tab-${s.id}`}
-                      onClick={() => setStyleId(s.id)}
-                      onKeyDown={(event) => {
-                        // 左右方向键在标签间移动并选中
-                        const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
-                        if (!step) return
-                        event.preventDefault()
-                        const next = DISPLAY_STYLES[(DISPLAY_STYLES.indexOf(s) + step + DISPLAY_STYLES.length) % DISPLAY_STYLES.length]!
-                        setStyleId(next.id)
-                        document.getElementById(`hero-tab-${next.id}`)?.focus()
-                      }}
-                      className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-ink text-ink-fg' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
-                    >
-                      {styleCopy(s.id).name}
-                    </button>
-                  )
-                })}
+          <div className="mt-8 flex flex-col gap-12 lg:mt-12">
+            <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
+              <span className="chip mx-auto w-fit">
+                <Flame className="size-4 text-accent" /> {c.hero.badge}
+              </span>
+              {STYLES.length > 1 ? (
+                <div role="tablist" aria-label={c.generator.stepStyle} className="flex flex-wrap justify-center gap-2">
+                  {DISPLAY_STYLES.map((s) => {
+                    const active = s.id === style.id
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        role="tab"
+                        id={`hero-tab-${s.id}`}
+                        aria-selected={active}
+                        aria-controls="hero-panel"
+                        tabIndex={active ? 0 : -1}
+                        data-testid={`hero-tab-${s.id}`}
+                        onClick={() => setStyleId(s.id)}
+                        onKeyDown={(event) => {
+                          // 左右方向键在标签间移动并选中
+                          const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
+                          if (!step) return
+                          event.preventDefault()
+                          const next = DISPLAY_STYLES[(DISPLAY_STYLES.indexOf(s) + step + DISPLAY_STYLES.length) % DISPLAY_STYLES.length]!
+                          setStyleId(next.id)
+                          document.getElementById(`hero-tab-${next.id}`)?.focus()
+                        }}
+                        className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-ink text-ink-fg' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
+                      >
+                        {styleCopy(s.id).name}
+                      </button>
+                    )
+                  })}
+                </div>
+              ) : null}
+              <div
+                // 原片 + 样片一共 2 段时（例如双人风格只有一段样片）收窄成两列，卡片和三列时一样大
+                className={`grid gap-3 sm:gap-4 ${style.examples.aiVersions.length === 1 ? 'mx-auto w-2/3 grid-cols-2' : 'grid-cols-3'}`}
+                {...(STYLES.length > 1 ? { id: 'hero-panel', role: 'tabpanel', 'aria-labelledby': `hero-tab-${style.id}` } : {})}
+              >
+                <VideoCard key={`${style.id}-original`} video={style.examples.original.video} poster={style.examples.original.poster} label={c.hero.original} credit={style.examples.original.credit} />
+                {style.examples.aiVersions.map((v) => (
+                  <VideoCard
+                    key={v.video}
+                    video={v.video}
+                    poster={v.poster}
+                    credit={v.credit}
+                    label={
+                      <>
+                        <Sparkles className="size-3" /> {c.hero.aiVersion}
+                      </>
+                    }
+                  />
+                ))}
               </div>
-            ) : null}
-            <div
-              // 原片 + 样片一共 2 段时（例如双人风格只有一段样片）收窄成两列，卡片和三列时一样大
-              className={`grid gap-3 sm:gap-4 ${style.examples.aiVersions.length === 1 ? 'mx-auto w-2/3 grid-cols-2' : 'grid-cols-3'}`}
-              {...(STYLES.length > 1 ? { id: 'hero-panel', role: 'tabpanel', 'aria-labelledby': `hero-tab-${style.id}` } : {})}
-            >
-              <VideoCard key={`${style.id}-original`} video={style.examples.original.video} poster={style.examples.original.poster} label={c.hero.original} credit={style.examples.original.credit} />
-              {style.examples.aiVersions.map((v) => (
-                <VideoCard
-                  key={v.video}
-                  video={v.video}
-                  poster={v.poster}
-                  credit={v.credit}
-                  label={
-                    <>
-                      <Sparkles className="size-3" /> {c.hero.aiVersion}
-                    </>
-                  }
-                />
-              ))}
+              <div className="flex flex-wrap justify-center gap-2">
+                {c.hero.chips.map((chip) => (
+                  <span key={chip} className="chip">
+                    {chip}
+                  </span>
+                ))}
+              </div>
+              <p className="text-center text-xs text-muted">{c.hero.creditNote}</p>
+              <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium">
+                <LocalLink to={articlePath('trend')} className="inline-flex items-center gap-1.5 hover:text-accent">
+                  {c.articles.trend.title} <ArrowRight className="size-4" />
+                </LocalLink>
+                <LocalLink to={articlePath('howTo')} className="inline-flex items-center gap-1.5 hover:text-accent">
+                  {c.articles.howTo.title} <ArrowRight className="size-4" />
+                </LocalLink>
+              </div>
             </div>
-            <div className="flex flex-wrap justify-center gap-2">
-              {c.hero.chips.map((chip) => (
-                <span key={chip} className="chip">
-                  {chip}
-                </span>
-              ))}
-            </div>
-            <p className="text-center text-xs text-muted">{c.hero.creditNote}</p>
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium">
-              <LocalLink to={articlePath('trend')} className="inline-flex items-center gap-1.5 hover:text-accent">
-                {c.articles.trend.title} <ArrowRight className="size-4" />
-              </LocalLink>
-              <LocalLink to={articlePath('howTo')} className="inline-flex items-center gap-1.5 hover:text-accent">
-                {c.articles.howTo.title} <ArrowRight className="size-4" />
-              </LocalLink>
+            <div className="mx-auto w-full max-w-[460px] space-y-5" id="create">
+              <Generator styleId={style.id} onStyleChange={setStyleId} />
             </div>
           </div>
         </div>
