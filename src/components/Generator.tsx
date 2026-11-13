@@ -332,7 +332,7 @@ export function Generator({
         {STYLES.length > 1 ? (
           <section className="space-y-3">
             <StepTitle n={2}>{g.stepStyle}</StepTitle>
-            <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={g.stepStyle}>
+            <div className="grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label={g.stepStyle}>
               {visibleStyles.map((style) => {
                 const active = style.id === styleId
                 const copy = c.styles[style.id as keyof typeof c.styles]
@@ -346,7 +346,7 @@ export function Generator({
                     disabled={busy}
                     data-testid={`style-${style.id}`}
                     onClick={() => selectStyle(style.id)}
-                    className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active ? 'bg-card shadow-sm ring-2 ring-ink' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
+                    className={`sticker flex items-center gap-3 rounded-xl border-2 border-muted p-2 text-left transition ${active ? 'bg-card text-fg' : 'bg-bg-soft text-muted hover:text-fg'}`}
                   >
                     {thumb ? <img src={thumb} alt="" loading="lazy" className="aspect-[3/4] w-10 shrink-0 rounded-md object-cover" /> : null}
                     <span className="min-w-0">
@@ -662,6 +662,7 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
 
 
