@@ -106,6 +106,7 @@ export function zh(s: S): Content {
       consent: '照片中是我本人，或我已获得照片中人物的许可；对方已满 18 岁，且不是明星或公众人物。',
       ctaSignUp: '免费注册，立即开始',
       ctaGenerate: (n: number) => `生成换装视频 · ${n} 积分`,
+      ctaGenerateImage: (n: number) => `生成图片 · ${n} 积分`,
       ctaBuy: '购买积分后生成',
       ctaBuyPack: (credits: number, price: string) => `购买 ${credits} 积分 · ${price}`,
       seePacks: '查看全部套餐',

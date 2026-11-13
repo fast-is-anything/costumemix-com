@@ -121,6 +121,7 @@ export function en(s: S) {
       consent: 'This photo is of me, or I have permission from the person in it. They are 18 or older and not a celebrity or public figure.',
       ctaSignUp: 'Sign up free and start',
       ctaGenerate: (n: number) => `Generate costume video · ${n} credits`,
+      ctaGenerateImage: (n: number) => `Generate photo · ${n} credits`,
       ctaBuy: 'Get credits to generate',
       ctaBuyPack: (credits: number, price: string) => `Get ${credits} credits · ${price}`,
       seePacks: 'See all packs',
