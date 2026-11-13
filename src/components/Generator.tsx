@@ -493,16 +493,28 @@ export function Generator({
               {g.ctaBuy}
             </LocalLink>
           ) : (
-            <button
-              type="button"
-              className="btn-primary sticker-sm w-full rounded-xl border-2 border-muted py-3.5"
-              disabled={busy || !photosReady || !consent}
-              onClick={generate}
-              data-testid="generate"
-            >
-              {submitting ? <Spinner /> : null}
-              {g.ctaGenerate(credits)}
-            </button>
+            <>
+              <button
+                type="button"
+                className="btn-primary sticker-sm w-full rounded-xl border-2 border-muted py-3.5"
+                disabled={busy || !photosReady || !consent}
+                onClick={generate}
+                data-testid="generate"
+              >
+                {submitting ? <Spinner /> : null}
+                {g.ctaGenerate(credits)}
+              </button>
+              {!busy && !photosReady ? (
+                <p className="text-center text-xs text-muted" data-testid="generate-hint-photo">
+                  {g.needPhoto}
+                </p>
+              ) : null}
+              {!busy && photosReady && !consent ? (
+                <p className="text-center text-xs text-muted" data-testid="generate-hint-consent">
+                  {g.needConsent}
+                </p>
+              ) : null}
+            </>
           )}
           {!loading && !user && photo ? (
             <p className="text-center text-xs text-muted" data-testid="generator-draft-kept">
