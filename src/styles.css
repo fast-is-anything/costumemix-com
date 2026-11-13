@@ -1,4 +1,4 @@
-/* 只扫描 src/：默认会扫整个仓库，README、docs 里像类名的词会被编进 CSS，dev 下改文档还会让页面整页刷新 */
+﻿/* 只扫描 src/：默认会扫整个仓库，README、docs 里像类名的词会被编进 CSS，dev 下改文档还会让页面整页刷新 */
 @import 'tailwindcss' source('.');
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
@@ -178,6 +178,14 @@
   .card {
     @apply rounded-(--card-radius) border border-line bg-card;
   }
+  /* 错位贴纸卡片：主卡片后面露出一张带边框、偏移的背景卡 */
+  .sticker {
+    @apply relative;
+    border-radius: var(--card-radius);
+    box-shadow:
+      0.55rem 0.55rem 0 -1px var(--bg-soft),
+      0.55rem 0.55rem 0 0 var(--accent);
+  }
   .input {
     @apply w-full rounded-(--field-radius) border border-line bg-card px-3.5 py-2.5 text-sm text-fg outline-none placeholder:text-muted focus:border-fg;
   }
@@ -257,3 +265,5 @@
     transform: rotate(360deg);
   }
 }
+
+

@@ -268,6 +268,7 @@ export function Generator({
   const busy = uploading > 0 || submitting || (generation !== null && isActiveGeneration(generation))
 
   return (
+    <div className="sticker mb-2">
     <section
       ref={rootRef}
       className="card grid gap-5 p-5 shadow-[0_1px_0_var(--line),0_20px_40px_-24px_rgba(0,0,0,0.25)] sm:p-6 lg:grid-cols-2 lg:items-start lg:gap-x-6"
@@ -515,6 +516,7 @@ export function Generator({
         </div>
       ) : null}
     </section>
+    </div>
   )
 }
 
