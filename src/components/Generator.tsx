@@ -587,7 +587,7 @@ function PhotoDrop({
           onFile(event.dataTransfer.files?.[0])
         }}
         className={`flex w-full items-center justify-center rounded-xl border-2 border-dashed text-center transition ${compact ? 'px-2 py-4' : 'px-4 py-6'} ${
-          dragging ? 'border-accent bg-accent/5' : 'border-line hover:border-fg/40'
+          dragging ? 'border-accent bg-accent/5' : 'border-line bg-card hover:border-fg/40'
         }`}
       >
         {photo ? (
@@ -677,6 +677,7 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
 
 
