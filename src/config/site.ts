@@ -65,6 +65,7 @@ export const site = {
         aiVersions: [
           { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · placeholder' },
           { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · placeholder' },
+          { video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg', credit: 'Demo clip · placeholder' },
         ],
         madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
       },
@@ -81,6 +82,7 @@ export const site = {
         aiVersions: [
           { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · placeholder' },
           { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · placeholder' },
+          { video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg', credit: 'Demo clip · placeholder' },
         ],
         madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
       },
@@ -97,6 +99,7 @@ export const site = {
         aiVersions: [
           { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · placeholder' },
           { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · placeholder' },
+          { video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg', credit: 'Demo clip · placeholder' },
         ],
         madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
       },

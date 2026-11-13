@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+﻿import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { ArrowRight, Camera, Check, Clock, Coins, Film, ShieldCheck, Smartphone, Sparkles, X } from 'lucide-react'
 import { Faq, faqJsonLd } from '#/components/Faq'
@@ -95,28 +95,21 @@ function Home() {
                 </div>
               ) : null}
               <ul
-                // 热门服装片段：手机上横向滑动、卡片轻微旋转的贴纸样式，桌面居中排开
-                className="-mx-5 flex snap-x snap-mandatory scroll-px-5 justify-start gap-3 overflow-x-auto px-5 pt-2 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:max-w-3xl sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0"
+                // 热门服装片段：手机上横向滑动，桌面居中排开
+                className="-mx-5 flex snap-x snap-mandatory scroll-px-5 justify-start gap-3 overflow-x-auto px-5 pt-2 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:max-w-4xl sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0"
                 {...(STYLES.length > 1 ? { id: 'hero-panel', role: 'tabpanel', 'aria-labelledby': `hero-tab-${style.id}` } : {})}
               >
-                <li className="w-[30%] max-w-[168px] min-w-[104px] shrink-0 snap-start motion-safe:transition-transform motion-safe:hover:rotate-0 sm:w-[168px] -rotate-2">
+                <li className="w-[32%] max-w-[200px] min-w-[116px] shrink-0 snap-start sm:w-[200px]">
                   <VideoCard
-                    variant="sticker"
                     video={style.examples.original.video}
                     poster={style.examples.original.poster}
                     label={c.hero.original}
                     credit={style.examples.original.credit}
                   />
                 </li>
-                {style.examples.aiVersions.map((v, index) => (
-                  <li
-                    key={v.video}
-                    className={`w-[30%] max-w-[168px] min-w-[104px] shrink-0 snap-start motion-safe:transition-transform motion-safe:hover:rotate-0 sm:w-[168px] ${
-                      index === 0 ? 'rotate-[1.5deg]' : index === 1 ? '-rotate-1' : 'rotate-2'
-                    }`}
-                  >
+                {style.examples.aiVersions.map((v) => (
+                  <li key={v.video} className="w-[32%] max-w-[200px] min-w-[116px] shrink-0 snap-start sm:w-[200px]">
                     <VideoCard
-                      variant="sticker"
                       video={v.video}
                       poster={v.poster}
                       credit={v.credit}
@@ -379,3 +372,4 @@ function Home() {
     </>
   )
 }
+
