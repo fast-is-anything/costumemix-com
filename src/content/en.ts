@@ -148,6 +148,9 @@ export function en(s: S) {
       phoneExpired: 'This code has expired.',
       phoneRenew: 'Get a new code',
       phoneCancel: 'Cancel',
+      // 点生成但条件不满足时的弹窗
+      missingTitle: 'A couple of things first',
+      missingAction: 'Got it',
       phoneLinkLabel: 'Or open this link on your phone',
     },
     phoneUpload: {

@@ -54,6 +54,8 @@ export function Generator({
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [generation, setGeneration] = useState<Generation | null>(null)
+  // 点生成但条件不满足时，弹窗提示缺什么（'photo' | 'consent'）
+  const [blocker, setBlocker] = useState<'photo' | 'consent' | null>(null)
   const [phoneOpen, setPhoneOpen] = useState(false)
   const rootRef = useRef<HTMLElement>(null)
   const photosRef = useRef<Photos>([null, null])
@@ -232,6 +234,9 @@ export function Generator({
   }
 
   async function generate() {
+    // 按钮不再禁用：条件不满足时弹窗告诉他缺什么
+    if (!photosReady) return setBlocker('photo')
+    if (!consent) return setBlocker('consent')
     const required = photos.slice(0, need)
     if (!photo || required.some((p) => p === null)) return setError('invalid_upload')
     setError(null)
@@ -521,7 +526,7 @@ export function Generator({
               <button
                 type="button"
                 className="btn-primary sticker-sm w-full rounded-xl border-2 border-muted py-3.5"
-                disabled={busy || !photosReady || !consent}
+                disabled={busy}
                 onClick={generate}
                 data-testid="generate"
               >
@@ -552,6 +557,28 @@ export function Generator({
           <ErrorText code={error} />
         </div>
       </div>
+
+      {blocker ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="presentation" onClick={() => setBlocker(null)} data-testid="generate-blocker">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="generate-blocker-title"
+            className="w-full max-w-sm rounded-2xl border border-line bg-card p-5 text-center shadow-xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <p className="flex items-center justify-center gap-2 text-sm font-semibold">
+              <CircleAlert className="size-4 text-accent-text" /> <span id="generate-blocker-title">{g.missingTitle}</span>
+            </p>
+            <p className="mt-3 text-sm text-muted" data-testid="generate-blocker-text">
+              {blocker === 'photo' ? g.needPhoto : g.needConsent}
+            </p>
+            <button type="button" className="btn-primary mt-5 w-full py-2.5" onClick={() => setBlocker(null)} data-testid="generate-blocker-close">
+              {g.missingAction}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {generation ? (
         <div className="lg:col-span-2">

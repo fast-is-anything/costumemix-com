@@ -133,6 +133,8 @@ export function zh(s: S): Content {
       phoneExpired: '二维码已过期。',
       phoneRenew: '换一个二维码',
       phoneCancel: '取消',
+      missingTitle: '还差一步',
+      missingAction: '知道了',
       phoneLinkLabel: '或在手机上打开这个链接',
     },
     phoneUpload: {
