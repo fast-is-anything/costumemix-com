@@ -504,16 +504,6 @@ export function Generator({
                 {submitting ? <Spinner /> : null}
                 {g.ctaGenerate(credits)}
               </button>
-              {!busy && !photosReady ? (
-                <p className="text-center text-xs text-muted" data-testid="generate-hint-photo">
-                  {g.needPhoto}
-                </p>
-              ) : null}
-              {!busy && photosReady && !consent ? (
-                <p className="text-center text-xs text-muted" data-testid="generate-hint-consent">
-                  {g.needConsent}
-                </p>
-              ) : null}
             </>
           )}
           {!loading && !user && photo ? (
@@ -532,7 +522,11 @@ export function Generator({
               {shortfall > 0 ? ` · ${g.needMore(shortfall)}` : ''}
             </p>
           ) : null}
-          {user && photosReady && !consent && !generation ? <p className="text-center text-xs text-muted">{g.needConsent}</p> : null}
+          {user && !generation && (!photosReady || !consent) ? (
+            <p className="text-center text-xs text-muted" data-testid="generator-hint">
+              {!photosReady ? g.needPhoto : g.needConsent}
+            </p>
+          ) : null}
           <ErrorText code={error} />
         </div>
       </div>
