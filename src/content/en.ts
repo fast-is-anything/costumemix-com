@@ -41,7 +41,7 @@ export function en(s: S) {
     styles,
     meta: {
       // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
-      homeTitle: 'CostumeMix: AI Outfit Changer — Swap Clothes & Costumes in Seconds',
+      homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
       homeDescription: 'CostumeMix is the AI outfit changer that turns one photo into a short Christmas costume video: Santa suit, elf costume or ugly sweater, in minutes.',
       pricingTitle: `Pricing — ${b}`,
       pricingDescription: subs

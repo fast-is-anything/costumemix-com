@@ -28,7 +28,7 @@ export function zh(s: S): Content {
   return {
     styles,
     meta: {
-      homeTitle: 'CostumeMix: AI Outfit Changer — Swap Clothes & Costumes in Seconds',
+      homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
       homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
       pricingTitle: `价格 — ${b}`,
       pricingDescription: subs
