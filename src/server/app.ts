@@ -1,4 +1,4 @@
-import { Hono } from 'hono'
+﻿import { Hono } from 'hono'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie'
 import { defaultStyle, findPackage, findPlan, findStyle, findStyleDuration, isLocale, localePath, sellingPlans, site, stylePhotoCount } from '#/config/site'
@@ -48,7 +48,7 @@ import { createTakedown, isBlockedMedia, parseTakedown, type TakedownInput } fro
 import { turnstileSiteKey, verifyTurnstile } from './turnstile'
 import type { AppContext, GenerationRow, OrderRow, UploadRow, UserRow } from './types'
 import { ApiError, constantTimeEqual, createId, isCheckConstraintError, isProduction, nowIso, randomToken, sha256Hex } from './util'
-import { videoProviderIdForStyle } from './video'
+import { videoProviderIdForStyle } from './providers/registry'
 import { videoModelName } from './video/model-name'
 
 const MAX_ACTIVE_JOBS_PER_USER = 3
@@ -1105,3 +1105,4 @@ function isLocalDevRequest(c: { env: Env; req: { url: string; header(name: strin
   const edgeIp = c.req.header('cf-connecting-ip')
   return !edgeIp || ['127.0.0.1', '::1'].includes(edgeIp)
 }
+

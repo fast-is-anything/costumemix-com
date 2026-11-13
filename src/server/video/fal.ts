@@ -14,7 +14,6 @@ export function createFalProvider(env: Env): VideoProvider {
   }
 
   return {
-    id: 'fal',
     async submit(input) {
       if (input.imageUrls.length > 1) throw new VideoProviderError('multi_photo_unsupported', 'fal takes one photo', false)
       const url = new URL(`https://queue.fal.run/${site.video.falModel}`)

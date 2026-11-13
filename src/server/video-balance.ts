@@ -1,5 +1,5 @@
-import { cleanSecret } from './util'
-import { activeVideoProviderId } from './video'
+﻿import { cleanSecret } from './util'
+import { activeVideoProviderId } from './providers/registry'
 
 // 视频服务商余额查询：后台“测试连接”（probes.ts）和 Cron 的主动余额告警（alerts.ts）共用。
 // 只发一次只读 GET，不回显密钥；各种失败情形用 status 区分，由调用方决定怎么说。
@@ -63,3 +63,4 @@ export async function fetchVideoBalance(env: Env): Promise<VideoBalance | null> 
   if (result.status === 'http') throw new Error(`video balance HTTP ${result.code}`)
   return result.status === 'ok' ? { provider: result.provider, amount: result.amount, currency: result.currency } : null
 }
+

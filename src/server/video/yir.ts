@@ -158,7 +158,6 @@ export function createYirProvider(env: Env): VideoProvider {
   }
 
   return {
-    id: 'yir',
     async submit(input) {
       if (input.imageUrls.length > 1) throw new VideoProviderError('multi_photo_unsupported', 'yir takes one photo', false)
       const photoUrl = input.imageUrls[0]!

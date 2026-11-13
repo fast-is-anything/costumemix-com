@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { activePaymentProviderId } from '#/server/payments'
 import { defaultStyle } from '#/config/site'
 import { createFalProvider } from '#/server/video/fal'
-import { activeVideoProviderId, videoProviderIdForStyle } from '#/server/video'
+import { activeVideoProviderId, videoProviderIdForStyle } from '#/server/providers/registry'
 
 // mock 支付/生成在生产环境必须不可用，否则任何人都能免费充值
 describe('provider 选择', () => {

@@ -12,7 +12,7 @@ const checkImage = vi.fn()
 const providerId = vi.fn(() => 'openai')
 vi.mock('#/server/moderation', () => ({ getModerationProvider: () => ({ id: providerId(), checkImage }) }))
 const status = vi.fn<(requestId: string, meta: Record<string, unknown>) => Promise<VideoStatus>>()
-vi.mock('#/server/video', () => ({ getVideoProvider: vi.fn(() => ({ id: 'fal', status, costCents: () => 0 })) }))
+vi.mock('#/server/providers/registry', () => ({ getVideoProvider: vi.fn(() => ({ status, costCents: () => 0 })) }))
 vi.mock('#/server/notifications', () => ({ notifyGenerationFinished: async () => {} }))
 
 const generation = { id: 'gen_1', duration_seconds: 6, provider_meta: null } as unknown as GenerationRow

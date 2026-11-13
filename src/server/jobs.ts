@@ -1,4 +1,4 @@
-import { findStyle, findStyleDuration, site } from '#/config/site'
+﻿import { findStyle, findStyleDuration, site } from '#/config/site'
 import { jobToken, signedUploadUrl, templateSourceUrl } from './media'
 import { expireStatements, generationRefundStatements } from './credits'
 import { notifyGenerationFinished } from './notifications'
@@ -8,7 +8,8 @@ import type { GenerationRow, UploadRow, VideoJobMessage } from './types'
 import { sweepExpiredMedia, sweepHandoff } from './retention'
 import { grantDueSubscriptions } from './subscriptions'
 import { nowIso } from './util'
-import { getVideoProvider } from './video'
+import { getVideoProvider } from './providers/registry'
+import type { ProviderId } from './providers/types'
 import { videoModelName } from './video/model-name'
 import { VideoProviderError } from './video/types'
 import { addStyleMusic } from './music'
@@ -133,12 +134,14 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
     return
   }
 
-  const provider = getVideoProvider(env, generation.provider)
+  // provider 列由服务端写入，值一定在 ProviderId 范围内
+  const providerId = generation.provider as ProviderId
+  const provider = getVideoProvider(env, providerId)
   const baseMeta = parseMeta(generation.provider_meta)
 
   // 签名在 try 里：生产环境 SESSION_SECRET 配错时会抛错，要和提交失败一样放回 queued，交给队列重试和死信退款
   try {
-    const webhookUrl = new URL(`/api/webhooks/${provider.id}`, env.SITE_URL)
+    const webhookUrl = new URL(`/api/webhooks/${providerId}`, env.SITE_URL)
     webhookUrl.searchParams.set('gen', generation.id)
     webhookUrl.searchParams.set('token', await jobToken(env, generation.id))
     // 重新提交时请求体要和第一次一致，签名按任务创建时间算（任务 45 分钟超时，2 小时有效期足够）
@@ -160,7 +163,7 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
     )
       .bind(result.requestId, JSON.stringify(result.meta), now, now, generation.id)
       .run()
-    await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[provider.id])
+    await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[providerId])
   } catch (error) {
     if (error instanceof VideoProviderError && !error.retryable) {
       await failGeneration(env, generation.id, error.code, error.message)
@@ -176,7 +179,9 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
 
 async function pollGeneration(env: Env, generation: GenerationRow) {
   if (generation.status !== 'processing' || !generation.provider_request_id) return
-  const provider = getVideoProvider(env, generation.provider)
+  // provider 列由服务端写入，值一定在 ProviderId 范围内
+  const providerId = generation.provider as ProviderId
+  const provider = getVideoProvider(env, providerId)
   let status
   try {
     status = await provider.status(generation.provider_request_id, parseMeta(generation.provider_meta))
@@ -205,7 +210,7 @@ async function pollGeneration(env: Env, generation: GenerationRow) {
     } else {
       await env.DB.prepare('UPDATE generations SET updated_at = ? WHERE id = ?').bind(nowIso(), generation.id).run()
     }
-    await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[provider.id])
+    await enqueueJob(env, { kind: 'poll', generationId: generation.id }, POLL_DELAY_SECONDS[providerId])
     return
   }
 
@@ -369,3 +374,5 @@ function parseMeta(value: string | null): Record<string, unknown> {
 function minutesSince(iso: string) {
   return (Date.now() - Date.parse(iso)) / 60_000
 }
+
+

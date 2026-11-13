@@ -80,7 +80,6 @@ export function createNanoapiProvider(env: Env): VideoProvider {
   }
 
   return {
-    id: 'nanoapi',
     async submit(input) {
       const existing = await findExisting(input.imageUrls, input.sourceVideoUrl)
       if (existing) return { requestId: existing, meta: {} }

@@ -2,13 +2,13 @@ import { DatabaseSync } from 'node:sqlite'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defaultStyle } from '#/config/site'
 import { handleVideoJob } from '#/server/jobs'
-import { getVideoProvider } from '#/server/video'
+import { getVideoProvider } from '#/server/providers/registry'
 import type { VideoStatus } from '#/server/video/types'
 import { d1Shim, migrate } from './d1-sqlite'
 
 // 多步任务（yir 两步走）在轮询里进入下一步：jobs.ts 把新的服务商任务写回 generations，只写一次
 const status = vi.fn<(requestId: string, meta: Record<string, unknown>) => Promise<VideoStatus>>()
-vi.mock('#/server/video', () => ({ getVideoProvider: vi.fn(() => ({ id: 'yir', status, costCents: () => 0 })) }))
+vi.mock('#/server/providers/registry', () => ({ getVideoProvider: vi.fn(() => ({ id: 'yir', status, costCents: () => 0 })) }))
 vi.mock('#/server/notifications', () => ({ notifyGenerationFinished: async () => {} }))
 
 let sqlite: DatabaseSync
@@ -58,7 +58,7 @@ describe('jobs：多步任务进入下一步', () => {
 describe('jobs：提交时按任务的风格找源视频', () => {
   it('风格已不在站点配置里：按 invalid_input 失败，不向 provider 提交', async () => {
     const submit = vi.fn()
-    vi.mocked(getVideoProvider).mockReturnValueOnce({ id: 'yir', submit, status, costCents: () => 0 })
+    vi.mocked(getVideoProvider).mockReturnValueOnce({ submit, status, costCents: () => 0 })
     sqlite.prepare("UPDATE generations SET status = 'queued', template_id = 'gone-v1', provider_request_id = NULL WHERE id = 'gen_1'").run()
     sqlite
       .prepare("INSERT INTO uploads (id, user_id, r2_key, content_type, size_bytes, sha256, created_at) VALUES ('upl_1', 'usr_1', 'k', 'image/jpeg', 1, 'h', ?)")
@@ -84,7 +84,7 @@ describe('jobs：双人生成带两张照片', () => {
   it('second_upload_id 有值：imageUrls 按 [第一张, 第二张] 带两个签名地址', async () => {
     const submit = vi.fn()
     submit.mockResolvedValue({ requestId: 'req_1', meta: {} })
-    vi.mocked(getVideoProvider).mockReturnValueOnce({ id: 'nanoapi', submit, status, costCents: () => 0 })
+    vi.mocked(getVideoProvider).mockReturnValueOnce({ submit, status, costCents: () => 0 })
     addUpload('upl_1')
     addUpload('upl_2')
     queue()
@@ -98,7 +98,7 @@ describe('jobs：双人生成带两张照片', () => {
 
   it('第二张照片已过期：按 invalid_input 失败，不向 provider 提交', async () => {
     const submit = vi.fn()
-    vi.mocked(getVideoProvider).mockReturnValueOnce({ id: 'nanoapi', submit, status, costCents: () => 0 })
+    vi.mocked(getVideoProvider).mockReturnValueOnce({ submit, status, costCents: () => 0 })
     addUpload('upl_1')
     addUpload('upl_2', now())
     queue()
