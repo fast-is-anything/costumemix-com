@@ -91,7 +91,7 @@ function Home() {
                           setStyleId(next.id)
                           document.getElementById(`hero-tab-${next.id}`)?.focus()
                         }}
-                        className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-ink text-ink-fg' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
+                        className={`sticker rounded-full border-2 border-muted px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-ink text-ink-fg' : 'bg-bg-soft text-muted hover:text-fg'}`}
                       >
                         {styleCopy(s.id).name}
                       </button>
