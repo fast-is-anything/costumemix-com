@@ -151,7 +151,7 @@
     @apply text-xs font-medium tracking-[0.28em] uppercase;
   }
   .brand-name {
-    @apply font-mono text-lg font-bold tracking-[0.12em] uppercase;
+    @apply font-mono text-lg font-bold tracking-tight;
   }
   /* Tailwind 4 的 @apply 不能引用自定义类，按钮基础样式用并列选择器共享；放在 components 层，页面上的 px-3 等工具类可覆盖 */
   .btn,
