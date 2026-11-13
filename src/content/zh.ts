@@ -27,6 +27,9 @@ export function zh(s: S): Content {
   const uploadMb = Math.round(s.upload.maxBytes / 1024 / 1024)
   return {
     styles,
+    scenes: {
+      christmas: { name: '圣诞节', tagline: '圣诞老人装、精灵装和丑毛衣。' },
+    },
     meta: {
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
       homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,

@@ -6,7 +6,7 @@ import { Generator } from '#/components/Generator'
 import { Pricing } from '#/components/Pricing'
 import { VideoCard } from '#/components/VideoCard'
 import { LocalLink } from '#/components/ui'
-import { DISPLAY_STYLES, STYLES, articlePath, featuredStyle, findStyle, formatPrice, site } from '#/config/site'
+import { DISPLAY_STYLES, STYLES, articlePath, featuredStyle, findStyle, site } from '#/config/site'
 import { getContent, localeFromParam, pageHead, useContent } from '#/lib/i18n'
 import { homeJsonLd, jsonLdScript } from '#/lib/seo'
 

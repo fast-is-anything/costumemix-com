@@ -1,4 +1,4 @@
-// 上新词时主要改这个文件：关键词、品牌、模板视频、时长档位、积分包、文章 slug。
+﻿// 上新词时主要改这个文件：关键词、品牌、模板视频、时长档位、积分包、文章 slug。
 // 文案在 src/content/<locale>.ts，通过 {keyword} 等变量自动套用。
 
 import type { ThemeName } from '#/lib/theme'
@@ -6,6 +6,10 @@ import type { ThemeName } from '#/lib/theme'
 export const LOCALES = ['en', 'zh'] as const
 export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = 'en'
+
+// 场景分类：生成器顶部的 tab 按这里的顺序渲染。加场景时在这里补一项，并补齐 content 里的 scenes 文案。
+export const SCENES = ['christmas'] as const
+export type SceneId = (typeof SCENES)[number]
 
 // 每种语言的 BCP 47 标签（<html lang>、日期格式、Turnstile）、og:locale 和切换器里显示的自称。
 // 加语言时在这里补一行，并在 src/lib/i18n.ts 的 loaders 里登记文案文件
@@ -41,6 +45,7 @@ export const site = {
     {
       // 写入 generations.template_id，发布后不要改
       id: 'santa-suit-v1',
+      category: 'christmas',
       // 双人风格（可选三项，都不写 = 单人照、用 VIDEO_PROVIDER、用全站 durations）：
       //   photos: 2        要两张照片，第 1 张 = 源视频里站左边的人，第 2 张 = 右边的人。需要支持多图的服务商，目前只有 nanoapi，所以必须同时写 provider: 'nanoapi'
       //   provider: '...'  这个风格固定走某个服务商（'fal' | 'yir' | 'nanoapi'），覆盖 VIDEO_PROVIDER；用到的服务商密钥也要配齐（config-health 会检查）
@@ -72,6 +77,7 @@ export const site = {
     },
     {
       id: 'elf-costume-v1',
+      category: 'christmas',
       sources: { short: 'elf-costume-6s.mp4', medium: 'elf-costume-12s.mp4', full: 'elf-costume-18s.mp4' },
       prompt:
         'The person from the reference image wears the green elf costume from the reference video. Keep their face, hair and skin tone, keep the costume and the original scene around them.',
@@ -89,6 +95,7 @@ export const site = {
     },
     {
       id: 'ugly-sweater-v1',
+      category: 'christmas',
       sources: { short: 'ugly-sweater-6s.mp4', medium: 'ugly-sweater-12s.mp4', full: 'ugly-sweater-18s.mp4' },
       prompt:
         'The person from the reference image wears the knitted Christmas sweater from the reference video. Keep their face, hair and skin tone, keep the sweater and the original setting around them.',
@@ -334,6 +341,7 @@ export interface StyleDuration {
 
 export interface Style {
   id: string
+  category: SceneId // 所属场景，决定生成器顶部 tab
   photos?: 1 | 2 // 需要几张照片，默认 1；第 1 张 = 源视频左边的人，第 2 张 = 右边的人
   provider?: 'fal' | 'yir' | 'nanoapi' // 固定走某个视频服务商；不写 = 用 VIDEO_PROVIDER
   durations?: readonly StyleDuration[] // 这个风格自己的时长档位，替换 site.durations；id 全站唯一
@@ -453,3 +461,4 @@ export function localePath(locale: Locale, path: string) {
 export function formatPrice(cents: number, currency: string) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(cents / 100)
 }
+

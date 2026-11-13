@@ -39,6 +39,10 @@ export function en(s: S) {
   }
   return {
     styles,
+    // 生成器顶部 tab 的展示名；键必须覆盖 site.ts 的 SCENES
+    scenes: {
+      christmas: { name: 'Christmas', tagline: 'Santa suits, elf costumes and ugly sweaters.' },
+    },
     meta: {
       // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
