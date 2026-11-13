@@ -280,7 +280,22 @@ export function Generator({
         {g.title}
       </h2>
       {SCENES.length > 1 ? (
-        <div role="tablist" aria-label={g.stepStyle} className="flex flex-wrap gap-2 lg:col-span-2" data-testid="scene-tabs">
+        // 滑动切换：外层是轨道，选中态指示块用 translateX 滑到当前场景，宽度按场景数均分
+        <div
+          role="tablist"
+          aria-label={g.stepStyle}
+          className="relative flex rounded-full bg-bg-soft p-1 lg:col-span-2"
+          style={{ width: `${SCENES.length * 7.5}rem` }}
+          data-testid="scene-tabs"
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-1 left-1 rounded-full bg-ink shadow-sm transition-transform duration-300 ease-out"
+            style={{
+              width: `calc((100% - 0.5rem) / ${SCENES.length})`,
+              transform: `translateX(calc(100% * ${Math.max(0, SCENES.indexOf(category))}))`,
+            }}
+          />
           {SCENES.map((id) => (
             <button
               key={id}
@@ -289,7 +304,7 @@ export function Generator({
               aria-selected={id === category}
               data-testid={`scene-tab-${id}`}
               onClick={() => selectCategory(id)}
-              className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${id === category ? 'bg-ink text-bg' : 'bg-bg-soft text-muted hover:text-fg'}`}
+              className={`relative z-1 flex-1 rounded-full px-3.5 py-1.5 text-center text-sm font-semibold transition-colors ${id === category ? 'text-bg' : 'text-muted hover:text-fg'}`}
             >
               {c.scenes[id].name}
             </button>
