@@ -20,3 +20,4 @@ playwright-report/
 !.claude/skills/sync-upstream/
 !.claude/skills/launch-audit/
 *.local.md
+.idea/

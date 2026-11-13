@@ -33,34 +33,36 @@ export function en(s: S) {
   const uploadMb = Math.round(s.upload.maxBytes / 1024 / 1024)
   // 每种风格的展示名和一句话介绍；site.styles 加风格时这里补一项（缺了 typecheck 报错），zh.ts 同
   const styles: Record<StyleId, StyleCopy> = {
-    'neon-shuffle-v1': { name: k, tagline: 'The original routine, beat for beat.' },
+    'santa-suit-v1': { name: 'Santa Suit', tagline: 'The classic red suit, beard included.' },
+    'elf-costume-v1': { name: 'Elf Costume', tagline: 'Green tunic, pointy hat, workshop energy.' },
+    'ugly-sweater-v1': { name: 'Ugly Christmas Sweater', tagline: 'Knitted, loud and party-ready.' },
   }
   return {
     styles,
     meta: {
-      // 首页 title 不加品牌后缀：品牌通常已含关键词，控制在 60 字符内（seo:check 会校验）
-      homeTitle: `${k} AI Video Generator from One Photo`,
-      homeDescription: `Upload one photo and get your own ${k} video in minutes. Same choreography, same framing, starring you. ${subs ? 'Buy credits once or subscribe monthly.' : 'Pay per video with credits that never expire.'}`,
-      pricingTitle: `Pricing – ${b}`,
+      // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
+      homeTitle: 'CostumeMix: AI Outfit Changer — Swap Clothes & Costumes in Seconds',
+      homeDescription: 'CostumeMix is the AI outfit changer that turns one photo into a short Christmas costume video: Santa suit, elf costume or ugly sweater, in minutes.',
+      pricingTitle: `Pricing — ${b}`,
       pricingDescription: subs
-        ? `Credit packs and monthly or yearly plans for ${k} AI videos. Pack credits never expire, cancel a plan anytime, failed renders are refunded automatically.`
-        : `Simple credit packs for ${k} AI videos. Pay once, credits never expire, failed renders are refunded automatically.`,
-      contactTitle: `Contact – ${b}`,
+        ? `Credit packs and monthly or yearly plans for AI outfit videos. Pack credits never expire, cancel anytime, failed renders are refunded.`
+        : `Simple credit packs for AI outfit videos. Pay once, credits never expire, failed renders are refunded automatically.`,
+      contactTitle: `Contact — ${b}`,
       contactDescription: `Questions about billing, refunds, a failed render or partnerships? Reach the ${b} team, we usually reply within one business day.`,
-      signInTitle: `Sign in – ${b}`,
-      dashboardTitle: `My videos – ${b}`,
-      privacyDescription: `How ${b} collects, uses and protects the photos, videos and account data behind your ${k} AI videos.`,
-      termsDescription: `The rules for creating ${k} AI videos with ${b}: consent, acceptable use, credits and liability.`,
+      signInTitle: `Sign in — ${b}`,
+      dashboardTitle: `My videos — ${b}`,
+      privacyDescription: `How ${b} collects, uses and protects the photos, videos and account data behind your ${k} videos.`,
+      termsDescription: `The rules for creating ${k} videos with ${b}: consent, acceptable use, credits and liability.`,
       refundDescription: `When ${b} returns credits or refunds a credit pack, and how long refunds take to arrive.`,
-      reportTitle: `Report content – ${b}`,
+      reportTitle: `Report content — ${b}`,
       reportDescription: `Report a ${b} video that shows you without consent, involves a minor or infringes your rights. We review every report within ${s.takedownSlaHours} hours.`,
-      verifyTitle: `Verify a Video – Made with ${b}?`,
+      verifyTitle: `Verify a Video — Made with ${b}?`,
       verifyDescription: `Check whether a video was made with ${b}. Choose the file and we read its AI label in your browser; the file is never uploaded.`,
-      ogImageAlt: `${b}: turn one photo into your own ${k} video`,
+      ogImageAlt: `${b}: turn one photo into a Christmas costume video`,
       breadcrumbHome: 'Home',
     },
     alt: {
-      inputPhoto: `Example input photo for a ${k} AI video`,
+      inputPhoto: `Example input photo for an ${k} video`,
     },
     nav: {
       features: 'Features',
@@ -78,13 +80,13 @@ export function en(s: S) {
       menu: 'Menu',
     },
     hero: {
-      title: `${k} AI Video Generator`,
-      subtitle: `Turn a single selfie into your own take on the ${k} clip. We keep the choreography, timing and framing of the original and cast you as the lead.`,
-      badge: `Trending on ${s.trendPlatform}`,
-      original: 'Original',
-      aiVersion: 'AI version',
-      chips: ['Same choreography', 'Same framing', 'You as the lead'],
-      creditNote: 'Sample clips are placeholders made for this demo.',
+      title: `${k}`,
+      subtitle: `Upload one photo and see yourself in a Santa suit, an elf costume or an ugly Christmas sweater. ${b} keeps your face and renders you into a short vertical costume video — no fitting room, no studio, no sewing.`,
+      badge: 'Christmas costume trend',
+      original: 'Original costume clip',
+      aiVersion: 'Your AI version',
+      chips: ['Keep your face', 'Any costume', 'Ready for Reels'],
+      creditNote: 'Sample clips are placeholders for this demo. Real renders use licensed costume footage.',
     },
     generator: {
       // 只给读屏用（sr-only），不放关键词，避免隐藏文字堆词
@@ -94,19 +96,19 @@ export function en(s: S) {
       dropHint: 'JPG, PNG or WebP · up to 10 MB',
       guidance: 'Best results: one person, facing the camera, even lighting, head and shoulders visible. Avoid sunglasses, masks and heavy filters.',
       change: 'Change photo',
-      photoLeft: 'Left dancer',
-      photoRight: 'Right dancer',
-      duoGuidance: 'Two dancers in this video: add one photo per person, left and right as they stand.',
+      photoLeft: 'Left person',
+      photoRight: 'Right person',
+      duoGuidance: 'Two people are in this clip: add one photo per person, left and right as they stand.',
       uploading: 'Uploading…',
       uploaded: 'Photo ready',
-      stepStyle: 'Dance style',
+      stepStyle: 'Costume',
       stepLength: 'Length',
       seconds: (n: number) => `${n} s`,
       full: 'full',
       creditsLabel: (n: number) => `${n} credits`,
       consent: 'This photo is of me, or I have permission from the person in it. They are 18 or older and not a celebrity or public figure.',
       ctaSignUp: 'Sign up free and start',
-      ctaGenerate: (n: number) => `Generate video · ${n} credits`,
+      ctaGenerate: (n: number) => `Generate costume video · ${n} credits`,
       ctaBuy: 'Get credits to generate',
       ctaBuyPack: (credits: number, price: string) => `Get ${credits} credits · ${price}`,
       seePacks: 'See all packs',
@@ -115,8 +117,8 @@ export function en(s: S) {
       needPhoto: 'Add a photo first.',
       needConsent: 'Please confirm the consent box.',
       queued: 'In the queue…',
-      processing: 'Rendering your video. This usually takes a few minutes; you can leave this page.',
-      succeeded: 'Your video is ready',
+      processing: 'Rendering your costume video. This usually takes a few minutes; you can leave this page.',
+      succeeded: 'Your costume video is ready',
       failed: 'This render failed.',
       refunded: 'The credits have been returned to your balance.',
       download: 'Download MP4',
@@ -145,39 +147,39 @@ export function en(s: S) {
     },
     madeWith: {
       eyebrow: `Made with ${b}`,
-      title: 'One photo in, one finished clip out',
-      body: 'No editing timeline, no green screen. Upload a clear photo, choose a length and the render keeps every beat of the original routine.',
+      title: 'One photo in, one costume clip out',
+      body: 'No sewing, no fitting room, no tripod. Upload a clear photo, choose a costume and the render puts you in the outfit while the clip keeps its original camera moves.',
       photoLabel: 'Uploaded photo',
       resultLabel: 'Generated clip',
     },
     problem: {
       eyebrow: 'The catch',
-      title: `Joining the ${k} trend is harder than it looks`,
+      title: 'A Christmas costume video is harder than it looks',
       items: [
-        { title: 'You have to learn the routine', body: 'Getting every move right takes real practice, and nerves still show once the camera is rolling.' },
-        { title: 'Someone has to film it', body: 'You need a friend or a tripod, plus a background that matches the framing of the original.' },
-        { title: 'The timing is unforgiving', body: 'Half a beat late looks obvious next to the original, so it turns into take after take.' },
+        { title: 'Costumes cost more than the clip', body: 'A Santa suit or elf costume is a one-off purchase, and most people wear it exactly once.' },
+        { title: 'You still need a shoot', body: 'Good light, a clean background and someone to hold the phone take longer than the video itself.' },
+        { title: 'Editing eats the evening', body: 'Trimming, captions and audio in a phone editor turn a fun idea into a project.' },
       ],
     } as ProblemBlock | null,
     withWithout: {
       eyebrow: 'Side by side',
-      title: `Filming it yourself vs. using ${b}`,
-      without: 'Filming it yourself',
+      title: `A costume shoot vs. using ${b}`,
+      without: 'Doing it yourself',
       with: `With ${b}`,
       rows: [
-        { without: 'Learn the choreography first', with: 'No dancing needed, one photo is enough' },
-        { without: 'Find a friend or set up a tripod', with: 'No camera setup' },
-        { without: 'Retake until the timing lines up', with: 'Timing follows the original clip' },
-        { without: 'Edit and export on your phone', with: 'Download a finished MP4' },
+        { without: 'Buy or rent a costume you wear once', with: 'Pick Santa, elf or a sweater from one photo' },
+        { without: 'Book a shoot or ask a friend to film', with: 'No camera, no studio, no tripod' },
+        { without: 'Learn poses and re-shoot for the light', with: 'The clip keeps its original camera moves' },
+        { without: 'Edit captions and audio on your phone', with: 'Download a finished MP4' },
       ],
     } as WithWithoutBlock | null,
     // 首页关键词区块（one-page SEO）：H2 带关键词，上新词时按趋势本身重写 whatIs
     howTo: {
       eyebrow: 'How it works',
-      title: `How to make a ${k} AI video in 3 steps`,
+      title: 'How to make an AI outfit video in 3 steps',
       steps: [
         { title: 'Upload one clear photo', body: 'One person, facing the camera, in even light. JPG, PNG or WebP up to 10 MB.' },
-        { title: 'Choose a length', body: 'Take a short hook or the full routine. One credit covers one second of video.' },
+        { title: 'Choose a costume and a length', body: 'Santa suit, elf costume or ugly sweater. Take a 6-second hook or the full 18-second clip.' },
         { title: 'Generate and download', body: 'The render finishes in a few minutes. Download the MP4 without a watermark and post it anywhere.' },
       ],
       cta: 'Start with your photo',
@@ -185,19 +187,19 @@ export function en(s: S) {
     },
     whatIs: {
       eyebrow: 'About the trend',
-      title: `What is ${k}?`,
+      title: 'What is an AI outfit changer?',
       paragraphs: [
-        `${k} is a short vertical clip that people re-create with their own face and style. The routine is quick, the beat is easy to recognise and the camera stays on a single performer, so every new version instantly reads as part of the trend.`,
-        `${b} is an AI dance video generator built around that one clip. Instead of learning the steps and filming, you upload a single photo and the model renders you performing the original routine with the same timing and framing.`,
+        'An AI outfit changer takes an ordinary photo and renders the person in it wearing a different costume — here a Santa suit, an elf costume or an ugly Christmas sweater. The result is a short vertical video rather than a still image, so the costume moves with the person.',
+        `${b} is built around that idea for the holidays: upload one photo, choose a costume, and the model casts you into a licensed costume clip while keeping the timing and camera work of the original.`,
       ],
-      guide: `Read the full ${k} trend guide`,
+      guide: 'Read the full AI Christmas video guide',
     },
     specs: {
       eyebrow: 'At a glance',
       title: `${b} specs`,
       rows: [
         { label: 'Input', value: `One clear photo of one person, ${uploadTypes} up to ${uploadMb} MB` },
-        { label: 'Styles', value: s.styles.map((style) => styles[style.id].name).join(', ') },
+        { label: 'Costumes', value: s.styles.map((style) => styles[style.id].name).join(', ') },
         { label: 'Video length', value: `${s.durations.map((d) => d.seconds).join(', ')} seconds` },
         { label: 'Output', value: `Vertical ${s.template.aspectRatio} MP4, no watermark` },
         { label: 'Price', value: `1 credit = 1 second of video; packs from ${usd(cheapest.priceCents)} for ${cheapest.credits} credits` },
@@ -208,12 +210,12 @@ export function en(s: S) {
     } as SpecsBlock | null,
     features: {
       eyebrow: 'Features',
-      title: `Everything you need for a ${k} clip`,
+      title: 'Everything you need from an AI outfit changer',
       items: [
-        { title: 'One photo is enough', body: 'A single clear selfie is all the model needs to rebuild you inside the routine.' },
-        { title: 'Faithful motion', body: 'Every step, pause and camera move follows the reference clip frame by frame.' },
+        { title: 'One photo is enough', body: 'A single clear selfie is all the model needs to rebuild you inside the costume.' },
+        { title: 'The costume stays on', body: 'The render keeps the outfit, props and set from the reference clip and puts your face and hair into it.' },
         { title: 'Vertical and ready to post', body: `Exports in ${s.template.aspectRatio} so it drops straight into Reels, Shorts or ${s.trendPlatform}.` },
-        { title: 'Pick your length', body: 'Grab a short hook or the full routine. You only pay for the seconds you render.' },
+        { title: 'Pick your length', body: 'Grab a short hook or the full scene. You only pay for the seconds you render.' },
         { title: 'Private by default', body: `Uploads are stored privately, used only for your render and ${photoRetention}.` },
         {
           title: 'Fair billing',
@@ -227,9 +229,9 @@ export function en(s: S) {
       eyebrow: 'Ideas',
       title: 'What people make with it',
       items: [
-        { title: 'Surprise the group chat', body: 'Drop yourself into the routine and send it before anyone else jumps on the trend.' },
-        { title: 'Birthday shout-outs', body: 'Use a friend’s photo (with their OK) and turn it into a dance-floor greeting card.' },
-        { title: 'Creator content in minutes', body: 'Ride the trend on your channel without filming, lighting or learning the steps.' },
+        { title: 'Christmas cards that move', body: 'Send a 6-second Santa clip instead of another family photo.' },
+        { title: 'Party invitations', body: 'Put the host in an elf costume and drop the clip into the group chat.' },
+        { title: 'Creator content in minutes', body: 'Post a costume reel without buying a costume or booking a shoot.' },
       ],
       cta: 'Try it with your photo',
     },
@@ -254,7 +256,7 @@ export function en(s: S) {
       bullets: ['Credits never expire', 'All video lengths', 'HD MP4 download, no watermark', 'Automatic refund on failed renders'],
       note: 'Prices in USD. Taxes are calculated at checkout by our payment partner.',
       // 价格页底部的教程链接
-      guide: `Before you buy: how to get a great ${k} video`,
+      guide: 'Before you buy: how to get a great AI costume video',
       packages: {
         starter: { name: 'Starter', tagline: 'Try the trend' },
         party: { name: 'Party', tagline: 'For you and your friends' },
@@ -283,13 +285,26 @@ export function en(s: S) {
       items: [
         {
           q: `What is ${b}?`,
-          a: `${b} is an online tool that recreates the ${k} video with you as the performer, using just one photo.`,
-          guide: { article: 'trend', label: `Where the ${k} clip came from` },
+          a: `${b} is an AI outfit changer: upload one photo and get a short video of yourself in a Christmas costume, ready to post.`,
+          guide: { article: 'trend', label: 'What an AI Christmas video is' },
         },
         {
           q: 'Which photo works best?',
           a: 'A recent photo of one person facing the camera, with even light and the head and shoulders in frame. Group shots, sunglasses and strong filters lower the quality.',
-          guide: { article: 'howTo', label: `Photo tips for a better ${k} AI video` },
+          guide: { article: 'howTo', label: 'Photo tips for a better costume video' },
+        },
+        {
+          q: 'Which costumes can I choose?',
+          a: `Today: ${s.styles.map((style) => styles[style.id].name).join(', ')}. Each one is a licensed clip, and new outfits are added for each season.`,
+          guide: { article: 'outfits', label: 'See the Christmas outfit ideas' },
+        },
+        {
+          q: 'Can I make an AI Santa video or an AI elf video?',
+          a: 'Yes. Pick the Santa suit for an AI Santa video, or the elf costume for an AI elf video. Both use the same single photo and render a vertical clip in minutes.',
+        },
+        {
+          q: 'Is this also an AI costume changer or AI outfit generator?',
+          a: 'It is: one AI costume changer and AI outfit generator. Upload a photo, pick a costume and the model puts you in it. For Christmas outfit AI ideas, start with the three clips above.',
         },
         { q: 'How long does a render take?', a: 'Most videos finish in 2–8 minutes depending on length and queue. You can close the page; finished videos wait in My videos.' },
         {
@@ -306,12 +321,12 @@ export function en(s: S) {
       ] as FaqItem[],
     },
     finalCta: {
-      title: `Your ${k} moment is one photo away`,
-      body: 'Upload a selfie, pick a length and watch yourself take the lead.',
-      cta: 'Create my video',
+      title: 'Your Christmas costume is one photo away',
+      body: 'Upload a selfie, pick a costume and watch yourself take the lead in a holiday clip.',
+      cta: 'Create my costume video',
     },
     footer: {
-      statement: `${b} is an independent project and is not affiliated with ${s.trendPlatform} or the creators of the original trend.`,
+      statement: `${b} is an independent project and is not affiliated with ${s.trendPlatform}, Elf Yourself or the costume brands shown in the sample clips.`,
       resources: 'Resources',
       legal: 'Legal',
       contact: 'Contact',
@@ -538,10 +553,10 @@ export function en(s: S) {
     // 成片公开分享页 /v/<id>
     share: {
       title: `An AI video made with ${b}`,
-      goneTitle: `Video unavailable – ${b}`,
-      description: `Watch this AI-generated ${k} video, then turn one photo into your own.`,
+      goneTitle: `Video unavailable — ${b}`,
+      description: 'Watch this AI-generated Christmas costume video, then turn one photo into your own.',
       heading: `Made with ${b}`,
-      body: `This ${k} video was generated by AI from a single photo. Upload yours to make your own.`,
+      body: 'This Christmas costume video was generated by AI from a single photo. Upload yours to make your own.',
       disclosure: 'This video is AI-generated and does not show real events.',
       cta: 'Make your own',
       reportPrompt: 'Shows you without consent or breaks our rules?',
@@ -567,12 +582,12 @@ export function en(s: S) {
     // 文章列表页 /guides
     guides: {
       nav: 'Guides',
-      title: `${k} guides`,
-      metaTitle: `${k} AI Video Guides – ${b}`,
-      description: `Guides to the ${k} trend and to making your own ${k} AI video: where it came from, which photos work best and step-by-step tips.`,
-      intro: `Background on the ${k} trend and practical tips for turning one photo into a ${k} AI video.`,
+      title: 'AI costume guides',
+      metaTitle: `AI Outfit & Christmas Video Guides — ${b}`,
+      description: `Guides to AI outfit videos and Christmas costume clips: where the trend came from, which photos work best, outfit ideas and step-by-step tips.`,
+      intro: 'Background on AI Christmas videos and practical tips for turning one photo into a costume clip.',
       related: 'Related guides',
-      styleDemo: `See the ${k} routine in action`,
+      styleDemo: 'See the costume clips in action',
       faqTitle: 'FAQ',
     },
     errors: {
@@ -592,7 +607,7 @@ export function en(s: S) {
       length_required: 'Your browser sent the file in a way we can’t accept. Please try again in another browser.',
       unsupported_file_type: 'Please upload a JPG, PNG or WebP image.',
       invalid_upload: 'Please upload the photo again.',
-      invalid_style: 'That dance style isn’t available. Please pick another one.',
+      invalid_style: 'That costume isn’t available. Please pick another one.',
       queue_unavailable: 'Our render queue is busy. Your credits were returned; please try again.',
       payment_not_configured: 'Payments are not available right now.',
       payment_provider_error: 'The payment provider did not respond. Please try again.',
@@ -720,33 +735,163 @@ export function en(s: S) {
     },
     articles: {
       trend: {
-        title: `What is the ${k} trend?`,
-        description: `Where the ${k} clip came from, why it spread and how to join in with an AI version of yourself.`,
-        intro: `The ${k} clip is a short vertical dance video that turned into a template: people re-create the same routine, beat for beat, and post their own version.`,
+        title: 'AI Christmas Video Generator',
+        description: 'What an AI Christmas video is, why costume clips fill the feed every December, and how to make your own from a single photo.',
+        intro:
+          'Every December the feed fills with people who suddenly own a Santa suit, a pointy elf hat or the loudest knitted sweater in the family. Most of those clips were never filmed in a costume at all: they were generated from one photo. Here is what an AI Christmas video actually is and how the trick works.',
         sections: [
-          { h: 'Why it caught on', p: ['The routine is short, the timing is easy to recognise and the camera work is simple enough that the performer is always the focus. That makes every new version feel like a fresh take on the same joke.'] },
-          { h: 'How people join in', p: ['Some learn the steps and film themselves. Others use AI to place themselves in the original clip, which keeps the exact timing and camera moves without filming anything.'] },
-          { h: 'Do it with AI', p: [`With ${b} you upload one photo and receive a vertical video in which you perform the routine. Choose a short hook or the full length and share it straight away.`] },
+          {
+            h: 'Why AI Christmas videos took over the feed',
+            p: [
+              'A costume clip is the perfect short video: one person, one costume, a familiar holiday scene and a punchline the viewer gets in under three seconds. It is also expensive to shoot. A Santa suit costs more than most people spend on the whole holiday, and a good elf costume needs a shoot, a background and someone to hold the phone.',
+              'An AI Christmas video removes the production. You keep the photo you already have, and the model puts you inside a clip that was filmed with the costume, the set and the camera move already in place. That is why the format spreads so fast: the effort is a selfie, and the result still looks like a costume shoot.',
+            ],
+          },
+          {
+            h: 'What you actually get',
+            p: [
+              'The output is a vertical 9:16 MP4, six to eighteen seconds long, with no watermark. Your face and hair come from the photo; the costume, the props and the room come from the reference clip. The result is an AI-generated video, not a photograph, so treat it as a bit of holiday fun rather than proof that you own a Santa suit.',
+              'Because the model is rebuilding a person it has only seen once, small details move: glasses can soften, long hair can change shape and a hat can sit differently. A sharp, front-facing photo with even light gives the cleanest result, and a quick look at the finished clip before you post it avoids surprises.',
+            ],
+          },
+          {
+            h: 'Santa, elf or ugly sweater',
+            p: [
+              `The three costumes people ask for most are the ones ${b} ships with: a red Santa suit with the beard, a green elf costume with the pointy hat, and an ugly Christmas sweater that looks like it came from a office party. Each one is a different clip with its own camera move, so the same photo gives a different video depending on the costume you pick.`,
+              'For a group chat, the six-second version is usually enough. For a post or a Story, the twelve or eighteen-second cut gives the scene room to breathe.',
+            ],
+          },
+          {
+            h: 'Make one from a single photo',
+            p: [
+              `With ${b}, upload one photo, choose a costume and a length, confirm that the photo is yours or that you have permission, and start the render. Most clips finish in a few minutes and land in My videos, ready to download and post.`,
+            ],
+          },
+        ],
+        faq: [
+          { q: 'Is an AI Christmas video the same as a costume photo edit?', a: 'No. A photo edit changes a still image; an AI Christmas video renders a moving clip where the costume, the set and the camera move come from a filmed reference.' },
+          { q: 'Do I need to own the costume?', a: 'No. The costume comes from the reference clip. You only need a clear photo of your face.' },
         ],
       },
       howTo: {
-        title: `How to make a ${k} AI video`,
-        description: `A step-by-step guide to making your own ${k} video from a single photo.`,
-        intro: `You can create your own ${k} video in about five minutes. Here is the full process and a few tips for the best result.`,
+        title: 'How to Make an AI Christmas Video',
+        description: 'A step-by-step guide to making a Christmas costume video from one photo: which picture to pick, which costume to choose and how to post it.',
+        intro: 'You can make a Christmas costume video in about five minutes. Here is the full process, plus the details that make the difference between a clip that looks like you and one that looks like a filter.',
         sections: [
-          { h: '1. Pick the right photo', p: ['Choose a recent, sharp photo of one person looking at the camera. Even daylight works best. Avoid sunglasses, hats that cover the face and beauty filters.'] },
           {
-            h: '2. Upload and choose a length',
-            p: ['Sign in, drop the photo into the generator and pick a length. Shorter clips render faster and cost fewer credits; the full version follows the complete routine.'],
+            h: '1. Pick the right photo',
+            p: [
+              'Choose a recent, sharp photo of one person looking at the camera. Daylight or a bright room works best. Avoid sunglasses, hats that cover the face and heavy beauty filters; the model has to find your face and keep it consistent for every frame.',
+              'A head-and-shoulders portrait is ideal. A full-body shot works too, but the face gets fewer pixels, so the result is softer.',
+            ],
+          },
+          {
+            h: '2. Choose a costume and a length',
+            p: [
+              'Pick the Santa suit for the classic look, the elf costume for something sillier, or the ugly sweater if you want the joke to be the outfit itself. Then choose a length: shorter clips render faster and cost fewer credits, while the full cut gives the scene time to play out.',
+            ],
             table: { head: ['Length', 'Credits'], rows: s.durations.map((d) => [`${d.seconds} seconds`, String(d.credits)]) },
           },
-          { h: '3. Confirm consent and generate', p: ['Tick the consent box to confirm the photo is yours or that you have permission, then start the render. You can leave the page while it works.'] },
-          { h: '4. Download and share', p: ['When the video is ready, download the MP4 from the generator or from My videos and post it wherever you like.'] },
+          {
+            h: '3. Confirm consent and generate',
+            p: [
+              'Tick the consent box to confirm the photo is yours or that you have permission, then start the render. You can leave the page while it works; the video waits in My videos when it is done.',
+            ],
+          },
+          {
+            h: '4. Download and share',
+            p: [
+              'When the clip is ready, download the MP4 and post it. Keep the AI label and mention that the video is AI-generated: it is part of the deal, and it keeps the joke honest.',
+            ],
+          },
         ],
         faq: [
-          { q: `How long does a ${k} AI video take to make?`, a: `Most videos finish in 2–8 minutes depending on length and queue. You can close the page while it renders; finished videos wait in My videos.` },
+          { q: 'How long does an AI Christmas video take to make?', a: 'Most videos finish in 2–8 minutes depending on length and queue. You can close the page while it renders.' },
           { q: 'How many credits does a video cost?', a: `Each second of video costs one credit, so ${s.durations.map((d) => `${d.seconds} seconds is ${d.credits} credits`).join(', ')}. Credits are refunded automatically if a render fails.` },
           { q: 'Which photo gives the best result?', a: 'A recent, sharp photo of one person facing the camera in even light. Avoid sunglasses, hats that cover the face and beauty filters.' },
+        ],
+      },
+      outfits: {
+        title: 'Christmas Outfit Ideas',
+        description: 'Santa suits, elf costumes and ugly Christmas sweaters: the three AI costume ideas people use most, and how to choose the one that fits your clip.',
+        intro:
+          'A Christmas outfit is a costume, a joke and a personality test in one. If you are putting yourself in a holiday video, the outfit decides the tone. These are the three costumes the clips are built around, what each one is good for and how to pick between them.',
+        sections: [
+          {
+            h: 'The Santa suit',
+            p: [
+              'The default for a reason. A red suit, white trim and a beard read as Christmas from across the room, and the joke works for every age. It suits family cards, work-chat surprises and anyone who wants the classic look without buying a suit they will wear once.',
+            ],
+          },
+          {
+            h: 'The elf costume',
+            p: [
+              'Greener, sillier and a little chaotic. The elf costume is the one people use for party invitations, group-chat jokes and clips where the punchline is the pointy hat. It plays well with dancing, waving and anything that does not take itself seriously.',
+            ],
+          },
+          {
+            h: 'The ugly Christmas sweater',
+            p: [
+              'The lowest-effort costume and often the funniest. A loud knitted sweater says “I am at the office party and I know it”. It works for dry humour, for people who would never wear a full costume, and for clips where the face does the acting.',
+            ],
+          },
+          {
+            h: 'How to choose',
+            p: [
+              'Pick the Santa suit when you want the clip to be immediately readable. Pick the elf when the clip should be playful. Pick the sweater when the joke should be understated or when you want a costume that does not dominate the frame.',
+              'Whichever you choose, the photo stays the same: one person, facing the camera, even light. The costume comes from the clip, the face comes from you.',
+            ],
+            table: {
+              head: ['Costume', 'Vibe', 'Best for'],
+              rows: [
+                ['Santa suit', 'Classic, warm, instantly readable', 'Family cards, work chats'],
+                ['Elf costume', 'Playful and silly', 'Party invites, group jokes'],
+                ['Ugly sweater', 'Deadpan, low-effort', 'Dry humour, office parties'],
+              ],
+            },
+          },
+        ],
+        faq: [
+          { q: 'Can I combine costumes in one video?', a: 'One costume per clip. Make a second video with another costume if you want to compare them.' },
+          { q: 'Do the costumes work on any photo?', a: 'Any clear photo of one adult facing the camera works. The clip keeps the costume and the set; your photo supplies the face, so the better the photo, the better the match.' },
+        ],
+      },
+      elfAlt: {
+        title: 'Elf Yourself Alternative',
+        description: 'Looking for an Elf Yourself alternative? Compare the classic elf videos with a photo-to-video tool and make an elf costume clip from one photo.',
+        intro:
+          'Elf Yourself-style videos have been a holiday staple since the mid-2000s: upload a face, watch it land on a dancing elf, send it to the group chat. The idea is still fun, but the tools around it have changed. If you are looking for an alternative this December, here is what to compare.',
+        sections: [
+          {
+            h: 'What people actually want from an elf video',
+            p: [
+              'Three things: their own face, a recognisable elf costume and a clip short enough to send. The original format delivered all three with a cartoon body and a fixed dance. Newer AI tools keep the idea but replace the cartoon with a filmed costume clip, so the result looks like a video shoot rather than a sticker.',
+            ],
+          },
+          {
+            h: 'Where the older tools fall short',
+            p: [
+              'Most Elf Yourself-style tools are built around one template: the same dance, the same body, the same green outfit. That is fine for a joke, but it stops being funny when everyone in the chat sends the identical clip. Some also ask for a photo of a child or an elaborate sign-up before you see anything.',
+              `A photo-to-video tool like ${b} takes a different route: you pick the costume, the clip keeps its own camera move, and the output is a normal vertical MP4 you can post anywhere. The trade-off is that it is a real render, so it takes minutes rather than seconds.`,
+            ],
+          },
+          {
+            h: 'How to make an elf clip from a photo',
+            p: [
+              'Upload a clear photo of one adult facing the camera, choose the elf costume, pick a length and confirm consent. The render puts your face and hair into the costume scene and returns a vertical MP4. Nothing else is needed: no costume, no shoot, no editing app.',
+              'Keep the AI label on the clip and say it is AI-generated when you share it. It is a holiday joke, not a record of a real event.',
+            ],
+          },
+          {
+            h: 'What to check before you pick a tool',
+            p: [
+              'Look for a tool that states what happens to your photo, how long it is kept and whether the output is downloadable. Check that the costume clips are licensed and that the site asks you to confirm you have permission to use the face in the photo. Those three points matter more than the number of templates.',
+            ],
+          },
+        ],
+        faq: [
+          { q: 'Is this the same as Elf Yourself?', a: 'No. Elf Yourself is a separate brand. CostumeMix is an independent AI video tool with its own costume clips, and it is not affiliated with Elf Yourself.' },
+          { q: 'Can I make an elf video without a costume?', a: 'Yes. The elf costume comes from the reference clip, so you only need a photo of your face.' },
         ],
       },
     } satisfies Record<ArticleKey, ArticleContent>,

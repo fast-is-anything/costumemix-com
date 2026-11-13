@@ -15,11 +15,13 @@ export const LOCALE_META: Record<Locale, { tag: string; ogLocale: string; name: 
 }
 
 export const site = {
-  keyword: 'Neon Shuffle',
-  brandName: 'Neon Shuffle AI',
-  logoMark: 'NS',
-  domain: 'example.com',
-  supportEmail: 'support@example.com',
+  keyword: 'AI Outfit Changer',
+  brandName: 'CostumeMix',
+  // 只用于结构化数据的 Organization.alternateName；其它位置统一写 CostumeMix
+  brandAlternateName: 'CostumeMix AI',
+  logoMark: 'CM',
+  domain: 'costumemix.com',
+  supportEmail: 'support@costumemix.com',
   // 社媒平台名称（用于 “Viral on TikTok” 之类标签）
   trendPlatform: 'TikTok',
   ogImage: '/og.png',
@@ -38,7 +40,7 @@ export const site = {
   styles: [
     {
       // 写入 generations.template_id，发布后不要改
-      id: 'neon-shuffle-v1',
+      id: 'santa-suit-v1',
       // 双人风格（可选三项，都不写 = 单人照、用 VIDEO_PROVIDER、用全站 durations）：
       //   photos: 2        要两张照片，第 1 张 = 源视频里站左边的人，第 2 张 = 右边的人。需要支持多图的服务商，目前只有 nanoapi，所以必须同时写 provider: 'nanoapi'
       //   provider: '...'  这个风格固定走某个服务商（'fal' | 'yir' | 'nanoapi'），覆盖 VIDEO_PROVIDER；用到的服务商密钥也要配齐（config-health 会检查）
@@ -46,9 +48,10 @@ export const site = {
       //                    id 写入 generations.duration_id，全站（含 durations 和所有风格）不能重复，发布后不要改
       // 下面的 sources 和 music 的键 = 这个风格实际用的时长档位 id（有 durations 时是它自己的 id）
       // 键 = durations[].id，每个档位都要有
-      sources: { short: 'neon-shuffle-v1-6s.mp4', medium: 'neon-shuffle-v1-12s.mp4', full: 'neon-shuffle-v1-18s.mp4' },
+      sources: { short: 'santa-suit-6s.mp4', medium: 'santa-suit-12s.mp4', full: 'santa-suit-18s.mp4' },
       // 这种风格的 prompt，覆盖 video.yir.prompt 和 video.nanoapi.prompt；null = 用默认
-      prompt: null as string | null,
+      prompt:
+        'The person from the reference image wears the red Santa suit from the reference video. Keep their face, hair and skin tone, keep the costume and the original room around them.',
       // yir 两步走（可选）：先用图片模型把照片里的人合成进源视频首帧，再拿合成图做动作参考，成片保留源视频的场景。
       // null = 单步，直接用用户照片做参考，背景会变成照片的背景。图片模型等共用参数在 video.yir.sceneImage
       scene: null as StyleScene | null,
@@ -58,14 +61,48 @@ export const site = {
       music: null as Readonly<Record<string, string>> | null,
       // 首页展示素材（public/demo/）。换成真实素材时必须拥有授权，credit 写原作者，例如 '@handle · TikTok'。
       examples: {
-        original: { video: '/demo/original.mp4', poster: '/demo/original.jpg', credit: 'Demo clip · original' },
+        original: { video: '/demo/original.mp4', poster: '/demo/original.jpg', credit: 'Demo clip · placeholder' },
         aiVersions: [
-          { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · AI render' },
-          { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · AI render' },
+          { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · placeholder' },
+          { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · placeholder' },
         ],
         madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
       },
     },
+    {
+      id: 'elf-costume-v1',
+      sources: { short: 'elf-costume-6s.mp4', medium: 'elf-costume-12s.mp4', full: 'elf-costume-18s.mp4' },
+      prompt:
+        'The person from the reference image wears the green elf costume from the reference video. Keep their face, hair and skin tone, keep the costume and the original scene around them.',
+      scene: null as StyleScene | null,
+      music: null as Readonly<Record<string, string>> | null,
+      examples: {
+        original: { video: '/demo/original.mp4', poster: '/demo/original.jpg', credit: 'Demo clip · placeholder' },
+        aiVersions: [
+          { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · placeholder' },
+          { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · placeholder' },
+        ],
+        madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
+      },
+    },
+    {
+      id: 'ugly-sweater-v1',
+      sources: { short: 'ugly-sweater-6s.mp4', medium: 'ugly-sweater-12s.mp4', full: 'ugly-sweater-18s.mp4' },
+      prompt:
+        'The person from the reference image wears the knitted Christmas sweater from the reference video. Keep their face, hair and skin tone, keep the sweater and the original setting around them.',
+      scene: null as StyleScene | null,
+      music: null as Readonly<Record<string, string>> | null,
+      examples: {
+        original: { video: '/demo/original.mp4', poster: '/demo/original.jpg', credit: 'Demo clip · placeholder' },
+        aiVersions: [
+          { video: '/demo/ai1.mp4', poster: '/demo/ai1.jpg', credit: 'Demo clip · placeholder' },
+          { video: '/demo/ai2.mp4', poster: '/demo/ai2.jpg', credit: 'Demo clip · placeholder' },
+        ],
+        madeWith: { photo: '/demo/sample-photo.jpg', video: '/demo/madeWith.mp4', poster: '/demo/madeWith.jpg' },
+      },
+    },
+    // TODO(site): 换成真实的圣诞服装趋势源视频（seed/templates/）
+    // TODO(site): 换成授权的展示素材并写 credit（public/demo/、public/og.png、public/favicon.svg）
   ],
   // 主推风格：首页 hero 标签和生成器默认选中它、排在最前面（例如新出的趋势风格）。
   // null = 默认风格（styles[0]）。只影响界面，请求不带 styleId 时仍用默认风格。
@@ -206,16 +243,18 @@ export const site = {
   // 文章正文的 faq 可选（content 的 articles[key].faq）：有就在正文后渲染折叠问答并输出 FAQPage 结构化数据
   // 段落的 table 可选（sections[i].table，{ head, rows }）：渲染在该段文字之后，第一列作行标题，适合对比表和规格表；窄屏横向滚动
   articles: [
-    { key: 'trend', slug: 'neon-shuffle-ai-trend', publishedAt: '2026-10-20', updatedAt: '2026-10-20', cover: '/guides/neon-shuffle-ai-trend.jpg' },
-    { key: 'howTo', slug: 'how-to-make-neon-shuffle-ai-video', publishedAt: '2026-10-20', updatedAt: '2026-10-20', style: 'neon-shuffle-v1' },
+    { key: 'trend', slug: 'ai-christmas-video', publishedAt: '2026-11-13', updatedAt: '2026-11-13', cover: '/guides/ai-christmas-video.jpg' },
+    { key: 'howTo', slug: 'how-to-make-ai-christmas-video', publishedAt: '2026-11-13', updatedAt: '2026-11-13', style: 'santa-suit-v1' },
+    { key: 'outfits', slug: 'christmas-outfits', publishedAt: '2026-11-13', updatedAt: '2026-11-13', cover: '/guides/christmas-outfits.jpg', related: ['trend', 'howTo'] },
+    { key: 'elfAlt', slug: 'elf-yourself-alternative', publishedAt: '2026-11-13', updatedAt: '2026-11-13', cover: '/guides/elf-yourself-alternative.jpg', related: ['howTo', 'outfits'] },
   ],
 
   seo: {
     // 长尾词：不输出 meta keywords（Google 不用），由 npm run seo:check 检查首页正文是否覆盖
-    secondaryKeywords: ['Neon Shuffle AI', 'Neon Shuffle video', 'Neon Shuffle trend', 'AI dance video'],
+    secondaryKeywords: ['AI Christmas video', 'AI Santa video', 'AI elf video', 'Christmas outfit AI', 'AI outfit generator', 'AI costume changer'],
     // 首次上线日期与站点页面（首页、价格、法律页等）最近一次内容更新日期：首页视频 uploadDate、sitemap lastmod。文章用各自的日期
-    publishedAt: '2026-10-20',
-    updatedAt: '2026-10-20',
+    publishedAt: '2026-11-13',
+    updatedAt: '2026-11-13',
     // Search Console / Bing Webmaster 选“HTML 标记”验证时填 content 值；用 DNS 验证则留空
     googleVerification: '',
     bingVerification: '',
@@ -225,7 +264,10 @@ export const site = {
     sameAs: [] as string[],
     // /llms.txt 的 Key facts 末尾追加的英文事实句（可选）：配置推不出来、AI 又常说错的事，
     // 例如能不能用宠物照片、和名字相近的站点不是一家。只写站内文案已经承诺的事，每句以句号结尾
-    llmsFacts: [] as string[],
+    llmsFacts: [
+      'CostumeMix turns one uploaded photo into a short vertical AI video where the person appears in a Christmas costume; it is not an image-only outfit try-on tool.',
+      'CostumeMix is an independent project and is not affiliated with TikTok, Elf Yourself or any of the costume brands shown in its sample clips.',
+    ],
     ogImageSize: { width: 1200, height: 630 },
   },
 

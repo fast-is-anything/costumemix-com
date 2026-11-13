@@ -16,6 +16,7 @@ function organization() {
     '@type': 'Organization',
     '@id': ORG_ID,
     name: site.brandName,
+    ...(site.brandAlternateName ? { alternateName: site.brandAlternateName } : {}),
     url: absoluteUrl('/'),
     logo: absoluteUrl('/favicon.svg'),
     email: site.supportEmail,

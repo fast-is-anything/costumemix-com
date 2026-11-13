@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // 新站点：改 name、routes、database_name/id、bucket_name、queue 名称，再改 src/config/site.ts
-  "name": "video-template",
+  "name": "costumemix",
   "main": "src/server.ts",
   "compatibility_date": "2026-06-19",
   "compatibility_flags": ["nodejs_compat"],
@@ -13,16 +13,17 @@
     "run_worker_first": ["/api/*"]
   },
   "vars": {
-    "APP_ENV": "development",
-    "SITE_URL": "http://localhost:3000",
+    // 预览阶段：staging 禁止搜索引擎抓取、禁用 dev 登录，等支付/视频/登录密钥就绪后改 production
+    "APP_ENV": "staging",
+    "SITE_URL": "https://costumemix.eastlion123456.workers.dev",
     // waffo | dodo | stripe | mock（mock 只允许非 production）
     "PAYMENT_PROVIDER": "mock",
     // fal | yir | nanoapi | mock（mock 只允许非 production）
     "VIDEO_PROVIDER": "mock",
     // 管理员邮箱（逗号分隔）：登录即为管理员，同时接收举报、留言提醒和系统告警
-    "ADMIN_EMAILS": "admin@example.com",
+    "ADMIN_EMAILS": "eastlion123456@gmail.com",
     // 交易邮件发件地址，域名须在 Cloudflare Email Service 完成 Onboard；留空 = 不发信（后台“邮件”页记为 skipped）
-    "EMAIL_FROM": "noreply@example.com",
+    "EMAIL_FROM": "noreply@costumemix.com",
     "WAFFO_ENVIRONMENT": "test",
     // Waffo 店铺 ID（STO_xxx，公开）：订阅的客户门户要用；只卖积分包可以留空
     "WAFFO_STORE_ID": "",
@@ -39,7 +40,7 @@
     // Umami 实例地址（不带路径的 https origin，如 https://umami.example.com）；留空 = 不代理。只在 Worker 端使用，不进前端
     "UMAMI_ORIGIN": "",
     // 上传图片审核：openai（需 OPENAI_API_KEY）| none | mock（mock 只允许非 production）
-    "MODERATION_PROVIDER": "mock",
+    "MODERATION_PROVIDER": "none",
     // 成片输出审核：frames（抽 3 帧交给 MODERATION_PROVIDER）| off | mock（mock 只允许非 production）。
     // frames 需要 Media Transformations 绑定：在本文件加 "media": { "binding": "MEDIA_TRANSFORM" }（本地 dev 会连远程，所以模板默认不声明），再把这里改成 frames，详见 docs/env.md
     "OUTPUT_MODERATION": "off"
@@ -47,31 +48,31 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "video-template",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_name": "costumemix",
+      "database_id": "bb746259-2da3-41c1-af88-e0187c5cab62",
       "migrations_dir": "migrations"
     }
   ],
-  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "video-template-media" }],
-  "kv_namespaces": [{ "binding": "KV", "id": "00000000000000000000000000000000" }],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "costumemix-media" }],
+  "kv_namespaces": [{ "binding": "KV", "id": "ecfb7b26823d47d18d2aefc997413414" }],
   "queues": {
-    "producers": [{ "binding": "VIDEO_QUEUE", "queue": "video-template-jobs" }],
+    "producers": [{ "binding": "VIDEO_QUEUE", "queue": "costumemix-jobs" }],
     "consumers": [
       {
-        "queue": "video-template-jobs",
+        "queue": "costumemix-jobs",
         "max_batch_size": 5,
         "max_batch_timeout": 2,
         "max_retries": 10,
-        "dead_letter_queue": "video-template-jobs-dlq"
+        "dead_letter_queue": "costumemix-jobs-dlq"
       },
       // 死信：同一个 Worker 消费，任务判失败、退积分，健康检查据此告警（src/server.ts 按 -dlq 后缀分流）
-      { "queue": "video-template-jobs-dlq", "max_batch_size": 10, "max_batch_timeout": 5, "max_retries": 3 }
+      { "queue": "costumemix-jobs-dlq", "max_batch_size": 10, "max_batch_timeout": 5, "max_retries": 3 }
     ]
   },
   "ratelimits": [
-    { "name": "UPLOAD_LIMITER", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } },
-    { "name": "GENERATE_LIMITER", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } },
-    { "name": "AUTH_LIMITER", "namespace_id": "1003", "simple": { "limit": 30, "period": 60 } }
+    { "name": "UPLOAD_LIMITER", "namespace_id": "37461", "simple": { "limit": 20, "period": 60 } },
+    { "name": "GENERATE_LIMITER", "namespace_id": "37462", "simple": { "limit": 10, "period": 60 } },
+    { "name": "AUTH_LIMITER", "namespace_id": "37463", "simple": { "limit": 30, "period": 60 } }
   ],
   // Cloudflare Email Service（交易邮件、管理员提醒）。本地 dev / e2e 只模拟发送；不要加 "remote": true，否则会真的发信
   "send_email": [{ "name": "EMAIL" }],

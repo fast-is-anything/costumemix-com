@@ -26,7 +26,7 @@ export const Route = createFileRoute('/{-$locale}/$slug')({
     const c = getContent(locale)
     const text: ArticleContent = c.articles[article.key]
     const path = `/${article.slug}`
-    const head = pageHead(locale, path, `${text.title} | ${site.brandName}`, text.description)
+    const head = pageHead(locale, path, `${text.title} — ${site.brandName}`, text.description)
     return {
       ...head,
       meta: [
