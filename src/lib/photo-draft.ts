@@ -11,6 +11,8 @@ export type PhotoDraft = {
   type2?: string
   styleId: string
   durationId: string
+  // 图片风格选中的变体（白底/蓝底）；旧草稿没有
+  variantId?: string
   consent: boolean
   savedAt: number
 }

@@ -57,7 +57,7 @@ export function Generator({
   // 当前风格需要的照片都已选好
   const photosReady = photos.slice(0, need).every((p) => p !== null)
   // 最近一次写进草稿的内容：恢复草稿后不重复写（否则每次访问都会把 24 小时重新计时），生成成功后不再写
-  const draftRef = useRef<{ file: File; file2: File | null; styleId: string; durationId: string; consent: boolean } | null>(null)
+  const draftRef = useRef<{ file: File; file2: File | null; styleId: string; durationId: string; variantId: string; consent: boolean } | null>(null)
   const draftClearedRef = useRef<File | null>(null)
 
   const checkout = useCheckout()
@@ -81,6 +81,7 @@ export function Generator({
   useEffect(() => {
     const lastDuration = styleDurationList[styleDurationList.length - 1]
     if (lastDuration && !styleDurationList.some((d) => d.id === durationId)) setDurationId(lastDuration.id)
+    if (!variantList.some((v) => v.id === variantId)) setVariantId(variantList[0]?.id ?? '')
   }, [styleId])
 
   // 挂载时（只在客户端）恢复登录或付款跳转前保存的草稿：照片、风格、时长、授权勾选
@@ -98,13 +99,20 @@ export function Generator({
         : nextStyleDurations.some((d) => d.id === durationId)
           ? durationId
           : (nextStyleDurations[nextStyleDurations.length - 1]?.id ?? '')
-      draftRef.current = { file, file2, styleId: nextStyle, durationId: nextDuration, consent: draft.consent === true }
+      const nextVariants = styleVariants(findStyle(nextStyle) ?? featuredStyle)
+      const nextVariant = draft.variantId && nextVariants.some((v) => v.id === draft.variantId)
+        ? draft.variantId
+        : (nextVariants[0]?.id ?? '')
+      draftRef.current = { file, file2, styleId: nextStyle, durationId: nextDuration, variantId: nextVariant, consent: draft.consent === true }
       setPhotos([
         { file, previewUrl: URL.createObjectURL(file), uploadId: null },
         file2 ? { file: file2, previewUrl: URL.createObjectURL(file2), uploadId: null } : null,
       ])
+      const restoredStyle = findStyle(nextStyle)
+      if (restoredStyle && restoredStyle.category !== category) setCategory(restoredStyle.category)
       if (nextStyle !== styleId) selectStyle(nextStyle)
       setDurationId(nextDuration)
+      setVariantId(nextVariant)
       setConsent(draft.consent === true)
       rootRef.current?.scrollIntoView({ block: 'start' })
     })
@@ -120,8 +128,8 @@ export function Generator({
   useEffect(() => {
     if (!photoFile || draftClearedRef.current === photoFile) return
     const last = draftRef.current
-    if (last && last.file === photoFile && last.file2 === photoFile2 && last.styleId === styleId && last.durationId === durationId && last.consent === consent) return
-    draftRef.current = { file: photoFile, file2: photoFile2, styleId, durationId, consent }
+    if (last && last.file === photoFile && last.file2 === photoFile2 && last.styleId === styleId && last.durationId === durationId && last.variantId === variantId && last.consent === consent) return
+    draftRef.current = { file: photoFile, file2: photoFile2, styleId, durationId, variantId, consent }
     void saveDraft({
       file: photoFile,
       name: photoFile.name,
@@ -129,9 +137,10 @@ export function Generator({
       ...(photoFile2 ? { file2: photoFile2, name2: photoFile2.name, type2: photoFile2.type } : {}),
       styleId,
       durationId,
+      variantId,
       consent,
     })
-  }, [photoFile, photoFile2, styleId, durationId, consent])
+  }, [photoFile, photoFile2, styleId, durationId, variantId, consent])
 
   // 轮询当前任务直到结束；结束后刷新余额（失败时积分已退回）
   useEffect(() => {
