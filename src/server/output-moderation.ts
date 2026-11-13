@@ -62,6 +62,7 @@ export async function moderateOutput(env: Env, generation: GenerationRow, output
     console.warn('output moderation skipped: MODERATION_PROVIDER=none', { generationId: generation.id })
     return { allowed: true }
   }
+  if (generation.duration_seconds === null) throw new Error('generation duration missing')
   for (const seconds of frameTimes(generation.duration_seconds)) {
     const verdict = await provider.checkImage({ bytes: await extractFrame(env, outputKey, seconds), contentType: 'image/jpeg' })
     if (!verdict.allowed) return verdict

@@ -8,7 +8,7 @@ const SHORT = durationCredits('short')
 
 const ADMIN_EMAIL = 'admin@example.com'
 
-type Generation = { id: string; status: string; videoUrl: string | null; expired: boolean; removed: boolean; expiresAt: string | null }
+type Generation = { id: string; status: string; mediaUrl: string | null; expired: boolean; removed: boolean; expiresAt: string | null }
 type Swept = { uploads: number; outputs: number }
 
 // 下架会把原图哈希加入全局黑名单，测试必须用独一份的图片，不能拉黑共用的 fixture。
@@ -58,7 +58,7 @@ test('数据保留：进行中任务的原图不清理；到期后原图不能�
   expect(await json<Swept>(post(request, '/api/dev/sweep', { days: 31 }))).toEqual({ uploads: 0, outputs: 1 })
   expect(await json<Swept>(post(request, '/api/dev/sweep', { days: 31 }))).toEqual({ uploads: 0, outputs: 0 })
   expect((await json<{ error: string }>(request.get(`/api/generations/${genId}/video`), 410)).error).toBe('media_expired')
-  expect(await generation(request, genId)).toMatchObject({ status: 'succeeded', expired: true, videoUrl: null, expiresAt: null })
+  expect(await generation(request, genId)).toMatchObject({ status: 'succeeded', expired: true, mediaUrl: null, expiresAt: null })
   expect((await json<{ error: string }>(post(request, '/api/dev/sweep', { days: -1 }), 400)).error).toBe('invalid_days')
 
   await page.goto('/dashboard')
@@ -159,7 +159,7 @@ test('举报下架：匿名在 /report 举报 → 管理员下架 → 同一原�
   // 被举报用户：两条同源视频都已删除，无关视频仍可播放；同一张图再传被拦截
   for (const id of [reported, copy]) {
     expect((await json<{ error: string }>(page.request.get(`/api/generations/${id}/video`), 410)).error).toBe('media_removed')
-    expect(await generation(page.request, id)).toMatchObject({ removed: true, videoUrl: null })
+    expect(await generation(page.request, id)).toMatchObject({ removed: true, mediaUrl: null })
   }
   expect((await page.request.get(`/api/generations/${kept}/video`)).status()).toBe(200)
   expect((await json<{ error: string }>(uploadPhoto(page.request, photo), 422)).error).toBe('content_rejected')

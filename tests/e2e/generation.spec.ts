@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import { DISPLAY_STYLES, STYLES, defaultStyle, featuredStyle, formatPrice, site, styleDurations, stylePhotoCount } from '#/config/site'
 import { ORIGIN, PHOTO, buyPackage, credits, devLogin, durationCredits, json, ledger, pkg, post, uniqueEmail, uploadPhoto } from './helpers'
 
-type Generation = { id: string; status: string; videoUrl: string | null; templateId: string }
+type Generation = { id: string; status: string; mediaUrl: string | null; templateId: string }
 
 const ADMIN_EMAIL = 'admin@example.com'
 const STARTER = pkg('starter').credits

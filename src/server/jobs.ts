@@ -120,6 +120,12 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
     .run()
   if (!claimed.meta.changes) return
 
+  // P3 只有视频产物；图片在 P4 接。缺字段直接判失败，避免拿 null 去请求服务商
+  if (generation.output_type !== 'video' || generation.duration_id === null || generation.duration_seconds === null) {
+    await failGeneration(env, generation.id, 'invalid_input', 'Generation is missing video options')
+    return
+  }
+
   const style = findStyle(generation.template_id)
   const duration = style ? findStyleDuration(style, generation.duration_id) : undefined
   const sourceFile = duration ? style?.sources[duration.id] : undefined
@@ -179,6 +185,11 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
 
 async function pollGeneration(env: Env, generation: GenerationRow) {
   if (generation.status !== 'processing' || !generation.provider_request_id) return
+
+  if (generation.output_type !== 'video' || generation.duration_id === null || generation.duration_seconds === null) {
+    await failGeneration(env, generation.id, 'invalid_input', 'Generation is missing video options')
+    return
+  }
   // provider 列由服务端写入，值一定在 ProviderId 范围内
   const providerId = generation.provider as ProviderId
   const provider = getVideoProvider(env, providerId)
@@ -374,5 +385,6 @@ function parseMeta(value: string | null): Record<string, unknown> {
 function minutesSince(iso: string) {
   return (Date.now() - Date.parse(iso)) / 60_000
 }
+
 
 

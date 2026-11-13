@@ -87,8 +87,10 @@ CREATE TABLE generations (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   template_id TEXT NOT NULL,
-  duration_id TEXT NOT NULL,
-  duration_seconds INTEGER NOT NULL,
+  output_type TEXT NOT NULL CHECK (output_type IN ('video', 'image')),
+  duration_id TEXT,          -- 视频
+  duration_seconds INTEGER,  -- 视频
+  variant_id TEXT,           -- 图片
   credits_cost INTEGER NOT NULL,
   upload_id TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'queued' CHECK (status IN ('queued', 'processing', 'succeeded', 'failed')),
@@ -103,7 +105,11 @@ CREATE TABLE generations (
   created_at TEXT NOT NULL,
   started_at TEXT,
   completed_at TEXT,
-  updated_at TEXT NOT NULL
+  updated_at TEXT NOT NULL,
+  CHECK (
+    (output_type = 'video' AND duration_id IS NOT NULL AND duration_seconds IS NOT NULL AND variant_id IS NULL)
+    OR (output_type = 'image' AND variant_id IS NOT NULL AND duration_id IS NULL AND duration_seconds IS NULL)
+  )
 );
 CREATE INDEX idx_generations_user ON generations(user_id, created_at);
 CREATE INDEX idx_generations_status ON generations(status, updated_at);

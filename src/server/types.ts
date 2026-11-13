@@ -84,8 +84,10 @@ export interface GenerationRow {
   id: string
   user_id: string
   template_id: string
-  duration_id: string
-  duration_seconds: number
+  output_type: 'video' | 'image'
+  duration_id: string | null
+  duration_seconds: number | null
+  variant_id: string | null
   credits_cost: number
   upload_id: string
   second_upload_id: string | null

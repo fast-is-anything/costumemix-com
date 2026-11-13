@@ -68,10 +68,10 @@ function VideosPage() {
 
   // 分享：先在浏览器里截一帧做链接预览图（失败就不带，分享页用站点默认图），再生成公开链接
   async function share(g: Generation) {
-    if (!g.videoUrl || !confirm(d.confirmShare)) return
+    if (!g.mediaUrl || !confirm(d.confirmShare)) return
     setSharing(g.id)
     try {
-      const poster = await captureSharePoster(g.videoUrl, c.common.aiGenerated)
+      const poster = await captureSharePoster(g.mediaUrl, c.common.aiGenerated)
       const { shareId } = await api<{ shareId: string }>(`/api/generations/${g.id}/share`, { method: 'POST', blob: poster ?? undefined })
       setShareId(g.id, shareId)
       setError(null)
@@ -117,13 +117,13 @@ function VideosPage() {
             className="card overflow-hidden"
             data-testid="video-item"
             data-status={g.status}
-            data-media={g.removed ? 'removed' : g.expired ? 'expired' : g.videoUrl ? 'available' : 'none'}
+            data-media={g.removed ? 'removed' : g.expired ? 'expired' : g.mediaUrl ? 'available' : 'none'}
           >
             <div className="relative grid aspect-[9/16] place-items-center bg-bg-soft">
-              {g.status === 'succeeded' && g.videoUrl ? (
+              {g.status === 'succeeded' && g.mediaUrl ? (
                 <>
                   <AiBadge />
-                  <video src={g.videoUrl} controls playsInline preload="metadata" className="size-full bg-black object-contain" />
+                  <video src={g.mediaUrl} controls playsInline preload="metadata" className="size-full bg-black object-contain" />
                 </>
               ) : isActiveGeneration(g) ? (
                 <Spinner className="size-6 text-muted" />
@@ -141,7 +141,7 @@ function VideosPage() {
                   return <StatusPill tone={TONES[shown]}>{d.status[shown] ?? shown}</StatusPill>
                 })()}
                 <span className="text-xs text-muted">
-                  {d.seconds(g.durationSeconds)} · {c.nav.credits(g.creditsCost)}
+                  {d.seconds(g.durationSeconds ?? 0)} · {c.nav.credits(g.creditsCost)}
                 </span>
               </div>
               <p className="text-xs text-muted">{formatDate(g.createdAt, locale)}</p>
@@ -149,12 +149,12 @@ function VideosPage() {
               {g.status === 'failed' && g.refunded ? <p className="text-xs text-emerald-700 dark:text-emerald-400">{d.refundedNote}</p> : null}
               {!isActiveGeneration(g) ? (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  {g.videoUrl ? (
-                    <a href={`${g.videoUrl}?download=1`} className="btn-ghost px-3 py-1.5 text-xs" download>
+                  {g.mediaUrl ? (
+                    <a href={`${g.mediaUrl}?download=1`} className="btn-ghost px-3 py-1.5 text-xs" download>
                       <Download className="size-3.5" /> {d.download}
                     </a>
                   ) : null}
-                  {g.videoUrl && site.share.enabled && !g.shareId ? (
+                  {g.mediaUrl && site.share.enabled && !g.shareId ? (
                     <button
                       type="button"
                       className="btn-ghost px-3 py-1.5 text-xs"
@@ -170,7 +170,7 @@ function VideosPage() {
                   </button>
                 </div>
               ) : null}
-              {g.videoUrl && g.shareId ? (
+              {g.mediaUrl && g.shareId ? (
                 <div className="space-y-1.5 rounded-lg bg-bg-soft p-2.5 text-xs" data-testid="share-controls">
                   <p className="text-muted">{d.sharedNote}</p>
                   <div className="flex flex-wrap gap-x-3 gap-y-1">

@@ -52,7 +52,7 @@ export function shareView(row: GenerationRow | null): ShareView {
     id: row.share_id,
     videoUrl: shareVideoPath(row.share_id),
     posterUrl: row.share_poster_key ? sharePosterPath(row.share_id) : null,
-    durationSeconds: row.duration_seconds,
+    durationSeconds: row.duration_seconds ?? 0,
     createdAt: row.completed_at ?? row.created_at,
     expiresAt: outputExpiresAt(row.completed_at),
   }

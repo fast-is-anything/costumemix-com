@@ -3,7 +3,7 @@ import { site } from '#/config/site'
 import { XMP_UUID_HEX, parseXmpAiInfo, scanTopLevelBoxes } from '#/lib/xmp'
 import { ORIGIN, buyPackage, credits, devLogin, durationCredits, json, ledger, post, uniqueEmail, uploadPhoto } from './helpers'
 
-type Generation = { id: string; status: string; videoUrl: string | null; errorCode: string | null; refunded: boolean }
+type Generation = { id: string; status: string; mediaUrl: string | null; errorCode: string | null; refunded: boolean }
 
 const STARTER = site.packages.find((p) => p.id === 'starter')!.credits
 const SHORT = durationCredits('short')
@@ -69,7 +69,7 @@ test.describe('成片 AI 标记与验证页', () => {
     await buyPackage(request, 'starter')
     const id = await generate(request)
     const done = await waitFor(request, id, 'succeeded')
-    expect(done.videoUrl).toBe(`/api/generations/${id}/video`)
+    expect(done.mediaUrl).toBe(`/api/generations/${id}/media`)
 
     // 下载的成片：最后一个顶层 box 是 XMP uuid box，生成 id、AI 来源类型都在里面，没有邮箱和用户 id
     const download = await request.get(`/api/generations/${id}/video?download=1`)
@@ -143,7 +143,7 @@ test.describe('成片 AI 标记与验证页', () => {
     expect(await credits(request)).toBe(STARTER - SHORT)
 
     const failed = await waitFor(request, id, 'failed')
-    expect(failed).toMatchObject({ errorCode: 'output_moderation_rejected', refunded: true, videoUrl: null })
+    expect(failed).toMatchObject({ errorCode: 'output_moderation_rejected', refunded: true, mediaUrl: null })
     expect(await credits(request)).toBe(STARTER)
     const entries = (await ledger(request)).filter((e) => e.ref_id === id)
     expect(entries.map((e) => [e.reason, e.delta]).sort()).toEqual([

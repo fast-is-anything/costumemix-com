@@ -68,15 +68,18 @@ export type ClientConfig = {
 export type Generation = {
   id: string
   templateId: string
-  durationId: string
-  durationSeconds: number
+  outputType: 'video' | 'image'
+  durationId: string | null
+  durationSeconds: number | null
+  variantId: string | null
   creditsCost: number
   status: 'queued' | 'processing' | 'succeeded' | 'failed'
   errorCode: string | null
   refunded: boolean
   createdAt: string
   completedAt: string | null
-  videoUrl: string | null
+  mediaUrl: string | null
+  mediaType: 'video' | 'image'
   expired: boolean
   removed: boolean
   expiresAt: string | null

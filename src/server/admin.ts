@@ -429,7 +429,7 @@ adminRoutes.get('/generations', async (c) => {
 })
 
 // 客服排查用：管理员可预览任意用户的成片
-adminRoutes.get('/generations/:id/video', async (c) => {
+adminRoutes.get('/generations/:id/media', async (c) => {
   const row = await c.env.DB.prepare('SELECT output_r2_key FROM generations WHERE id = ?').bind(c.req.param('id')).first<{ output_r2_key: string | null }>()
   if (!row?.output_r2_key) throw new ApiError(404, 'not_ready')
   return serveR2Object(c.env.MEDIA, row.output_r2_key, c.req.raw, { cacheControl: 'private, no-store' })

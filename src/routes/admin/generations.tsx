@@ -23,7 +23,9 @@ type GenerationRow = {
   user_id: string
   user_email: string
   template_id: string
-  duration_seconds: number
+  output_type: 'video' | 'image'
+  duration_seconds: number | null
+  variant_id: string | null
   credits_cost: number
   status: string
   provider: string
@@ -116,7 +118,7 @@ function AdminGenerations() {
                 <tr key={g.id}>
                   <td className="font-mono text-xs">
                     {g.output_r2_key ? (
-                      <a href={`/api/admin/generations/${g.id}/video`} target="_blank" rel="noreferrer" className="hover:underline">
+                      <a href={`/api/admin/generations/${g.id}/media`} target="_blank" rel="noreferrer" className="hover:underline">
                         {g.id}
                       </a>
                     ) : (
@@ -131,7 +133,7 @@ function AdminGenerations() {
                   <td className="text-xs">
                     {g.template_id}
                     <span className="block text-muted">
-                      {g.duration_seconds}s · {g.credits_cost} 积分
+                      {g.duration_seconds ?? '—'}s · {g.credits_cost} 积分
                     </span>
                   </td>
                   <td>

@@ -516,21 +516,21 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
           <Spinner className="mt-0.5 size-4 shrink-0" />
           {generation.status === 'queued' ? g.queued : g.processing}
         </p>
-      ) : generation.status === 'succeeded' && generation.videoUrl ? (
+      ) : generation.status === 'succeeded' && generation.mediaUrl ? (
         <>
           <p className="flex items-center gap-2 text-sm font-semibold">
             <CircleCheck className="size-4 text-emerald-600" /> {g.succeeded}
           </p>
           <div className="relative mx-auto w-fit">
             <AiBadge />
-            <video src={generation.videoUrl} controls playsInline className="max-h-[420px] rounded-lg bg-black" data-testid="generation-video" />
+            <video src={generation.mediaUrl} controls playsInline className="max-h-[420px] rounded-lg bg-black" data-testid="generation-video" />
           </div>
           <p className="text-xs text-muted" data-testid="ai-notice">
             {g.aiNotice}
             {generation.expiresAt ? ` ${g.expiresOn(formatDate(generation.expiresAt, locale))}` : null}
           </p>
           <div className="flex flex-wrap gap-2">
-            <a href={`${generation.videoUrl}?download=1`} className="btn-primary px-4 py-2" download>
+            <a href={`${generation.mediaUrl}?download=1`} className="btn-primary px-4 py-2" download>
               <Download className="size-4" /> {g.download}
             </a>
             <LocalLink to="/dashboard" className="btn-ghost px-4 py-2">

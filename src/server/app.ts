@@ -324,9 +324,9 @@ app.post('/api/generations', async (c) => {
     await db.batch([
       db
         .prepare(
-          `INSERT INTO generations (id, user_id, template_id, duration_id, duration_seconds, credits_cost, upload_id,
+          `INSERT INTO generations (id, user_id, template_id, output_type, duration_id, duration_seconds, variant_id, credits_cost, upload_id,
            second_upload_id, status, provider, provider_meta, created_at, updated_at, consent_at, consent_text)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'queued', ?, ?, ?, ?, ?, ?)`,
+           VALUES (?, ?, ?, 'video', ?, ?, NULL, ?, ?, ?, 'queued', ?, ?, ?, ?, ?, ?)`,
         )
         .bind(id, user.id, style.id, duration.id, duration.seconds, duration.credits, upload.id, secondUpload?.id ?? null, providerId, meta, now, now, now, consent),
       ...ledgerStatements(db, {
@@ -380,7 +380,7 @@ app.get('/api/generations/:id', async (c) => {
   return c.json({ generation: publicGeneration(await ownGeneration(c, c.req.param('id'))) })
 })
 
-app.get('/api/generations/:id/video', async (c) => {
+app.get('/api/generations/:id/media', async (c) => {
   const row = await ownGeneration(c, c.req.param('id'))
   if (row.removed_at) throw new ApiError(410, 'media_removed')
   if (row.expired_at) throw new ApiError(410, 'media_expired')
@@ -389,7 +389,7 @@ app.get('/api/generations/:id/video', async (c) => {
   // 文件名标明 AI 生成，并带上 id：二次传播后被举报时可直接定位
   return serveR2Object(c.env.MEDIA, row.output_r2_key, c.req.raw, {
     cacheControl: 'private, max-age=3600',
-    downloadName: download ? `${site.brandName.replace(/\s+/g, '-').toLowerCase()}-ai-video-${row.id}.mp4` : undefined,
+    downloadName: download ? `${site.brandName.replace(/\s+/g, '-').toLowerCase()}-ai-${row.output_type}-${row.id}.${row.output_type === 'image' ? 'jpg' : 'mp4'}` : undefined,
   })
 })
 

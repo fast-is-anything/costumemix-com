@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "node_modules/wrangler/config-schema.json",
   // 新站点：改 name、routes、database_name/id、bucket_name、queue 名称，再改 src/config/site.ts
   "name": "costumemix",
@@ -54,7 +54,7 @@
     {
       "binding": "DB",
       "database_name": "costumemix",
-      "database_id": "bb746259-2da3-41c1-af88-e0187c5cab62",
+      "database_id": "ceaa6ba5-b435-437f-9dba-0432324e61d9",
       "migrations_dir": "migrations"
     }
   ],
@@ -83,3 +83,4 @@
   "send_email": [{ "name": "EMAIL" }],
   "triggers": { "crons": ["*/5 * * * *"] }
 }
+
