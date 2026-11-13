@@ -27,11 +27,11 @@
   --line: #e4ddd1;
   --ink: #1d1a16;
   --ink-fg: #fbf8f2;
-  --accent: #e0306f;
+  --accent: #f97316;
   /* 小号强调文字用：对 --bg 的对比度需 ≥ 4.5:1（WCAG AA），--accent 只适合图标、大字和背景 */
-  --accent-text: #c41f5c;
+  --accent-text: #c2410c;
   --accent-2: #00b8d9;
-  --glow: rgba(224, 48, 111, 0.12);
+  --glow: rgba(249, 115, 22, 0.14);
   color-scheme: light;
 }
 
@@ -271,6 +271,7 @@
     transform: rotate(360deg);
   }
 }
+
 
 
 
