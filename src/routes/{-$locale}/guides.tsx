@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+﻿import { createFileRoute } from '@tanstack/react-router'
 import { ArticleCards } from '#/components/ArticleCards'
 import { Breadcrumbs } from '#/components/ui'
 import { ARTICLES } from '#/config/site'
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/{-$locale}/guides')({
 function GuidesPage() {
   const c = useContent()
   return (
-    <div className="container-page max-w-4xl py-16">
+    <div className="container-page py-16">
       <Breadcrumbs items={[{ name: c.guides.title, path: '/guides' }]} />
       <h1 className="font-display text-5xl leading-tight">{c.guides.title}</h1>
       <p className="mt-4 max-w-2xl text-lg leading-8 text-muted">{c.guides.intro}</p>
@@ -31,3 +31,4 @@ function GuidesPage() {
     </div>
   )
 }
+

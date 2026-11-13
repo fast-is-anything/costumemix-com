@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react'
+﻿import { ArrowRight } from 'lucide-react'
 import type { Article } from '#/config/site'
 import { useContent, useLocale } from '#/lib/i18n'
 import { LocalLink, formatDay } from './ui'
@@ -9,7 +9,7 @@ export function ArticleCards({ articles, headingLevel }: { articles: readonly Ar
   const locale = useLocale()
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
   return (
-    <ul className="grid gap-4 sm:grid-cols-2">
+    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {articles.map((article) => {
         const text = c.articles[article.key]
         return (
@@ -18,7 +18,10 @@ export function ArticleCards({ articles, headingLevel }: { articles: readonly Ar
               {/* 标题紧跟在后面，封面对读屏是重复信息，alt 留空 */}
               {article.cover ? (
                 <img src={article.cover} alt="" width={1200} height={630} loading="lazy" className="aspect-[1200/630] w-full border-b border-line object-cover" />
-              ) : null}
+              ) : (
+                // 没有封面的文章留同尺寸占位，卡片标题和正文才能跨列对齐
+                <div aria-hidden className="aspect-[1200/630] w-full border-b border-line bg-bg-soft" />
+              )}
               <div className="flex flex-1 flex-col gap-3 p-6">
                 <Heading className="font-display text-xl leading-snug group-hover:text-accent-text">{text.title}</Heading>
                 <p className="text-sm leading-6 text-muted">{text.description}</p>
@@ -34,3 +37,4 @@ export function ArticleCards({ articles, headingLevel }: { articles: readonly Ar
     </ul>
   )
 }
+
