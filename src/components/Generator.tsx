@@ -532,7 +532,6 @@ export function Generator({
               {shortfall > 0 ? ` · ${g.needMore(shortfall)}` : ''}
             </p>
           ) : null}
-          {user && photosReady && !consent && !generation ? <p className="text-center text-xs text-muted">{g.needConsent}</p> : null}
           <ErrorText code={error} />
         </div>
       </div>
