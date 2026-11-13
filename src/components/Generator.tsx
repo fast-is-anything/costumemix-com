@@ -63,6 +63,16 @@ export function Generator({
   const checkout = useCheckout()
   const duration = styleDurationList.find((d) => d.id === durationId) ?? styleDurationList[styleDurationList.length - 1]
   const selectedVariant = variantList.find((v) => v.id === variantId) ?? variantList[0]
+  // 切场景 = 换一类结果：选中该场景第一套服装，参数回到该服装的默认项（时长取最后一档、变体取第一个）
+  function selectCategory(next: SceneId) {
+    setCategory(next)
+    const first = DISPLAY_STYLES.find((s) => s.category === next)
+    if (!first) return
+    selectStyle(first.id)
+    const durations = styleDurations(first)
+    setDurationId(durations[durations.length - 1]?.id ?? '')
+    setVariantId(styleVariants(first)[0]?.id ?? '')
+  }
   const credits = isImage ? (selectedVariant?.credits ?? 0) : (duration?.credits ?? 0)
   const shortfall = user ? Math.max(0, credits - user.credits) : 0
   // 余额不足时直接在这里下单够用的最便宜积分包；没有够用的包就退回去价格页
@@ -260,7 +270,7 @@ export function Generator({
               role="tab"
               aria-selected={id === category}
               data-testid={`scene-tab-${id}`}
-              onClick={() => setCategory(id)}
+              onClick={() => selectCategory(id)}
               className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${id === category ? 'bg-ink text-bg' : 'bg-bg-soft text-muted hover:text-fg'}`}
             >
               {c.scenes[id].name}
@@ -631,6 +641,7 @@ function GenerationResult({ generation, onReset }: { generation: Generation; onR
     </div>
   )
 }
+
 
 
 
