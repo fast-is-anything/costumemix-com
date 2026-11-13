@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // 合并模板更新前的计划（只读 git，不改工作区）：同步基线、模板的新提交、按层归类的改动、两边都改过的文件、
 // 站点改过的共用文件、新 migration、新增的 vars 和密钥。合并步骤见 .claude/skills/sync-upstream。
-//   git fetch upstream
-//   node scripts/sync-plan.mjs                      # 对比 upstream/main
+//   git fetch origin
+//   node scripts/sync-plan.mjs                      # 对比 origin/main（模板分支）
 //   node scripts/sync-plan.mjs --target <ref> --json
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
@@ -54,9 +54,9 @@ export function devVarsKeys(text) {
 const added = (before, after) => after.filter((key) => !before.includes(key))
 
 // git(args) 返回 stdout；失败时返回 null
-export function buildPlan(git, target = 'upstream/main') {
+export function buildPlan(git, target = 'origin/main') {
   const targetSha = git(['rev-parse', '--verify', `${target}^{commit}`])
-  if (!targetSha) throw new Error(`找不到 ${target}：先 git fetch upstream`)
+  if (!targetSha) throw new Error(`找不到 ${target}：先 git fetch origin`)
   const base = git(['merge-base', 'HEAD', targetSha])
   if (!base) throw new Error(`当前仓库和 ${target} 没有共同历史（可能是用 GitHub “Use this template” 建的），无法 git merge，见 README“上新词流程”第 1 步`)
   const show = (ref, file) => git(['show', `${ref}:${file}`]) ?? ''
@@ -85,7 +85,7 @@ function git(args) {
 
 function main(args) {
   const index = args.indexOf('--target')
-  const target = index >= 0 ? args[index + 1] : 'upstream/main'
+  const target = index >= 0 ? args[index + 1] : 'origin/main'
   let plan
   try {
     plan = buildPlan(git, target)

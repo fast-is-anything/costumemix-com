@@ -10,7 +10,7 @@
   - SEO：`npm run seo:check`（20 个页面 0 error）。
   - 支付商 sandbox（2026-10-21，`SANDBOX_WEBHOOK=1`，经隧道收真实 webhook）：Dodo 付款、拒付、部分退款 3 个用例通过，订阅用例的首付、激活、积分和门户通过，取消续费因 test 密钥缺 Subscriptions 写入返回 403；Waffo 付款、拒付和订阅 3 个用例全部通过。
 - 模板全面评审（2026-10-20）中不需要产品决策的 P0/P1 已在本地完成：
-  - 工程：GitHub Actions CI（typecheck、单元测试、build，e2e 单独一个 job 并上传报告；Playwright 在 CI 重试 1 次）；README 改为 upstream remote 的多站升级流程。
+  - 工程：GitHub Actions CI（typecheck、单元测试、build，e2e 单独一个 job 并上传报告；Playwright 在 CI 重试 1 次）；README 改为基于本仓库 main 分支的多站升级流程。
   - SEO 与内链：文章改为可扩展集合（`site.articles`）；`/guides` 列表页进入导航和页脚；文章页有相关文章和可见面包屑，价格页面包屑与 BreadcrumbList 一致；FAQ、价格页、联系页链接到文章；语言切换改为可抓取的 `<a hreflang>`；sitemap `lastmod` 按页面取。
   - 性能：`public/_headers` 给 `/assets/*` 长缓存，`/demo/*`、`/og.png` 缓存 7 天；文案按语言拆包，首屏共享 i18n chunk 从 gzip 43.9 kB 降到约 27 kB，另加当前语言 9–10 kB。
   - 无障碍：文字用的强调色加深（`--accent-text`），标题层级、上传控件 label、Logo 可访问名称已修。
@@ -94,7 +94,7 @@
 - 模板增强计划 #14 已完成（2026-10-21），工件在 `.tmp/e2e-catalog/`：`tests/e2e/CATALOG.md` 把 48 个 e2e 用例和 4 个巡检用例按风险归类（P0：资金与积分、权限与安全、合规与用户数据、主路径；P1：邮件、告警、安全响应头、SEO、运营），每条写断言要点；另列只由单元测试覆盖的逻辑，以及 12 项没有 e2e 的风险、原因和计划（真实支付商、真实视频生成与 fal 回调、真实发信、Google 登录、Turnstile、OpenAI 审核、限流、真实队列与 Cron、争议、Cookie 横幅、移动端与其他浏览器、线上巡检）。`tests/unit/catalog.test.ts` 双向核对：目录引用的标题必须存在，`tests/e2e` 的每个用例必须登记；故意写错标题、删掉一条登记都能报出来。
 - 模板增强计划 #25 已完成（2026-10-21），工件在 `.tmp/new-hot-site/`：Claude Code skill `.claude/skills/new-hot-site/` 入库（`.gitignore` 只放行这一个 skill），把一句话需求整理成站点简介，按白名单只改站点差异文件，缺的信息写成 `TODO(site): …`；`npm run doctor` 扫描 `site.ts`、`src/content/*.ts`、`wrangler.jsonc` 里的 `TODO(site)`，正式环境报错、其它环境提醒。在模板快照的沙箱里按 skill 派生了 Moon Hop 站（域名未定、没有素材），typecheck、单元测试、build、seo:check（0 error、0 warn）都通过，doctor 列出的 4 处 TODO 和写入的一致。实测修了模板的 4 个问题：派生站删掉 `wrangler.staging.jsonc` 后 `npm test` 会失败（跳过的 describe 仍会读文件）；占位素材脚本和 e2e 的 global-setup 写死了 `neon-shuffle-v1-*` 文件名，改为跟 `site.durations` 走；价格、隐私、条款、退款页的中文描述和英文联系页描述在品牌名较短时低于 70 个宽度，已加长。
 - 模板增强计划 #11 已完成（2026-10-21），工件在 `.tmp/sync-upstream/`（同步）和 `.tmp/launch-audit/`（上线体检）：
-  - 同步：`scripts/sync-plan.mjs` 只读出同步计划。基线取 `git merge-base HEAD upstream/main`，所以站点只能 `git merge`。计划把模板改动分成共用代码、站点层、站点已删除、依赖锁四层，列出两边都改过的文件、站点改过的共用文件、新 migration、新增 vars 和密钥。skill `.claude/skills/sync-upstream/` 用模板最新版的脚本出计划，按层解决冲突、补本地配置、跑完整验证，合并停在暂存区；提交带 `Template-sync: <sha>` trailer。
+  - 同步：`scripts/sync-plan.mjs` 只读出同步计划。基线取 `git merge-base HEAD origin/main`，所以站点只能 `git merge`。计划把模板改动分成共用代码、站点层、站点已删除、依赖锁四层，列出两边都改过的文件、站点改过的共用文件、新 migration、新增 vars 和密钥。skill `.claude/skills/sync-upstream/` 用模板最新版的脚本出计划，按层解决冲突、补本地配置、跑完整验证，合并停在暂存区；提交带 `Template-sync: <sha>` trailer。
   - 同步的沙箱验证：从模板快照派生 Moon Hop 站，站点改了文案和主色；模板再加一个提交（新 var、新密钥、改 staging 配置）。计划正确分层，标出站点改过的 `src/styles.css`。合并出现 en.ts 和 staging 配置两个冲突，按 skill 处理后 typecheck、单元测试、build、seed、e2e 48 个、seo:check 都通过，提交后再出计划显示已是最新。没有共同历史、目标 ref 不存在都给出明确报错。e2e 的新 global-setup 暴露了测试站的源视频没按新 `template.id` 改名，已写进 skill。另外发现 Windows Git Bash 会改写 `git show <ref>:<路径>`，要加 `MSYS_NO_PATHCONV=1`。
   - 上线体检：skill `.claude/skills/launch-audit/` 只读，依次跑部署前检查、线上检查（seo:check、smoke、HTTPS、R2 源视频、移动端 Lighthouse 和截图）和人工清单，报告给出三档结论。对本机生产模式预览实跑一遍：smoke 9 个通过，Lighthouse 移动端 95 分，故意缺的 18s 源视频被查出 404，在线 doctor 和 R2 生命周期对未部署的模板给出明确失败，结论“不能上线”符合预期。PageSpeed Insights API 不带 key 返回 429，skill 改为优先用 `PSI_API_KEY`，没有 key 时用本地 Lighthouse。
   - 未验证：依赖锁冲突后 `npm install` 的路径；真实域名上的上线体检，随第一个热词站进行。

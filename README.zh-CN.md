@@ -61,17 +61,16 @@ npm run dev -- --host 127.0.0.1      # http://127.0.0.1:3000
 
 ## 上新词流程
 
-每个热词站是一个独立仓库，把本模板设为 `upstream`。支付、安全和框架的修复在模板里改一次，各站点合并即可。
+本仓库的 `main` 分支是模板，站点代码在自己的分支上（例如 `costumemix-com`）。支付、安全和框架的修复提交到 `main`，再合并进站点分支即可。
 
 用 Claude Code 时，建好站点仓库（第 1 步）后可以直接说“上新词：Moon Hop，TikTok 上的月球跳舞”。仓库自带的 `new-hot-site` skill（`.claude/skills/new-hot-site/`）会完成第 2–4 步和第 7 步的本地部分：整理站点简介、跑脚手架、改定价、重写两种语言的文案、生成占位素材，再跑 typecheck、test、build、seo:check 和离线 doctor。它只改站点差异文件，不提交、不部署。缺的信息（正式域名、授权素材等）写成 `TODO(site): …` 注释，`npm run doctor` 会列出来，正式站（`APP_ENV=production`）还有没填的就拦下部署。
 
 1. **建站点仓库**：
    ```bash
-   git clone https://github.com/qianshuixia/shrimpreel.git moonhop && cd moonhop
-   git remote rename origin upstream
-   git remote add origin git@github.com:<owner>/moonhop.git
+   git clone https://github.com/fast-is-anything/costumemix-com.git moonhop && cd moonhop
+   git switch -c <站点分支> main
    ```
-   不要用 GitHub 的 “Use this template”：它生成的仓库和模板没有共同历史，之后无法 `git merge upstream/main`。公开仓库的 fork 不能设为私有，站点仓库一般也不用 fork。
+   站点分支必须从 `main` 拉出来，才有共同历史，之后才能 `git merge origin/main`。
 2. **跑脚手架**：
    ```bash
    node scripts/new-site.mjs --keyword "Moon Hop" --domain moonhop.ai --keywords "AI dance video,Moon Hop filter"          # 预览
@@ -106,20 +105,20 @@ npm run dev -- --host 127.0.0.1      # http://127.0.0.1:3000
 
 ### 合并模板更新
 
-用 Claude Code 时直接说“同步模板”。`sync-upstream` skill（`.claude/skills/sync-upstream/`）会先出同步计划，再合并、按下面的分层解决冲突、补本地配置并跑完整验证，合并结果停在暂存区等你确认后再提交。站点里还没有这个 skill 时，让它读模板里的版本：`git show upstream/main:.claude/skills/sync-upstream/SKILL.md`（Windows Git Bash 前面加 `MSYS_NO_PATHCONV=1`）。
+用 Claude Code 时直接说“同步模板”。`sync-upstream` skill（`.claude/skills/sync-upstream/`）会先出同步计划，再合并、按下面的分层解决冲突、补本地配置并跑完整验证，合并结果停在暂存区等你确认后再提交。站点里还没有这个 skill 时，让它读模板里的版本：`git show origin/main:.claude/skills/sync-upstream/SKILL.md`（Windows Git Bash 前面加 `MSYS_NO_PATHCONV=1`）。
 
 手工合并：
 
 ```bash
-git fetch upstream
-git show upstream/main:scripts/sync-plan.mjs > .tmp/sync-plan.mjs && node .tmp/sync-plan.mjs   # 同步计划，只读
-git merge --no-ff upstream/main
+git fetch origin
+git show origin/main:scripts/sync-plan.mjs > .tmp/sync-plan.mjs && node .tmp/sync-plan.mjs   # 同步计划，只读
+git merge --no-ff origin/main
 npm install && npm run typecheck && npm test && npm run test:e2e
 npm run db:migrate:remote   # 模板新增了 migrations/ 时，部署前先应用
 ```
 
 - 同步计划用模板最新版的 `scripts/sync-plan.mjs`，列出：同步基线、模板的新提交、按层归类的改动（共用代码 / 站点层 / 站点已删除 / 依赖锁）、两边都改过的文件、站点改过的共用文件、新 migration、新增的 vars 和密钥。`--json` 输出机器可读结果。
-- 基线是 `git merge-base HEAD upstream/main`，只能用 `git merge` 同步。squash、rebase 或 cherry-pick 模板提交会让基线停在原地，下次计划会重复列出已合过的提交。
+- 基线是 `git merge-base HEAD origin/main`，只能用 `git merge` 同步。squash、rebase 或 cherry-pick 模板提交会让基线停在原地，下次计划会重复列出已合过的提交。
 - 合并提交信息末尾加一行 `Template-sync: <模板 commit sha>`（计划最后会打印），`git log --grep "Template-sync:"` 可以查历次同步。
 - 站点差异只放在 `src/config/site.ts`、`src/content/*`、`public/*`、`seed/`、`wrangler.jsonc` 和 `package.json` 的 `name`。其它文件和模板保持一致：共用代码的 bug 在模板里修，再合并到各站，不要只改一个站。
 - 这些文件冲突时，保留站点自己的值，同时接受模板新增的键；文案缺键时 typecheck 会报错。

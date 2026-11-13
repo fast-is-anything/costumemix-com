@@ -61,17 +61,16 @@ npm run dev -- --host 127.0.0.1      # http://127.0.0.1:3000
 
 ## Launching a site for a new keyword
 
-Each keyword site is its own repository that tracks this template as `upstream`, so payment, security and framework fixes are made once in the template and merged into every site.
+The `main` branch of this repository is the template; each site lives on its own branch (for example `costumemix-com`). Payment, security and framework fixes go into `main` and are merged into every site.
 
 With Claude Code, once the site repo exists (step 1) you can just say "new hot site: Moon Hop, the moon-jump dance on TikTok". The bundled `new-hot-site` skill (`.claude/skills/new-hot-site/`) covers steps 2–4 and the local part of step 7: it writes a site brief, runs the scaffolder, sets pricing, rewrites the copy in both languages, generates placeholder media, then runs typecheck, tests, build, seo:check and an offline doctor. It only touches per-site files and never commits or deploys. Missing information (final domain, licensed media, etc.) is left as `TODO(site): …` comments; `npm run doctor` lists them and blocks a production deploy (`APP_ENV=production`) while any remain.
 
 1. **Create the site repo**
    ```bash
-   git clone https://github.com/qianshuixia/shrimpreel.git moonhop && cd moonhop
-   git remote rename origin upstream
-   git remote add origin git@github.com:<owner>/moonhop.git
+   git clone https://github.com/fast-is-anything/costumemix-com.git moonhop && cd moonhop
+   git switch -c <site-branch> main
    ```
-   Don't use GitHub's "Use this template": the new repo shares no history with the template, so `git merge upstream/main` won't work later. Forks of a public repo can't be private, so site repos usually aren't forks either.
+   The site branch must start from `main` so it shares history and `git merge origin/main` works later. Forks of a public repo can't be private, so site repos usually aren't forks either.
 2. **Run the scaffolder**
    ```bash
    node scripts/new-site.mjs --keyword "Moon Hop" --domain moonhop.ai --keywords "AI dance video,Moon Hop filter"          # dry run
@@ -111,15 +110,15 @@ With Claude Code, just say "sync the template". The `sync-upstream` skill (`.cla
 By hand:
 
 ```bash
-git fetch upstream
-git show upstream/main:scripts/sync-plan.mjs > .tmp/sync-plan.mjs && node .tmp/sync-plan.mjs   # sync plan, read-only
-git merge --no-ff upstream/main
+git fetch origin
+git show origin/main:scripts/sync-plan.mjs > .tmp/sync-plan.mjs && node .tmp/sync-plan.mjs   # sync plan, read-only
+git merge --no-ff origin/main
 npm install && npm run typecheck && npm test && npm run test:e2e
 npm run db:migrate:remote   # before deploying, if the template added files to migrations/
 ```
 
 - The plan uses the template's latest `scripts/sync-plan.mjs` and lists the sync base, new template commits, changes grouped by layer (shared code / site layer / removed in sites / lockfile), files changed on both sides, shared files the site has changed, new migrations, and new vars and secrets. `--json` prints machine-readable output.
-- The base is `git merge-base HEAD upstream/main`, so sync only with `git merge`. Squashing, rebasing or cherry-picking template commits leaves the base where it was, and the next plan lists already-merged commits again.
+- The base is `git merge-base HEAD origin/main`, so sync only with `git merge`. Squashing, rebasing or cherry-picking template commits leaves the base where it was, and the next plan lists already-merged commits again.
 - End the merge commit message with `Template-sync: <template commit sha>` (the plan prints it); `git log --grep "Template-sync:"` lists past syncs.
 
 - Keep site-specific changes in `src/config/site.ts`, `src/content/*`, `public/*`, `seed/`, `wrangler.jsonc` and the `name` in `package.json`. Keep everything else identical to the template: fix shared code in the template and merge it into each site rather than patching one site.
