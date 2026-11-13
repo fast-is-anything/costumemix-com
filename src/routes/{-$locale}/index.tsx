@@ -6,7 +6,7 @@ import { Generator } from '#/components/Generator'
 import { Pricing } from '#/components/Pricing'
 import { VideoCard } from '#/components/VideoCard'
 import { LocalLink } from '#/components/ui'
-import { DISPLAY_STYLES, STYLES, articlePath, featuredStyle, findStyle, site } from '#/config/site'
+import { DISPLAY_STYLES, STYLES, VIDEO_STYLES, articlePath, featuredStyle, findStyle, site } from '#/config/site'
 import { getContent, localeFromParam, pageHead, useContent } from '#/lib/i18n'
 import { homeJsonLd, jsonLdScript } from '#/lib/seo'
 
@@ -39,6 +39,8 @@ function Home() {
   // hero 标签和生成器共用同一个风格；SSR 默认显示主推风格（或 URL 指定的）
   const [styleId, setStyleId] = useState<string>(search.style ?? featuredStyle.id)
   const style = findStyle(styleId) ?? featuredStyle
+  // hero 演示区目前按视频准备；图片风格在 P4b 接
+  const videoStyle = style.kind === 'image' ? null : style
   const styleCopy = (id: string) => c.styles[id as keyof typeof c.styles]
   return (
     <>
@@ -94,6 +96,7 @@ function Home() {
                   })}
                 </div>
               ) : null}
+              {videoStyle ? (
               <ul
                 // 热门服装片段：手机上横向滑动，桌面居中排开
                 className="-mx-5 flex snap-x snap-mandatory scroll-px-5 justify-start gap-3 overflow-x-auto px-5 pt-2 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:max-w-4xl sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0"
@@ -101,13 +104,13 @@ function Home() {
               >
                 <li className="w-[32%] max-w-[200px] min-w-[116px] shrink-0 snap-start sm:w-[200px]">
                   <VideoCard
-                    video={style.examples.original.video}
-                    poster={style.examples.original.poster}
+                    video={videoStyle.examples.original.video}
+                    poster={videoStyle.examples.original.poster}
                     label={c.hero.original}
-                    credit={style.examples.original.credit}
+                    credit={videoStyle.examples.original.credit}
                   />
                 </li>
-                {style.examples.aiVersions.map((v) => (
+                {videoStyle.examples.aiVersions.map((v) => (
                   <li key={v.video} className="w-[32%] max-w-[200px] min-w-[116px] shrink-0 snap-start sm:w-[200px]">
                     <VideoCard
                       video={v.video}
@@ -122,6 +125,7 @@ function Home() {
                   </li>
                 ))}
               </ul>
+              ) : null}
             </div>
             <div className="mx-auto w-full max-w-4xl space-y-5" id="create">
               <Generator styleId={style.id} onStyleChange={setStyleId} />
@@ -224,7 +228,7 @@ function Home() {
           <div className="relative min-w-0">
             <div aria-hidden className="pointer-events-none absolute inset-y-0 left-[0.4375rem] w-px bg-line" />
             <ol className="flex flex-col gap-12 lg:gap-16">
-              {DISPLAY_STYLES.map((s, index) => (
+              {VIDEO_STYLES.map((s, index) => (
                 <li key={s.id} className="relative grid grid-cols-[max-content_minmax(0,1fr)] items-start gap-x-4 lg:gap-x-6" data-testid={`made-with-${s.id}`}>
                   <div className="relative z-[1] flex h-full justify-center">
                     <span aria-hidden className="mt-3 block size-3.5 rounded-full bg-gradient-to-br from-accent to-accent-2 ring-4 ring-bg-soft" />

@@ -126,9 +126,14 @@ async function submitGeneration(env: Env, generation: GenerationRow) {
     return
   }
 
-  const style = findStyle(generation.template_id)
-  const duration = style ? findStyleDuration(style, generation.duration_id) : undefined
-  const sourceFile = duration ? style?.sources[duration.id] : undefined
+  const foundStyle = findStyle(generation.template_id)
+  if (!foundStyle || foundStyle.kind === 'image') {
+    await failGeneration(env, generation.id, 'invalid_input', 'Style is not a video style')
+    return
+  }
+  const style = foundStyle
+  const duration = findStyleDuration(style, generation.duration_id)
+  const sourceFile = duration ? style.sources[duration.id] : undefined
   const upload = await env.DB.prepare('SELECT * FROM uploads WHERE id = ?').bind(generation.upload_id).first<UploadRow>()
   // 双人生成还要第二张照片，同样不能缺或过期
   const secondUpload = generation.second_upload_id
@@ -245,7 +250,8 @@ async function pollGeneration(env: Env, generation: GenerationRow) {
     await env.MEDIA.put(outputKey, await source.arrayBuffer(), { httpMetadata: { contentType: 'video/mp4' } })
   }
   // 风格配了背景音乐：先混流再审核和打 XMP，这样审核看到的就是最终成片；失败只 warn，成片保持原样
-  const musicFile = findStyle(generation.template_id)?.music?.[generation.duration_id]
+  const musicStyle = findStyle(generation.template_id)
+  const musicFile = musicStyle && musicStyle.kind !== 'image' ? musicStyle.music?.[generation.duration_id] : undefined
   if (musicFile) await addStyleMusic(env.MEDIA, outputKey, musicFile, generation.id)
   const now = nowIso()
   // 审核服务不可用时抛错，队列重试（不判失败）；不通过则删掉成片、失败退积分

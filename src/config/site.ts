@@ -339,14 +339,25 @@ export interface StyleDuration {
   isFull?: boolean
 }
 
-export interface Style {
+interface StyleBase {
   id: string
   category: SceneId // 所属场景，决定生成器顶部 tab
+  prompt: string | null
+}
+
+export interface ImageVariant {
+  id: string // 写入 generations.variant_id，发布后不要改
+  template: string // 参考图（背景/场景），style 自己定文件名
+  credits: number
+}
+
+// 视频风格：照片 + 源视频 + 时长
+export interface VideoStyle extends StyleBase {
+  kind?: 'video'
   photos?: 1 | 2 // 需要几张照片，默认 1；第 1 张 = 源视频左边的人，第 2 张 = 右边的人
   provider?: 'fal' | 'yir' | 'nanoapi' // 固定走某个视频服务商；不写 = 用 VIDEO_PROVIDER
   durations?: readonly StyleDuration[] // 这个风格自己的时长档位，替换 site.durations；id 全站唯一
   sources: Readonly<Record<string, string>> // 键 = 该风格的时长档位 id（styleDurations），值 = seed/templates/ 里的文件名
-  prompt: string | null
   scene: StyleScene | null
   music: Readonly<Record<string, string>> | null // 键 = durations[].id，值 = seed/templates/ 里的 .m4a 文件名；null = 不加背景音乐
   examples: {
@@ -356,13 +367,28 @@ export interface Style {
   }
 }
 
+// 图片风格：照片 + 参考图 → 静态图片
+export interface ImageStyle extends StyleBase {
+  kind: 'image'
+  photos?: 1 | 2
+  provider?: 'fal' | 'yir' // 固定走某个图片服务商；不写 = 用 IMAGE_PROVIDER
+  variants: readonly ImageVariant[]
+  examples: { photo: string; result: string; credit?: string }
+}
+
+export type Style = VideoStyle | ImageStyle
+
 export const STYLES: readonly Style[] = site.styles
-// 第一个风格是默认风格：请求不带 styleId 和首页结构化数据用它
-export const defaultStyle: Style = STYLES[0]!
-// 首页和生成器默认选中的风格（site.featuredStyleId，没设或 id 不存在时是默认风格）
-export const featuredStyle: Style = (site.featuredStyleId === null ? undefined : findStyle(site.featuredStyleId)) ?? defaultStyle
+// 默认/主推风格要求是视频风格：首页结构化数据和 hero 演示素材都按视频准备
+const firstVideoStyle = STYLES.find((s): s is VideoStyle => s.kind !== 'image')
+if (!firstVideoStyle) throw new Error('site.styles 至少需要一个视频风格')
+export const defaultStyle: VideoStyle = firstVideoStyle
+const featuredCandidate = site.featuredStyleId === null ? undefined : findStyle(site.featuredStyleId)
+export const featuredStyle: VideoStyle = featuredCandidate?.kind === 'image' || !featuredCandidate ? defaultStyle : featuredCandidate
 // 界面上的风格顺序：主推风格在前，其余按 site.styles 的顺序
 export const DISPLAY_STYLES: readonly Style[] = [featuredStyle, ...STYLES.filter((s) => s !== featuredStyle)]
+// 只含视频风格：首页时间轴、结构化数据、llms.txt 这些按视频准备的区块用它
+export const VIDEO_STYLES: readonly VideoStyle[] = STYLES.filter((s): s is VideoStyle => s.kind !== 'image')
 
 export function findStyle(id: string): Style | undefined {
   return STYLES.find((s) => s.id === id)
@@ -376,13 +402,22 @@ export function stylePhotoCount(style: Style): 1 | 2 {
   return style.photos ?? 1
 }
 
-// 风格实际可选的时长档位：自己配了用自己的，否则用全站的
+// 视频风格实际可选的时长档位：自己配了用自己的，否则用全站的；图片风格没有时长
 export function styleDurations(style: Style): readonly StyleDuration[] {
-  return style.durations ?? site.durations
+  return style.kind === 'image' ? [] : style.durations ?? site.durations
 }
 
 export function findStyleDuration(style: Style, id: string): StyleDuration | undefined {
   return styleDurations(style).find((d) => d.id === id)
+}
+
+// 图片风格的可选变体
+export function styleVariants(style: Style): readonly ImageVariant[] {
+  return style.kind === 'image' ? style.variants : []
+}
+
+export function findStyleVariant(style: Style, id: string): ImageVariant | undefined {
+  return styleVariants(style).find((v) => v.id === id)
 }
 
 export function findPackage(id: string) {

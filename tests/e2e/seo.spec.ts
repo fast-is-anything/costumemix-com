@@ -182,7 +182,7 @@ test('文章可选能力：绑定风格显示样片并预选风格、带 FAQ 输
   const plain = ARTICLES.find((a) => !a.style && !(en.articles[a.key] as ArticleContent).faq)
   test.skip(!bound || !plain, '没有同时带 style、faq 的文章，或没有对照文章')
   const style = findStyle(bound!.style!)!
-  const videos = 1 + style.examples.aiVersions.length
+  const videos = style.kind === 'image' ? 1 : 1 + style.examples.aiVersions.length
   const jsonLdTypes = () =>
     page.locator('script[type="application/ld+json"]').evaluateAll((els) => els.map((el) => JSON.parse(el.textContent ?? '{}') as { '@type': string; mainEntity?: unknown[] }))
 

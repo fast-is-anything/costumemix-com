@@ -15,7 +15,7 @@ async function ready(page: Page) {
 test('访客草稿跨登录和付款保留：照片、风格、时长、授权都恢复，生成开始后草稿清除', async ({ page }) => {
   expect(OTHER_DURATION.id, '默认时长是最后一档，本用例选第一档').not.toBe(LONGEST.id)
   // 换成另一个按全站时长计费的单人风格（双人风格要两张照片、时长另算）
-  const otherStyle = STYLES.find((s) => s !== defaultStyle && stylePhotoCount(s) === 1 && !s.durations) ?? null
+  const otherStyle = STYLES.find((s) => s !== defaultStyle && s.kind !== 'image' && stylePhotoCount(s) === 1 && !s.durations) ?? null
   const cheapest = cheapestPackageCovering(OTHER_DURATION.credits)!
 
   await page.goto(SOLO_HOME)

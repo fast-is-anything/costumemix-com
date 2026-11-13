@@ -217,7 +217,8 @@ export function createYirProvider(env: Env): VideoProvider {
 
 // 估算：Motion Control 按参考视频实测秒数计费，参考视频就是模板源视频，时长固定；两步走再加一张合成图
 export function yirCostCents(durationSeconds: number, styleId: string) {
-  const twoStep = !!findStyle(styleId)?.scene
+  const style = findStyle(styleId)
+  const twoStep = !!style && style.kind !== 'image' && !!style.scene
   return Math.round(durationSeconds * site.video.yir.costCentsPerSecond) + (twoStep ? site.video.yir.sceneImage.costCents : 0)
 }
 

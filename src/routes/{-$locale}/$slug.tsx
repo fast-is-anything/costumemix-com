@@ -88,7 +88,7 @@ function ArticlePage() {
         />
       ) : null}
       <p className="mt-6 text-xl leading-9 text-muted">{text.intro}</p>
-      {style ? (
+      {style && style.kind !== 'image' ? (
         <section className="mt-8" aria-labelledby="style-demo" data-testid="article-style-demo">
           <h2 id="style-demo" className="mb-4 font-display text-2xl">
             {c.guides.styleDemo}

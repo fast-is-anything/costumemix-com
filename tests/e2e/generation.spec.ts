@@ -174,9 +174,9 @@ test.describe('多风格站点', () => {
     await page.getByTestId(`hero-tab-${second.id}`).click()
     await expect(page.getByTestId(`hero-tab-${second.id}`)).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByTestId(`style-${second.id}`)).toHaveAttribute('aria-checked', 'true')
-    await expect(page.locator(`[role="tabpanel"] video[src="${second.examples.original.video}"]`)).toHaveCount(1)
+    await expect(page.locator(`[role="tabpanel"] video[src="${second.kind === 'image' ? '' : second.examples.original.video}"]`)).toHaveCount(1)
     // “Made with”每个风格各一行，不依赖 JS
-    for (const style of STYLES) await expect(page.getByTestId(`made-with-${style.id}`)).toBeVisible()
+    for (const style of STYLES.filter((s) => s.kind !== 'image')) await expect(page.getByTestId(`made-with-${style.id}`)).toBeVisible()
 
     // 键盘：方向键在标签间移动并选中
     await page.getByTestId(`hero-tab-${second.id}`).focus()

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { defaultStyle, site, type Style } from '#/config/site'
+import { defaultStyle, site, type VideoStyle } from '#/config/site'
 import { createNanoapiProvider, nanoapiCostCents } from '#/server/video/nanoapi'
 import { VideoProviderError } from '#/server/video/types'
 
@@ -8,9 +8,9 @@ const env = (vars: Record<string, string> = {}) =>
   ({ APP_ENV: 'production', SITE_URL: 'https://moonhop.ai', SESSION_SECRET: 'a'.repeat(64), NANOAPI_API_KEY: 'nano_test', ...vars }) as unknown as Env
 
 // 站点会给默认风格配自己的 prompt、scene：用例默认按风格不带 prompt 跑
-const plainStyle: Style = { ...defaultStyle, prompt: null, scene: null }
+const plainStyle: VideoStyle = { ...defaultStyle, prompt: null, scene: null }
 
-const input = (webhookUrl = 'https://moonhop.ai/api/webhooks/nanoapi?gen=gen_1&token=t', style: Style = plainStyle) => ({
+const input = (webhookUrl = 'https://moonhop.ai/api/webhooks/nanoapi?gen=gen_1&token=t', style: VideoStyle = plainStyle) => ({
   generationId: 'gen_1',
   style,
   durationSeconds: 12,

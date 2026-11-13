@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { defaultStyle, site, type Style } from '#/config/site'
+﻿import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { defaultStyle, site, type VideoStyle } from '#/config/site'
 import { signedUploadUrl } from '#/server/media'
 import { createYirProvider } from '#/server/video/yir'
 
@@ -8,7 +8,7 @@ const env = (vars: Record<string, string> = {}) =>
   ({ APP_ENV: 'production', SITE_URL: 'https://moonhop.ai', SESSION_SECRET: 'a'.repeat(64), YIR_API_KEY: 'yir_test', ...vars }) as unknown as Env
 
 // style 取站点的默认风格对象本身：withScene 改它的 scene 后，submit 立刻按两步走
-const input = (webhookUrl = 'https://moonhop.ai/api/webhooks/yir?gen=gen_1&token=t', style: Style = defaultStyle) => ({
+const input = (webhookUrl = 'https://moonhop.ai/api/webhooks/yir?gen=gen_1&token=t', style: VideoStyle = defaultStyle) => ({
   generationId: 'gen_1',
   style,
   durationSeconds: 12,
@@ -347,8 +347,8 @@ describe('yir provider：两步走（先合成首帧，再做动作参考）', (
   })
 
   it('多风格：各风格用自己的首帧、合成 prompt 和视频 prompt；没配 scene 的风格走单步', async () => {
-    const other: Style = { ...defaultStyle, id: 'party-v1', prompt: 'Keep the party hat.', scene: { frame: 'party-scene.jpg', prompt: 'Put Image 2 at the party in Image 1.' } }
-    const plain: Style = { ...defaultStyle, id: 'plain-v1', prompt: 'Plain prompt.', scene: null }
+    const other: VideoStyle = { ...defaultStyle, id: 'party-v1', prompt: 'Keep the party hat.', scene: { frame: 'party-scene.jpg', prompt: 'Put Image 2 at the party in Image 1.' } }
+    const plain: VideoStyle = { ...defaultStyle, id: 'plain-v1', prompt: 'Plain prompt.', scene: null }
     yirConfig.sceneImage = SCENE_IMAGE
 
     const scene = stubFetch({ '/v1/images/generations': () => json(202, { id: 'job_s', status: 'queued' }) })
@@ -366,3 +366,4 @@ describe('yir provider：两步走（先合成首帧，再做动作参考）', (
     expect(single.some((c) => c.url.includes('/images/generations'))).toBe(false)
   })
 })
+

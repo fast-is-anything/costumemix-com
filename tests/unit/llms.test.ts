@@ -28,7 +28,7 @@ describe('llms.txt', () => {
 
   it('配乐、无水印和站点补充的事实句与配置一致', async () => {
     const text = await (await fetchLlms()).text()
-    expect(text.includes('background music track')).toBe(STYLES.some((style) => style.music))
+    expect(text.includes('background music track')).toBe(STYLES.some((style) => style.kind !== 'image' && style.music))
     expect(text).toContain('without a visible watermark')
     expect(text.includes('machine-readable AI label')).toBe(site.aiMetadata.enabled)
     for (const fact of site.seo.llmsFacts) expect(text).toContain(`

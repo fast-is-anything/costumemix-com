@@ -267,7 +267,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
               {DISPLAY_STYLES.map((style) => {
                 const active = style.id === styleId
                 const copy = c.styles[style.id as keyof typeof c.styles]
-                const thumb = style.examples.aiVersions[0]
+                const thumb = style.kind === 'image' ? style.examples.result : style.examples.aiVersions[0]?.poster
                 return (
                   <button
                     key={style.id}
@@ -279,7 +279,7 @@ export function Generator({ styleId: controlledStyleId, onStyleChange }: { style
                     onClick={() => selectStyle(style.id)}
                     className={`flex items-center gap-3 rounded-xl p-2 text-left transition ${active ? 'bg-card shadow-sm ring-2 ring-ink' : 'bg-bg-soft text-muted ring-1 ring-line hover:text-fg'}`}
                   >
-                    {thumb ? <img src={thumb.poster} alt="" loading="lazy" className="aspect-[3/4] w-10 shrink-0 rounded-md object-cover" /> : null}
+                    {thumb ? <img src={thumb} alt="" loading="lazy" className="aspect-[3/4] w-10 shrink-0 rounded-md object-cover" /> : null}
                     <span className="min-w-0">
                       <span className="block text-sm font-semibold text-fg">{copy.name}</span>
                       <span className="block text-xs text-muted">{copy.tagline}</span>

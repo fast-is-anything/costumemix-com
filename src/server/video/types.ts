@@ -1,7 +1,9 @@
+import type { VideoStyle } from '#/config/site'
 import type { ProviderCapability, ProviderMeta, ProviderStatus, SubmitBase } from '../providers/types'
 
 // 视频能力的输入：在共享字段之外多了源视频与时长
 export interface VideoSubmitInput extends SubmitBase {
+  style: VideoStyle
   durationSeconds: number
   sourceVideoUrl: string
   sourceVideoKey: string
