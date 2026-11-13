@@ -145,7 +145,7 @@ function VideosPage() {
                   return <StatusPill tone={TONES[shown]}>{d.status[shown] ?? shown}</StatusPill>
                 })()}
                 <span className="text-xs text-muted">
-                  {d.seconds(g.durationSeconds ?? 0)} · {c.nav.credits(g.creditsCost)}
+                  {g.mediaType === 'video' && g.durationSeconds !== null ? ` · ` : ''}{c.nav.credits(g.creditsCost)}
                 </span>
               </div>
               <p className="text-xs text-muted">{formatDate(g.createdAt, locale)}</p>
@@ -197,6 +197,7 @@ function VideosPage() {
     </div>
   )
 }
+
 
 
 
