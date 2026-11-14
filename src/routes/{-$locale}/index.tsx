@@ -53,7 +53,7 @@ function Home() {
         <div className="container-page relative py-6 lg:py-8">
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="mt-2 font-display text-5xl font-black uppercase leading-[1.04] tracking-tight sm:text-7xl">{c.hero.title}</h1>
-            <p className="mx-auto mt-3 max-w-2xl text-lg leading-8 text-muted">{c.hero.subtitle}</p>
+            <p className="mx-auto mt-3 max-w-3xl text-lg leading-8 text-muted">{c.hero.subtitle}</p>
           </div>
           <div className="mt-4 flex flex-col gap-8 lg:mt-6">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-3">
@@ -427,6 +427,7 @@ function Home() {
     </>
   )
 }
+
 
 
 
