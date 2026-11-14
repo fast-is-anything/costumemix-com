@@ -210,7 +210,7 @@ export function zh(s: S): Content {
     },
     features: {
       eyebrow: '功能',
-      title: 'AI 换装 - 应有尽有',
+      title: '面面俱到的 AI 换装服务',
       items: [
         { title: '一张照片就够', body: '一张清晰自拍，模型就能把你放进整套服装里。' },
         { title: '服装留在身上', body: '成片保留原片的服装、道具和场景，只把你的脸和头发换进去。' },
@@ -867,6 +867,7 @@ export function zh(s: S): Content {
     },
   }
 }
+
 
 
 
