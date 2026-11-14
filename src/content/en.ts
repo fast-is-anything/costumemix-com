@@ -103,7 +103,7 @@ export function en(s: S) {
     },
     generator: {
       // 只给读屏用（sr-only），不放关键词，避免隐藏文字堆词
-      title: 'Create your video',
+      title: 'Create your AI outfit video',
       stepPhoto: 'Your photo',
       dropTitle: 'Drop a photo or click to upload',
       dropHint: 'JPG, PNG or WebP · up to 10 MB',
@@ -940,6 +940,7 @@ export function en(s: S) {
 }
 
 export type Content = ReturnType<typeof en>
+
 
 
 

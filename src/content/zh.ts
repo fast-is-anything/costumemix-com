@@ -87,7 +87,7 @@ export function zh(s: S): Content {
       guideLinks: { guides: 'AI 换装指南', howTo: '如何制作有趣的 AI 圣诞视频' },
     },
     generator: {
-      title: '制作你的视频',
+      title: '制作你的 AI 换装视频',
       stepPhoto: '你的照片',
       dropTitle: '拖入照片或点击上传',
       dropHint: 'JPG、PNG 或 WebP · 不超过 10 MB',
@@ -884,6 +884,7 @@ export function zh(s: S): Content {
     },
   }
 }
+
 
 
 
