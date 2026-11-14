@@ -39,7 +39,7 @@ export function zh(s: S): Content {
     },
     meta: {
       homeTitle: 'CostumeMix：AI 换装 - 一张自拍开启精致换装',
-      homeDescription: `CostumeMix 是一款 AI 换装工具：上传一张照片、挑一套服装，几分钟生成可直接发布的图片或视频，不用买衣服、不用约拍。适用于个人娱乐，生产爆款推文，商业宣传。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
+      homeDescription: 'CostumeMix 是一款 AI 换装工具：上传一张照片、挑一套服装，几分钟生成可直接发布的图片或视频，不用买衣服、不用约拍。适用于个人娱乐，生产爆款推文，商业宣传。',
       pricingTitle: `价格 — ${b}`,
       pricingDescription: subs
         ? `${k} 视频的积分包与月付、年付订阅：按秒计费，积分包永不过期，订阅随时可取消；生成失败自动退还积分。`
@@ -866,6 +866,7 @@ export function zh(s: S): Content {
     },
   }
 }
+
 
 
 
