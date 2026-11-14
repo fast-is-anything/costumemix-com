@@ -115,6 +115,8 @@ export function en(s: S) {
       uploading: 'Uploading…',
       uploaded: 'Photo ready',
       stepStyle: 'Outfit',
+      // 场景切换 tablist 的标签（Christmas / ID photos）
+      sceneTabs: 'Scene',
       stepLength: 'Length',
       stepVariant: 'Background',
       seconds: (n: number) => `${n} s`,

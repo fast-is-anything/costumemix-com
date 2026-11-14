@@ -296,7 +296,7 @@ export function Generator({
         // 滑动切换：外层是轨道，选中态指示块用 translateX 滑到当前场景，宽度按场景数均分
         <div
           role="tablist"
-          aria-label={g.stepStyle}
+          aria-label={g.sceneTabs}
           className="relative flex rounded-xl bg-bg-soft p-1 lg:col-span-2 dark:bg-surface-inset"
           style={{ width: `${SCENES.length * 7.5}rem` }}
           data-testid="scene-tabs"

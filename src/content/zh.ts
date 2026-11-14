@@ -99,6 +99,7 @@ export function zh(s: S): Content {
       uploading: '上传中…',
       uploaded: '照片已就绪',
       stepStyle: '服装',
+      sceneTabs: '场景',
       stepLength: '时长',
       stepVariant: '背景',
       seconds: (n: number) => `${n} 秒`,
