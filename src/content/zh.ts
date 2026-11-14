@@ -165,8 +165,8 @@ export function zh(s: S): Content {
     withWithout: {
       eyebrow: '对比',
       title: `真实换装拍摄 vs. 用 ${b}`,
-      without: '自己拍',
-      with: `用 ${b}`,
+      without: '自己动手拍',
+      with: `用 ${b} 提高效率`,
       rows: [
         { without: '买或租一套只穿一次的衣服', with: '一张照片换一套服装' },
         { without: '约拍或找朋友帮忙举手机', with: '不用相机、不用摄影棚' },

@@ -182,8 +182,8 @@ export function en(s: S) {
     withWithout: {
       eyebrow: 'Side by side',
       title: `A real outfit shoot vs. using ${b}`,
-      without: 'Doing it yourself',
-      with: `With ${b}`,
+      without: 'Do it yourself',
+      with: `Get it faster with ${b}`,
       rows: [
         { without: 'Buy or rent an outfit you wear once', with: 'Pick an outfit from one photo' },
         { without: 'Book a shoot or ask a friend to film', with: 'No camera, no studio, no tripod' },
