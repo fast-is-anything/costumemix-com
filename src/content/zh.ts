@@ -39,7 +39,7 @@ export function zh(s: S): Content {
     },
     meta: {
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
-      homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
+      homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片、挑一套服装，几分钟生成可直接发布的竖屏视频，不用买衣服、不用约拍。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
       pricingTitle: `价格 — ${b}`,
       pricingDescription: subs
         ? `${k} 视频的积分包与月付、年付订阅：按秒计费，积分包永不过期，订阅随时可取消；生成失败自动退还积分。`
@@ -78,7 +78,7 @@ export function zh(s: S): Content {
     },
     hero: {
       title: `${k}`,
-      subtitle: '一张照片就能换装。选圣诞老人、精灵或丑毛衣，几分钟生成可直接分享的竖屏短片。',
+      subtitle: '一张照片，换一套新造型。上传人像、挑一套服装，几分钟生成可直接发布的竖屏视频。',
       badge: '圣诞换装玩法',
       original: '原版服装片段',
       aiVersion: '你的 AI 版本',
@@ -147,27 +147,27 @@ export function zh(s: S): Content {
     },
     madeWith: {
       eyebrow: `用 ${b} 制作`,
-      title: '放进一张照片，拿到一段换装成片',
-      body: '不用缝衣服、不用去试衣间、不用架三脚架。上传清晰照片、选好服装，成片会把你放进那段服装片段，镜头运动保持原样。',
+      title: '一张照片进去，一套新造型出来',
+      body: '不用缝衣服、不用去试衣间、不用架三脚架。上传清晰照片、选好服装，成片会把你放进新造型里，镜头运动保持原样。',
       photoLabel: '上传的照片',
       resultLabel: '生成的视频',
     },
     problem: {
       eyebrow: '难点',
-      title: '想拍一条圣诞服装视频，比看起来麻烦',
+      title: '拍一条换装视频，比看起来麻烦',
       items: [
-        { title: '衣服比视频还贵', body: '一套圣诞老人装或精灵装往往只穿一次，买完就压箱底。' },
+        { title: '服装比视频还贵', body: '西装、礼服或演出服往往只穿一次，买完就压箱底。' },
         { title: '还是要拍一场', body: '找光线、找干净背景、找人帮你举手机，布置的时间比视频本身还长。' },
         { title: '剪辑吃掉一个晚上', body: '裁切、字幕、配乐，在手机剪辑软件里折腾完，兴致也没了。' },
       ],
     },
     withWithout: {
       eyebrow: '对比',
-      title: `自己拍 vs 用 ${b}`,
+      title: `真实换装拍摄 vs. 用 ${b}`,
       without: '自己拍',
       with: `用 ${b}`,
       rows: [
-        { without: '买或租一套只穿一次的衣服', with: '一张照片，选圣诞老人、精灵或丑毛衣' },
+        { without: '买或租一套只穿一次的衣服', with: '一张照片换一套服装' },
         { without: '约拍或找朋友帮忙举手机', with: '不用相机、不用摄影棚' },
         { without: '学摆姿势、反复重拍找光', with: '成片沿用原片的镜头运动' },
         { without: '在手机上剪辑、配乐、导出', with: '直接下载成片 MP4' },
@@ -175,10 +175,10 @@ export function zh(s: S): Content {
     },
     howTo: {
       eyebrow: '使用方法',
-      title: '三步做出一条 AI 换装视频',
+      title: '三步用 AI 换一套服装',
       steps: [
         { title: '上传一张清晰照片', body: '单人、正对镜头、光线均匀。支持 JPG、PNG、WebP，最大 10 MB。' },
-        { title: '选服装和时长', body: '圣诞老人装、精灵装或丑毛衣；6 秒、12 秒或 18 秒。1 积分对应 1 秒视频。' },
+        { title: '选服装和时长', body: '从服装库里挑一套，再选 6 秒、12 秒或 18 秒。1 积分对应 1 秒视频。' },
         { title: '生成并下载', body: '几分钟内完成渲染。下载无水印 MP4，发布到任何平台。' },
       ],
       cta: '用我的照片开始',
@@ -188,8 +188,8 @@ export function zh(s: S): Content {
       eyebrow: '换个装',
       title: 'AI Outfit Changer（AI 换装视频）是什么？',
       paragraphs: [
-        'AI 换装（AI outfit changer）会把一张普通照片里的人换成另一套服装——这里是圣诞老人装、精灵装或丑毛衣。它输出的是一段竖屏短视频而不是静态图，所以衣服会随人物一起动。',
-        `${b} 就是把这件事做成了节日玩法：上传一张照片、选一套服装，模型会把你放进一段已授权的服装片段里，同时保留原片的节奏和运镜。`,
+        'AI 换装（AI outfit changer）会把一张普通照片里的人换成另一套服装。它输出的是一段竖屏短视频而不是静态图，所以衣服会随人物一起动，而不是停在一张修好的照片里。',
+        `${b} 就是把这件事做成了工具：上传一张照片、选一套服装，模型会把你放进一段已授权的服装片段里，同时保留原片的节奏和运镜。目前先上圣诞服装，之后按季节增加。`,
       ],
       guide: '阅读完整的 AI 圣诞视频解读',
     },
@@ -221,7 +221,7 @@ export function zh(s: S): Content {
     },
     ideas: {
       eyebrow: '创意',
-      title: '大家都用它做什么',
+      title: 'AI 换装灵感：大家用它做什么',
       items: [
         { title: '会动的圣诞贺卡', body: '发一段 6 秒的圣诞老人视频，比再发一张全家福有意思。' },
         { title: '派对邀请', body: '把主人家放进精灵装，视频丢进群里就是邀请函。' },
@@ -272,7 +272,7 @@ export function zh(s: S): Content {
       items: [
         {
           q: `${b} 是什么？`,
-          a: `${b} 是一款 AI 换装工具：上传一张照片，就能得到一段你穿圣诞服装的短视频，可以直接发布。`,
+          a: `${b} 是一款 AI 换装（AI outfit changer）工具：上传一张照片，就能得到一段你穿另一套服装的短视频，可以直接发布。`,
           guide: { article: 'trend', label: 'AI 圣诞视频到底是什么' },
         },
         {
@@ -311,8 +311,8 @@ export function zh(s: S): Content {
       ],
     },
     finalCta: {
-      title: '华丽换装，现在开始',
-      body: '一张照片，几秒换装。挑一套圣诞造型，生成可直接发布的竖屏短片。',
+      title: '下一套造型，现在开始',
+      body: '一张照片、几分钟，换一个全新造型。挑一套服装，生成可直接发布的竖屏短片。',
       cta: '制作我的换装视频',
       makeVideo: '制作换装视频',
       seePricing: '查看价格',
@@ -569,7 +569,7 @@ export function zh(s: S): Content {
       title: 'AI 换装指南',
       metaTitle: `AI 换装与圣诞视频指南 — ${b}`,
       description: 'AI 换装视频和圣诞服装片段的完整指南：这个玩法从哪来、怎么选照片、有哪些服装灵感，以及从生成到发布的每一步。',
-      intro: '了解 AI 圣诞视频的背景，学会用一张照片做出效果更好的换装视频。',
+      intro: '了解 AI 换装视频的背景，学会用一张照片做出效果更好的新造型。',
       styleDemo: '看看换装片段的效果',
       faqTitle: '常见问题',
       related: '相关指南',
@@ -866,6 +866,8 @@ export function zh(s: S): Content {
     },
   }
 }
+
+
 
 
 

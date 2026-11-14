@@ -58,8 +58,8 @@ function Home() {
           <div className="mt-4 flex flex-col gap-8 lg:mt-6">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-3">
               <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium">
-                <LocalLink to={articlePath('trend')} className="inline-flex items-center gap-1.5 hover:text-accent">
-                  {c.articles.trend.title} <ArrowRight className="size-4" />
+                <LocalLink to="/guides" className="inline-flex items-center gap-1.5 hover:text-accent">
+                  {c.guides.title} <ArrowRight className="size-4" />
                 </LocalLink>
                 <LocalLink to={articlePath('howTo')} className="inline-flex items-center gap-1.5 hover:text-accent">
                   {c.articles.howTo.title} <ArrowRight className="size-4" />
@@ -427,6 +427,7 @@ function Home() {
     </>
   )
 }
+
 
 
 
