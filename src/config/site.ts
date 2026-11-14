@@ -128,7 +128,11 @@ export const site = {
   featuredStyleId: null as string | null,
 
   // What is 区块右侧的示例图（照片 → 成片）
-  whatIsExamples: { photo: '/demo/sample-photo.jpg', result: '/demo/ai1.jpg' },
+  whatIsExamples: {
+    photo: '/media/templates/kitchen-duo-cover.jpg',
+    result: '/media/templates/kitchen-duo-ai1.mp4',
+    poster: '/media/templates/kitchen-duo-cover.jpg',
+  },
 
   // 全站共用的首页展示素材
   examples: {

@@ -21,3 +21,6 @@ playwright-report/
 !.claude/skills/launch-audit/
 *.local.md
 .idea/
+
+# R2 上传临时文件
+_r2_upload/

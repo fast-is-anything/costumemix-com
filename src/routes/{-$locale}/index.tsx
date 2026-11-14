@@ -173,7 +173,15 @@ function Home() {
           {/* 右侧示例：和 hero 一样的图片卡（3:4、sticker 外框、左上角标签），两张并排 */}
           <div className="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 lg:mx-0 lg:max-w-none lg:gap-5">
             <ImageCard src={site.whatIsExamples.photo} alt={c.alt.inputPhoto} label={c.madeWith.photoLabel} />
-            <ImageCard src={site.whatIsExamples.result} alt={c.hero.aiVersion} label={c.hero.aiVersion} />
+            <VideoCard
+              video={site.whatIsExamples.result}
+              poster={site.whatIsExamples.poster}
+              label={
+                <>
+                  <Sparkles className="size-3" /> {c.hero.aiVersion}
+                </>
+              }
+            />
           </div>
         </div>
       </section>
