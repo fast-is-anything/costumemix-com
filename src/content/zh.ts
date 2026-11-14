@@ -84,6 +84,7 @@ export function zh(s: S): Content {
       aiVersion: '你的 AI 版本',
       chips: ['保留你的脸', '一套衣服几秒换', '竖屏直接发'],
       creditNote: '示例片段为本站制作的占位素材，正式成片使用已授权的服装视频。',
+      guideLinks: { guides: 'AI 换装指南', howTo: '如何制作有趣的 AI 圣诞视频' },
     },
     generator: {
       title: '制作你的视频',
@@ -866,6 +867,7 @@ export function zh(s: S): Content {
     },
   }
 }
+
 
 
 

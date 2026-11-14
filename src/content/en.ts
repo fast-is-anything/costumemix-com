@@ -98,6 +98,8 @@ export function en(s: S) {
       aiVersion: 'Your AI version',
       chips: ['Keep your face', 'Any costume', 'Ready for Reels'],
       creditNote: 'Sample clips are placeholders for this demo. Real renders use licensed costume footage.',
+      // hero 上方两个指南入口的短标签
+      guideLinks: { guides: 'AI Outfit Changer Guides', howTo: 'How to Make a Funny AI Christmas Video' },
     },
     generator: {
       // 只给读屏用（sr-only），不放关键词，避免隐藏文字堆词
