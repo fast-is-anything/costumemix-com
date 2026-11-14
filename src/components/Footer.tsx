@@ -1,4 +1,4 @@
-import { LifeBuoy } from 'lucide-react'
+﻿import { LifeBuoy } from 'lucide-react'
 import { ARTICLES, site } from '#/config/site'
 import { ASK_AI, askAiUrl } from '#/lib/ask-ai'
 import { CONSENT_OPEN_EVENT, CONSENT_REQUIRED } from '#/lib/consent'
@@ -49,7 +49,7 @@ export function Footer() {
         {columns.map((column) => (
           <div key={column.title}>
             {/* h2：页脚前面可能只有 H1（登录页、404），用 h3 会跳级 */}
-            <h2 className="eyebrow mb-4 text-footer-fg/60">{column.title}</h2>
+            <p className="eyebrow mb-4 text-footer-fg/60">{column.title}</p>
             <ul className="space-y-3 text-sm">
               {column.links.map((link) => (
                 <li key={link.to}>
@@ -135,3 +135,4 @@ export function SupportButton() {
     </LocalLink>
   )
 }
+
