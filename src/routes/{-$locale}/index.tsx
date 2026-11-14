@@ -169,9 +169,6 @@ function Home() {
                 </div>
               ))}
             </div>
-            <LocalLink to={articlePath('howTo')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
-              {c.articles.howTo.title} <ArrowRight className="size-4" />
-            </LocalLink>
           </div>
         </section>
       ) : null}
