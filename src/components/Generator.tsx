@@ -704,12 +704,13 @@ function CostumeIcon({ className }: { className?: string }) {
   )
 }
 
+// 步骤标题用 p 而不是 h3：生成器的步骤不是页面大纲的一部分，不该被当成标题收录
 function StepTitle({ n, children }: { n: number; children: string }) {
   return (
-    <h3 className="flex items-center gap-2 text-sm font-semibold">
+    <p className="flex items-center gap-2 text-sm font-semibold">
       <span className="grid size-5 place-items-center rounded-full bg-ink text-[11px] text-ink-fg">{n}</span>
       {children}
-    </h3>
+    </p>
   )
 }
 
