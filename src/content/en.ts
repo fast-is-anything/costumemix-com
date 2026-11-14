@@ -214,7 +214,7 @@ export function en(s: S) {
     },
     specs: {
       eyebrow: 'At a glance',
-      title: 'AI outfit changer specs',
+      title: `AI outfit changer specs from ${b}`,
       rows: [
         { label: 'Input', value: `One clear photo of one person, ${uploadTypes} up to ${uploadMb} MB` },
         { label: 'Outfits', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join(', ') },
