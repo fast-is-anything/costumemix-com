@@ -78,7 +78,7 @@ export function zh(s: S): Content {
     },
     hero: {
       title: `${k}`,
-      subtitle: '一张照片，换一套新造型。上传人像、挑一套服装，几分钟生成可直接发布的竖屏视频。',
+      subtitle: '想畅享制作热门短视频的乐趣？选 CostumeMix。想免去换衣的麻烦？选 CostumeMix。最全的在线一键换装网站：上传自拍，丝滑切换今日造型，即刻生成换装预览视频。',
       badge: '圣诞换装玩法',
       original: '原版服装片段',
       aiVersion: '你的 AI 版本',

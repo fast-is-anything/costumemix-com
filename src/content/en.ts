@@ -92,7 +92,7 @@ export function en(s: S) {
     },
     hero: {
       title: `${k}`,
-      subtitle: 'One photo, a new outfit. Upload a portrait, pick a look and get a share-ready vertical video in minutes.',
+      subtitle: 'Want the fun of making your next viral short? Pick CostumeMix. Tired of changing clothes for it? Pick CostumeMix. The most complete one-click outfit changer online: upload a selfie, switch today’s look in seconds and get a preview video right away.',
       badge: 'Christmas costume trend',
       original: 'Original costume clip',
       aiVersion: 'Your AI version',
