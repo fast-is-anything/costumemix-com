@@ -157,17 +157,44 @@ function Home() {
 
       {/* What is：解释趋势本身，承接 "what is {keyword}" 信息型搜索 */}
       <section id="about" className="scroll-mt-20 border-t border-line py-20">
-        <div className="container-page">
-          <p className="eyebrow text-accent-text">{c.whatIs.eyebrow}</p>
-          <h2 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">{c.whatIs.title}</h2>
-          {c.whatIs.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="mt-5 text-lg leading-8 text-muted">
-              {paragraph}
-            </p>
-          ))}
-          <LocalLink to={articlePath('trend')} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
-            {c.whatIs.guide} <ArrowRight className="size-4" />
-          </LocalLink>
+        <div className="container-page grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
+          <div>
+            <p className="eyebrow text-accent-text">{c.whatIs.eyebrow}</p>
+            <h2 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">{c.whatIs.title}</h2>
+            {c.whatIs.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="mt-5 text-lg leading-8 text-muted">
+                {paragraph}
+              </p>
+            ))}
+            <LocalLink to={articlePath('trend')} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.whatIs.guide} <ArrowRight className="size-4" />
+            </LocalLink>
+          </div>
+          {/* 右侧示例：一张输入照片 + 一张成片 */}
+          <div className="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 lg:mx-0 lg:max-w-none">
+            <figure>
+              <img
+                src={site.whatIsExamples.photo}
+                alt={c.alt.inputPhoto}
+                width={1200}
+                height={1600}
+                loading="lazy"
+                className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover"
+              />
+              <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
+            </figure>
+            <figure>
+              <img
+                src={site.whatIsExamples.result}
+                alt={c.hero.aiVersion}
+                width={1200}
+                height={1600}
+                loading="lazy"
+                className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover"
+              />
+              <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.resultLabel}</figcaption>
+            </figure>
+          </div>
         </div>
       </section>
 

@@ -127,6 +127,9 @@ export const site = {
   // null = 默认风格（styles[0]）。只影响界面，请求不带 styleId 时仍用默认风格。
   featuredStyleId: null as string | null,
 
+  // What is 区块右侧的示例图（照片 → 成片）
+  whatIsExamples: { photo: '/demo/sample-photo.jpg', result: '/demo/ai1.jpg' },
+
   // 全站共用的首页展示素材
   examples: {
     // “创意”区块：每条 = 一张示例照片 + 一段成片
