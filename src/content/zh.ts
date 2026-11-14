@@ -77,7 +77,7 @@ export function zh(s: S): Content {
       menu: '菜单',
     },
     hero: {
-      title: `${k}`,
+      title: 'AI 换装 - 百变造型',
       subtitle: '想畅享制作热门短视频的乐趣？选 CostumeMix。想免去换衣的麻烦？选 CostumeMix。最全的在线一键换装网站：上传自拍，丝滑切换今日造型，即刻生成换装预览视频。',
       badge: '圣诞换装玩法',
       original: '原版服装片段',
