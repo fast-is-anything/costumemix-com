@@ -39,7 +39,7 @@ export function zh(s: S): Content {
     },
     meta: {
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
-      homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频，或一张干净的证件照。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
+      homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片，几分钟内生成你穿圣诞老人装、精灵装或丑毛衣的竖屏短视频。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
       pricingTitle: `价格 — ${b}`,
       pricingDescription: subs
         ? `${k} 视频的积分包与月付、年付订阅：按秒计费，积分包永不过期，订阅随时可取消；生成失败自动退还积分。`
@@ -78,7 +78,7 @@ export function zh(s: S): Content {
     },
     hero: {
       title: `${k}`,
-      subtitle: '一张照片就能换装。选圣诞老人、精灵或丑毛衣，几分钟生成可直接分享的竖屏短片；也可以换成纯色背景，做一张干净的证件照。',
+      subtitle: '一张照片就能换装。选圣诞老人、精灵或丑毛衣，几分钟生成可直接分享的竖屏短片。',
       badge: '圣诞换装玩法',
       original: '原版服装片段',
       aiVersion: '你的 AI 版本',
@@ -195,7 +195,7 @@ export function zh(s: S): Content {
     },
     specs: {
       eyebrow: '一览',
-      title: `${b} 规格`,
+      title: 'AI 换装（outfit changer）规格',
       rows: [
         { label: '上传', value: `一张清晰的单人照片，${uploadTypes}，不超过 ${uploadMb} MB` },
         { label: '服装', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join('、') },
@@ -231,7 +231,7 @@ export function zh(s: S): Content {
     },
     pricing: {
       eyebrow: '价格',
-      title: subs ? '按需购买，或者订阅' : '一次购买，随时使用',
+      title: 'AI 换装价格',
       subtitle: subs ? '1 积分 = 1 秒视频。可以买永不过期的积分包，也可以订阅、每月领取新积分。' : '1 积分 = 1 秒视频。无订阅，不过期。',
       popular: '最受欢迎',
       was: '原价',
@@ -266,7 +266,7 @@ export function zh(s: S): Content {
       renewalNote: '订阅按显示的价格自动续费，直到你取消。当月未用完的订阅积分不会累积到下月。',
     },
     faq: {
-      title: '常见问题',
+      title: 'AI 换装常见问题',
       body: '还有疑问？我们会在一个工作日内回复。',
       cta: '联系客服',
       items: [
@@ -305,6 +305,9 @@ export function zh(s: S): Content {
           : []),
         { q: '可以用别人的照片吗？', a: '必须获得本人许可，且禁止使用未成年人、明星或公众人物的照片。违规账号将被关闭。' },
         { q: '我的照片会怎么处理？', a: `上传内容私密保存，只用于生成你的视频，并${photoRetention}；成片${videoRetention}。注销账号会立即删除全部内容。` },
+        { q: '成片可以商用吗？', a: '可以。你可以在自己的账号发布并变现，保留 AI 标识，不要把成片说成真实拍摄。' },
+        { q: '会有水印吗？', a: '没有可见水印，下载的是可以直接发布的竖屏 MP4。' },
+        { q: '生成失败会扣积分吗？', a: '不会。失败时积分会自动退回。' },
       ],
     },
     finalCta: {

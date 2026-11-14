@@ -53,7 +53,7 @@ export function en(s: S) {
     meta: {
       // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
-      homeDescription: 'CostumeMix is the AI outfit changer that turns one photo into a short Christmas costume video or a clean ID photo: Santa suit, elf costume or ugly sweater, in minutes.',
+      homeDescription: 'CostumeMix is the AI outfit changer that turns one photo into a Christmas costume video — Santa, elf or ugly sweater — in minutes.',
       pricingTitle: `Pricing — ${b}`,
       pricingDescription: subs
         ? `Credit packs and monthly or yearly plans for AI outfit videos. Pack credits never expire, cancel anytime, failed renders are refunded.`
@@ -92,7 +92,7 @@ export function en(s: S) {
     },
     hero: {
       title: `${k}`,
-      subtitle: 'One photo is all it takes. Pick a Santa suit, elf costume or ugly sweater for a share-ready vertical clip, or a plain backdrop for an ID photo, in minutes.',
+      subtitle: 'One photo is all it takes. Pick a Santa suit, elf costume or ugly sweater for a share-ready vertical clip in minutes.',
       badge: 'Christmas costume trend',
       original: 'Original costume clip',
       aiVersion: 'Your AI version',
@@ -212,7 +212,7 @@ export function en(s: S) {
     },
     specs: {
       eyebrow: 'At a glance',
-      title: `${b} specs`,
+      title: 'AI outfit changer specs',
       rows: [
         { label: 'Input', value: `One clear photo of one person, ${uploadTypes} up to ${uploadMb} MB` },
         { label: 'Costumes', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join(', ') },
@@ -253,7 +253,7 @@ export function en(s: S) {
     },
     pricing: {
       eyebrow: 'Pricing',
-      title: subs ? 'Pay as you go, or subscribe' : 'Pay once, use whenever',
+      title: 'AI outfit changer pricing',
       subtitle: subs
         ? '1 credit = 1 second of video. Buy a pack that never expires, or subscribe for a fresh allowance every month.'
         : '1 credit = 1 second of video. No subscription, no expiry.',
@@ -295,7 +295,7 @@ export function en(s: S) {
       renewalNote: 'Subscriptions renew automatically at the price shown until you cancel. Unused monthly credits do not roll over.',
     },
     faq: {
-      title: 'Questions, answered',
+      title: 'AI outfit changer FAQ',
       body: 'Still unsure? Our team replies within one business day.',
       cta: 'Contact support',
       items: [
@@ -334,6 +334,9 @@ export function en(s: S) {
           : []),
         { q: 'Can I use someone else’s photo?', a: 'Only with their permission, and never photos of minors, celebrities or public figures. Accounts that break this rule are closed.' },
         { q: 'What happens to my photos?', a: `Uploads are private, used only to make your video and ${photoRetention}. Finished videos are ${videoRetention}. Deleting your account removes everything right away.` },
+        { q: 'Can I use the video commercially?', a: 'Yes. You can post and monetise the video on your own channels. Keep the AI label visible and do not present it as real footage of the person.' },
+        { q: 'Is there a watermark?', a: 'No visible watermark. You download a vertical MP4 that is ready to post.' },
+        { q: 'What happens if a render fails?', a: 'The credits are refunded automatically, so a failed render never costs you credits.' },
       ] as FaqItem[],
     },
     finalCta: {

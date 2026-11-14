@@ -52,10 +52,8 @@ function Home() {
         <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
         <div className="container-page relative py-6 lg:py-8">
           <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mt-2 font-display text-5xl font-black uppercase leading-[1.04] tracking-tight sm:text-7xl">
-              {c.hero.title}
-              <span className="mx-auto mt-2 block max-w-2xl font-sans text-lg font-normal leading-8 text-muted normal-case">{c.hero.subtitle}</span>
-            </h1>
+            <h1 className="mt-2 font-display text-5xl font-black uppercase leading-[1.04] tracking-tight sm:text-7xl">{c.hero.title}</h1>
+            <p className="mx-auto mt-3 max-w-2xl text-lg leading-8 text-muted">{c.hero.subtitle}</p>
           </div>
           <div className="mt-4 flex flex-col gap-8 lg:mt-6">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-3">
@@ -171,6 +169,9 @@ function Home() {
                 </div>
               ))}
             </div>
+            <LocalLink to={articlePath('howTo')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.articles.howTo.title} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </section>
       ) : null}
@@ -209,6 +210,9 @@ function Home() {
                 ))}
               </tbody>
             </table>
+            <LocalLink to={articlePath('outfits')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.articles.outfits.title} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </section>
       ) : null}
@@ -262,7 +266,7 @@ function Home() {
                     <p className="mt-2 text-xs font-medium uppercase tracking-[0.12em] text-muted">{styleCopy(s.id).tagline}</p>
                     <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-4">
                       <figure className="min-w-0">
-                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
+                        <img src={s.examples.madeWith.photo} alt={c.alt.inputPhoto} width={1200} height={1600} loading="lazy" className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
                         <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
                       </figure>
                       <ArrowRight className="size-5 text-muted" aria-hidden />
@@ -275,6 +279,9 @@ function Home() {
                 </li>
               ))}
             </ol>
+            <LocalLink to={articlePath('outfits')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.articles.outfits.title} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </div>
       </section>
@@ -309,6 +316,9 @@ function Home() {
                 </div>
               ))}
             </dl>
+            <LocalLink to="/pricing" className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.nav.pricing} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </section>
       ) : null}
@@ -347,7 +357,7 @@ function Home() {
               return (
                 <div key={idea.title} className="grid items-center gap-10 md:grid-cols-2">
                   <div className={`grid grid-cols-[0.8fr_1fr] items-end gap-4 ${flip ? 'md:order-2' : ''}`}>
-                    <img src={media.photo} alt={c.alt.inputPhoto} loading="lazy" className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
+                    <img src={media.photo} alt={c.alt.inputPhoto} width={1200} height={1600} loading="lazy" className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover" />
                     <VideoCard video={media.video} poster={media.poster} />
                   </div>
                   <div className="space-y-4">
