@@ -156,8 +156,8 @@ function Home() {
       </section>
 
       {/* What is：解释趋势本身，承接 "what is {keyword}" 信息型搜索 */}
-      <section id="about" className="scroll-mt-20 py-20">
-        <div className="container-page max-w-3xl">
+      <section id="about" className="scroll-mt-20 border-t border-line py-20">
+        <div className="container-page">
           <p className="eyebrow text-accent-text">{c.whatIs.eyebrow}</p>
           <h2 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">{c.whatIs.title}</h2>
           {c.whatIs.paragraphs.map((paragraph) => (
@@ -421,6 +421,7 @@ function Home() {
     </>
   )
 }
+
 
 
 
