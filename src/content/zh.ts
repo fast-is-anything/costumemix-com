@@ -196,7 +196,7 @@ export function zh(s: S): Content {
     },
     specs: {
       eyebrow: '一览',
-      title: `${b} 提供的 AI 换装服务规格`,
+      title: `${b} 提供的 AI 换装规格`,
       rows: [
         { label: '上传', value: `一张清晰的单人照片，${uploadTypes}，不超过 ${uploadMb} MB` },
         { label: '服装', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join('、') },
@@ -867,6 +867,7 @@ export function zh(s: S): Content {
     },
   }
 }
+
 
 
 
