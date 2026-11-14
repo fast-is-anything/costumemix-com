@@ -217,7 +217,7 @@ export function en(s: S) {
       title: `AI outfit changer specs from ${b}`,
       rows: [
         { label: 'Input', value: `One clear photo of one person, ${uploadTypes} up to ${uploadMb} MB` },
-        { label: 'Outfits', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join(', ') },
+        { label: 'Outfits', value: 'Any scene and any trending video template' },
         { label: 'Video length', value: `${s.durations.map((d) => d.seconds).join(', ')} seconds` },
         { label: 'Output', value: `Vertical ${s.template.aspectRatio} MP4, no watermark` },
         { label: 'Price', value: `1 credit = 1 second of video; packs from ${usd(cheapest.priceCents)} for ${cheapest.credits} credits` },

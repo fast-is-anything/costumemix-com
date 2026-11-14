@@ -199,7 +199,7 @@ export function zh(s: S): Content {
       title: `${b} 提供的 AI 换装规格`,
       rows: [
         { label: '上传', value: `一张清晰的单人照片，${uploadTypes}，不超过 ${uploadMb} MB` },
-        { label: '服装', value: VIDEO_STYLES.map((style) => styles[style.id as StyleId].name).join('、') },
+        { label: '服装', value: '各种场景和各种热门视频模板生成' },
         { label: '视频时长', value: `${s.durations.map((d) => d.seconds).join('、')} 秒` },
         { label: '成片', value: `竖屏 ${s.template.aspectRatio} MP4，无水印` },
         { label: '价格', value: `1 积分 = 1 秒视频；积分包 ${usd(cheapest.priceCents)} 起（${cheapest.credits} 积分）` },
