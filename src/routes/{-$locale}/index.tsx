@@ -293,6 +293,9 @@ function Home() {
             <h2 className="font-display text-4xl leading-tight sm:text-5xl">{c.madeWith.title}</h2>
             <div aria-hidden className="h-px w-14 bg-gradient-to-r from-accent to-accent-2" />
             <p className="max-w-md text-lg leading-8 text-muted">{c.madeWith.body}</p>
+            <LocalLink to={articlePath('outfits')} className="inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.articles.outfits.title} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
           {/* 每种风格是一个时间轴节点（服务端渲染，不依赖 JS）；单风格时不显示风格名 */}
           <div className="relative min-w-0">
@@ -322,9 +325,6 @@ function Home() {
                 </li>
               ))}
             </ol>
-            <LocalLink to={articlePath('outfits')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
-              {c.articles.outfits.title} <ArrowRight className="size-4" />
-            </LocalLink>
           </div>
         </div>
       </section>
