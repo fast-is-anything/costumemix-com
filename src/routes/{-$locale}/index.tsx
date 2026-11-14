@@ -207,9 +207,6 @@ function Home() {
                 ))}
               </tbody>
             </table>
-            <LocalLink to={articlePath('outfits')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
-              {c.articles.outfits.title} <ArrowRight className="size-4" />
-            </LocalLink>
           </div>
         </section>
       ) : null}
