@@ -194,6 +194,14 @@ export function zh(s: S): Content {
         `${b} 就是把这件事做成了工具：上传一张照片、选一套服装，模型会把你放进一段已授权的服装片段里，同时保留原片的节奏和运镜。目前圣诞服装已经上线，之后 ${b} 会持续提供各种节日和热门模板。`,
       ],
       guide: '阅读完整的 AI 换装指南',
+      sectionLinks: {
+        problem: '如何制作有趣的 AI 圣诞视频',
+        compare: '圣诞装扮灵感',
+        features: 'AI 换装指南',
+        ideas: '全部指南',
+        pricing: '查看所有积分包',
+        faq: 'AI 换装指南',
+      },
     },
     specs: {
       eyebrow: '一览',
@@ -223,7 +231,7 @@ export function zh(s: S): Content {
     },
     ideas: {
       eyebrow: '创意',
-      title: 'AI 换装灵感：大家用它做什么',
+      title: '一张照片就能用的 AI 换装：大家用它做什么',
       items: [
         { title: '会动的圣诞贺卡', body: '发一段 6 秒的圣诞老人视频，比再发一张全家福有意思。' },
         { title: '派对邀请', body: '把主人家放进精灵装，视频丢进群里就是邀请函。' },
@@ -233,7 +241,7 @@ export function zh(s: S): Content {
     },
     pricing: {
       eyebrow: '价格',
-      title: 'AI 换装价格',
+      title: '在线 AI 换装价格',
       subtitle: subs ? '1 积分 = 1 秒视频。可以买永不过期的积分包，也可以订阅、每月领取新积分。' : '1 积分 = 1 秒视频。无订阅，不过期。',
       popular: '最受欢迎',
       was: '原价',
@@ -290,6 +298,14 @@ export function zh(s: S): Content {
         {
           q: '可以做 AI Santa video 或 AI elf video 吗？',
           a: '可以。选圣诞老人装就是一段 AI Santa video，选精灵装就是 AI elf video；两者都用同一张照片，几分钟内生成竖屏成片。',
+        },
+        {
+          q: '有可以给照片换装的免费 AI 工具吗？',
+          a: '可以先上传照片、选好服装和时长，不花钱就能配好一次生成；积分只在成片渲染成功时扣除，失败会自动退回。',
+        },
+        {
+          q: '不注册账号也能用 AI 换装吗？',
+          a: '可以先选照片、服装和时长，注册时草稿会保留；成片需要登录后才能保存到作品里。',
         },
         {
           q: '它算 AI costume changer 或 AI outfit generator 吗？',

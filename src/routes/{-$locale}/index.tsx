@@ -212,6 +212,9 @@ function Home() {
                 </div>
               ))}
             </div>
+            <LocalLink to={articlePath('howTo')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.whatIs.sectionLinks.problem} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </section>
       ) : null}
@@ -250,6 +253,9 @@ function Home() {
                 ))}
               </tbody>
             </table>
+            <LocalLink to={articlePath('outfits')} className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.whatIs.sectionLinks.compare} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </section>
       ) : null}
@@ -340,6 +346,9 @@ function Home() {
             <LocalLink to="/pricing" className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
               {c.nav.pricing} <ArrowRight className="size-4" />
             </LocalLink>
+            <LocalLink to={articlePath('trend')} className="mt-8 ml-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+              {c.whatIs.guide} <ArrowRight className="size-4" />
+            </LocalLink>
           </div>
         </section>
       ) : null}
@@ -363,6 +372,9 @@ function Home() {
               )
             })}
           </div>
+          <LocalLink to="/guides" className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+            {c.whatIs.sectionLinks.features} <ArrowRight className="size-4" />
+          </LocalLink>
         </div>
       </section>
 
@@ -393,6 +405,9 @@ function Home() {
               )
             })}
           </div>
+          <LocalLink to="/guides" className="mt-10 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+            {c.whatIs.sectionLinks.ideas} <ArrowRight className="size-4" />
+          </LocalLink>
         </div>
       </section>
 
@@ -412,6 +427,9 @@ function Home() {
       <section id="faq" className="scroll-mt-20 py-20">
         <div className="container-page">
           <Faq />
+          <LocalLink to="/guides" className="mt-10 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+            {c.whatIs.sectionLinks.faq} <ArrowRight className="size-4" />
+          </LocalLink>
         </div>
       </section>
 

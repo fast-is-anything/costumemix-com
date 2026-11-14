@@ -213,6 +213,14 @@ export function en(s: S) {
         `${b} is built around that idea: upload one photo, choose an outfit, and the model casts you into a licensed outfit clip while keeping the timing and camera work of the original. Christmas outfits are live now, and ${b} keeps adding seasonal and trending templates.`,
       ],
       guide: 'Read the full AI Outfit Changer Guides',
+      sectionLinks: {
+        problem: 'How to Make a Funny AI Christmas Video',
+        compare: 'Christmas Outfit Ideas',
+        features: 'AI Outfit Changer Guides',
+        ideas: 'All guides',
+        pricing: 'See all packs',
+        faq: 'AI Outfit Changer Guides',
+      },
     },
     specs: {
       eyebrow: 'At a glance',
@@ -247,7 +255,7 @@ export function en(s: S) {
     },
     ideas: {
       eyebrow: 'Ideas',
-      title: 'AI outfit ideas: what people make',
+      title: 'An AI outfit changer from one photo: what people make',
       items: [
         { title: 'Christmas cards that move', body: 'Send a 6-second Santa clip instead of another family photo.' },
         { title: 'Party invitations', body: 'Put the host in an elf costume and drop the clip into the group chat.' },
@@ -257,7 +265,7 @@ export function en(s: S) {
     },
     pricing: {
       eyebrow: 'Pricing',
-      title: 'AI outfit changer pricing',
+      title: 'Best AI outfit changer online: pricing',
       subtitle: subs
         ? '1 credit = 1 second of video. Buy a pack that never expires, or subscribe for a fresh allowance every month.'
         : '1 credit = 1 second of video. No subscription, no expiry.',
@@ -321,6 +329,14 @@ export function en(s: S) {
         {
           q: 'Can I make an AI Santa video or an AI elf video?',
           a: 'Yes. Pick the Santa suit for an AI Santa video, or the elf costume for an AI elf video. Both use the same single photo and render a vertical clip in minutes.',
+        },
+        {
+          q: 'Is there a free AI clothes changer for photos?',
+          a: 'You can upload a photo and set up a render for free; credits are only spent when a render succeeds, and a failed render is refunded automatically.',
+        },
+        {
+          q: 'Can I use the AI outfit changer without signing up?',
+          a: 'You can pick a photo, an outfit and a length before signing up — the draft is kept while you create an account, and the finished video is saved to your creations.',
         },
         {
           q: 'Is this also an AI costume changer or AI outfit generator?',
