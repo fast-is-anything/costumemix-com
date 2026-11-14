@@ -170,30 +170,14 @@ function Home() {
               {c.whatIs.guide} <ArrowRight className="size-4" />
             </LocalLink>
           </div>
-          {/* 右侧示例：一张输入照片 + 一张成片 */}
-          <div className="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 lg:mx-0 lg:max-w-none">
-            <figure>
-              <img
-                src={site.whatIsExamples.photo}
-                alt={c.alt.inputPhoto}
-                width={1200}
-                height={1600}
-                loading="lazy"
-                className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover"
-              />
-              <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.photoLabel}</figcaption>
-            </figure>
-            <figure>
-              <img
-                src={site.whatIsExamples.result}
-                alt={c.hero.aiVersion}
-                width={1200}
-                height={1600}
-                loading="lazy"
-                className="sticker-md aspect-[3/4] w-full rounded-2xl border-2 border-muted object-cover"
-              />
-              <figcaption className="mt-2 text-center text-xs text-muted">{c.madeWith.resultLabel}</figcaption>
-            </figure>
+          {/* 右侧示例：和 hero 一样的图片卡（3:4、sticker 外框、左上角标签、hover 放大） */}
+          <div className="mx-auto w-full max-w-xs lg:mx-0 lg:max-w-none">
+            <ImageCard
+              src={site.whatIsExamples.photo}
+              alt={c.alt.inputPhoto}
+              label={c.madeWith.photoLabel}
+              credit={c.madeWith.resultLabel}
+            />
           </div>
         </div>
       </section>
