@@ -53,7 +53,7 @@ export function en(s: S) {
     meta: {
       // 首页标题由品牌 + 主关键词 + 品类承诺组成，按 CostumeMix 品牌规范固定
       homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
-      homeDescription: 'CostumeMix is the AI outfit changer: upload one photo, pick an outfit and get a short vertical video in minutes — no shoot, studio or editing.',
+      homeDescription: 'CostumeMix is an AI outfit changer: one photo plus an outfit becomes a ready-to-post image or video in minutes. For personal fun, viral posts and brand promos.',
       pricingTitle: `Pricing — ${b}`,
       pricingDescription: subs
         ? `Credit packs and monthly or yearly plans for AI outfit videos. Pack credits never expire, cancel anytime, failed renders are refunded.`
@@ -920,6 +920,8 @@ export function en(s: S) {
 }
 
 export type Content = ReturnType<typeof en>
+
+
 
 
 
