@@ -210,7 +210,7 @@ export function en(s: S) {
       title: `What is an AI outfit video from ${b}?`,
       paragraphs: [
         'An AI outfit changer takes an ordinary photo and renders the person in it wearing a different outfit, or puts you in the starring role of a video. You get a high-quality still and a full short video, so the image is tailored to you and the clothes move with the person instead of sitting in a static edit.',
-        `${b} is built around that idea: upload one photo, choose an outfit, and the model casts you into a licensed outfit clip while keeping the timing and camera work of the original. Christmas outfits are landing soon, and ${b} keeps adding seasonal and trending templates.`,
+        `${b} is built around that idea: upload one photo, choose an outfit, and the model casts you into a licensed outfit clip while keeping the timing and camera work of the original. Christmas outfits are live now, and ${b} keeps adding seasonal and trending templates.`,
       ],
       guide: 'Read the full AI Outfit Changer Guides',
     },
