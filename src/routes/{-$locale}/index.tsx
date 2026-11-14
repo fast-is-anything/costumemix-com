@@ -166,7 +166,7 @@ function Home() {
                 {paragraph}
               </p>
             ))}
-            <LocalLink to={articlePath('trend')} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+            <LocalLink to="/guides" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
               {c.whatIs.guide} <ArrowRight className="size-4" />
             </LocalLink>
           </div>
@@ -346,7 +346,7 @@ function Home() {
             <LocalLink to="/pricing" className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
               {c.nav.pricing} <ArrowRight className="size-4" />
             </LocalLink>
-            <LocalLink to={articlePath('trend')} className="mt-8 ml-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+            <LocalLink to="/guides" className="mt-8 ml-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
               {c.whatIs.guide} <ArrowRight className="size-4" />
             </LocalLink>
           </div>
@@ -466,6 +466,7 @@ function Home() {
     </>
   )
 }
+
 
 
 
