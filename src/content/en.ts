@@ -172,11 +172,11 @@ export function en(s: S) {
     },
     problem: {
       eyebrow: 'The catch',
-      title: 'Changing outfits for a video is harder than it looks',
+      title: 'Why is everyone else faster at producing visuals and videos?',
       items: [
-        { title: 'Outfits cost more than the clip', body: 'A suit, gown or costume is a one-off purchase, and most people wear it exactly once.' },
-        { title: 'You still need a shoot', body: 'Good light, a clean background and someone to hold the phone take longer than the video itself.' },
-        { title: 'Editing eats the evening', body: 'Trimming, captions and audio in a phone editor turn a fun idea into a project.' },
+        { title: 'Outfit cost and shipping', body: 'Buying an outfit and waiting for delivery stretch the whole process, and a suit, gown or costume is usually worn once before it goes into storage.' },
+        { title: 'Booking a model and styling a set', body: 'You are still chasing the model’s schedule and agreeing on a slot, then hunting for good light, a clean background and someone to hold the phone. The setup takes longer than the video itself.' },
+        { title: 'Editing and rendering the effects', body: 'Then come the trims, captions and audio, endless nudges in a phone editor and a wait for the effects render — with nothing left in the tank.' },
       ],
     } as ProblemBlock | null,
     withWithout: {
