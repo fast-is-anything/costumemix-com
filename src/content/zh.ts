@@ -187,7 +187,7 @@ export function zh(s: S): Content {
     },
     whatIs: {
       eyebrow: '换个装',
-      title: 'AI Outfit Changer（AI 换装视频）是什么？',
+      title: `${b} 提供的 AI 换装视频是什么？`,
       paragraphs: [
         'AI 换装（AI outfit changer）会把一张普通照片里的人换成另一套服装。它输出的是一段竖屏短视频而不是静态图，所以衣服会随人物一起动，而不是停在一张修好的照片里。',
         `${b} 就是把这件事做成了工具：上传一张照片、选一套服装，模型会把你放进一段已授权的服装片段里，同时保留原片的节奏和运镜。目前先上圣诞服装，之后按季节增加。`,

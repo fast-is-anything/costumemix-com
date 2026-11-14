@@ -205,7 +205,7 @@ export function en(s: S) {
     },
     whatIs: {
       eyebrow: 'About the trend',
-      title: 'What is an AI outfit changer?',
+      title: `What is an AI outfit video from ${b}?`,
       paragraphs: [
         'An AI outfit changer takes an ordinary photo and renders the person in it wearing a different outfit. The result is a short vertical video rather than a still image, so the clothes move with the person instead of sitting in a static edit.',
         `${b} is built around that idea: upload one photo, choose an outfit, and the model casts you into a licensed outfit clip while keeping the timing and camera work of the original. Christmas costumes are the current collection; more outfits are added by season.`,
