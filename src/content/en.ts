@@ -210,7 +210,7 @@ export function en(s: S) {
         'An AI outfit changer takes an ordinary photo and renders the person in it wearing a different outfit. The result is a short vertical video rather than a still image, so the clothes move with the person instead of sitting in a static edit.',
         `${b} is built around that idea: upload one photo, choose an outfit, and the model casts you into a licensed outfit clip while keeping the timing and camera work of the original. Christmas costumes are the current collection; more outfits are added by season.`,
       ],
-      guide: 'Read the full AI Christmas video guide',
+      guide: 'Read the full AI Outfit Changer Guides',
     },
     specs: {
       eyebrow: 'At a glance',
