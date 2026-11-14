@@ -155,6 +155,22 @@ function Home() {
         </div>
       </section>
 
+      {/* What is：解释趋势本身，承接 "what is {keyword}" 信息型搜索 */}
+      <section id="about" className="scroll-mt-20 py-20">
+        <div className="container-page max-w-3xl">
+          <p className="eyebrow text-accent-text">{c.whatIs.eyebrow}</p>
+          <h2 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">{c.whatIs.title}</h2>
+          {c.whatIs.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="mt-5 text-lg leading-8 text-muted">
+              {paragraph}
+            </p>
+          ))}
+          <LocalLink to={articlePath('trend')} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
+            {c.whatIs.guide} <ArrowRight className="size-4" />
+          </LocalLink>
+        </div>
+      </section>
+
       {/* Problem：不用本站时的麻烦，文案设为 null 就不渲染 */}
       {c.problem ? (
         <section id="problem" className="scroll-mt-20 border-t border-line py-20">
@@ -277,22 +293,6 @@ function Home() {
               {c.articles.outfits.title} <ArrowRight className="size-4" />
             </LocalLink>
           </div>
-        </div>
-      </section>
-
-      {/* What is：解释趋势本身，承接 "what is {keyword}" 信息型搜索 */}
-      <section id="about" className="scroll-mt-20 py-20">
-        <div className="container-page max-w-3xl">
-          <p className="eyebrow text-accent-text">{c.whatIs.eyebrow}</p>
-          <h2 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">{c.whatIs.title}</h2>
-          {c.whatIs.paragraphs.map((paragraph) => (
-            <p key={paragraph} className="mt-5 text-lg leading-8 text-muted">
-              {paragraph}
-            </p>
-          ))}
-          <LocalLink to={articlePath('trend')} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold hover:text-accent">
-            {c.whatIs.guide} <ArrowRight className="size-4" />
-          </LocalLink>
         </div>
       </section>
 
