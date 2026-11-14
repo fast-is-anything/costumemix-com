@@ -47,7 +47,7 @@ export function Pricing() {
       {sellingPlans.length ? (
         <>
           <div className="mx-auto max-w-2xl text-center">
-            <h3 className="font-display text-2xl">{p.plansTitle}</h3>
+            <p className="font-display text-2xl">{p.plansTitle}</p>
             <p className="mt-2 text-sm text-muted">{p.plansBody}</p>
           </div>
           <div className="mx-auto grid max-w-3xl gap-5 md:grid-cols-2">
@@ -56,7 +56,7 @@ export function Pricing() {
             ))}
           </div>
           <p className="text-center text-xs text-muted">{p.renewalNote}</p>
-          <h3 className="pt-6 text-center font-display text-2xl">{p.packsTitle}</h3>
+          <p className="pt-6 text-center font-display text-2xl">{p.packsTitle}</p>
         </>
       ) : null}
       <div className={`grid gap-5 ${gridCols}`}>
@@ -74,7 +74,7 @@ export function Pricing() {
               {highlight ? (
                 <span className="absolute -top-3 left-6 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-ink-fg">{p.popular}</span>
               ) : null}
-              <h3 className="font-display text-2xl">{info.name}</h3>
+              <p className="font-display text-2xl">{info.name}</p>
               <p className="mt-1 text-sm text-muted">{info.tagline}</p>
               <p className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                 <span className="font-display text-4xl">{formatPrice(pack.priceCents, pack.currency)}</span>
@@ -126,7 +126,7 @@ function PlanCard({ plan, button }: { plan: SubscriptionPlan; button: ReactNode 
       {plan.highlight ? (
         <span className="absolute -top-3 left-6 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-ink-fg">{p.popular}</span>
       ) : null}
-      <h3 className="font-display text-2xl">{info.name}</h3>
+      <p className="font-display text-2xl">{info.name}</p>
       <p className="mt-1 text-sm text-muted">{info.tagline}</p>
       <p className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="font-display text-4xl">{formatPrice(plan.priceCents, plan.currency)}</span>
