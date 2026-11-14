@@ -38,7 +38,7 @@ export function zh(s: S): Content {
       'id-photo': { name: '证件照', tagline: '纯色影棚背景，干净的头肩照。' },
     },
     meta: {
-      homeTitle: 'CostumeMix: AI Outfit Changer – Swap Clothes & Costumes',
+      homeTitle: 'CostumeMix：AI 换装（AI Outfit Changer）— 一张照片换一套新造型',
       homeDescription: `CostumeMix 是一款 AI 换装（AI outfit changer）工具：上传一张照片、挑一套服装，几分钟生成可直接发布的竖屏视频，不用买衣服、不用约拍。${subs ? '可单次购买积分，也可按月订阅。' : '按秒计费，积分永不过期。'}`,
       pricingTitle: `价格 — ${b}`,
       pricingDescription: subs
@@ -866,6 +866,7 @@ export function zh(s: S): Content {
     },
   }
 }
+
 
 
 
